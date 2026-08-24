@@ -1,0 +1,18 @@
+uuid: 9b742ece-d76b-44d5-9ef2-b1a29fe9e9b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.online_enquiry
+id: node.online_enquiry.changed
+field_name: changed
+entity_type: node
+bundle: online_enquiry
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

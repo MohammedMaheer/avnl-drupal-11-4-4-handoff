@@ -1,7 +1,44 @@
 <?php
 
-ini_set('session.cookie_domain','staging.avnl.org');
 // phpcs:ignoreFile
+
+/**
+ * Load secrets captured from the existing target without storing them in Git.
+ *
+ * Explicit AVNL_* environment variables always take precedence. The optional
+ * locator is generated on the target by scripts/capture-uat-runtime.php and
+ * contains only the absolute path of the protected secrets file.
+ */
+$avnl_runtime = [];
+$avnl_runtime_file = getenv('AVNL_RUNTIME_SECRETS_FILE');
+$avnl_runtime_required = is_string($avnl_runtime_file) && $avnl_runtime_file !== '';
+$avnl_runtime_locator = __DIR__ . '/avnl.runtime-locator.php';
+if (($avnl_runtime_file === FALSE || $avnl_runtime_file === '') && is_readable($avnl_runtime_locator)) {
+  $avnl_located_file = require $avnl_runtime_locator;
+  if (!is_string($avnl_located_file) || $avnl_located_file === '') {
+    throw new \RuntimeException('The AVNL runtime-secrets locator is invalid.');
+  }
+  $avnl_runtime_file = $avnl_located_file;
+  $avnl_runtime_required = TRUE;
+}
+if ($avnl_runtime_required && !is_readable($avnl_runtime_file)) {
+  throw new \RuntimeException('The configured AVNL runtime-secrets file is not readable.');
+}
+if (is_string($avnl_runtime_file) && $avnl_runtime_file !== '' && is_readable($avnl_runtime_file)) {
+  $avnl_loaded_runtime = require $avnl_runtime_file;
+  if (!is_array($avnl_loaded_runtime) || ($avnl_loaded_runtime['format'] ?? NULL) !== 1) {
+    throw new \RuntimeException('The AVNL runtime-secrets file has an unsupported format.');
+  }
+  $avnl_runtime = $avnl_loaded_runtime;
+}
+
+$avnl_cookie_domain = getenv('AVNL_SESSION_COOKIE_DOMAIN');
+if ($avnl_cookie_domain === FALSE && isset($avnl_runtime['session_cookie_domain'])) {
+  $avnl_cookie_domain = $avnl_runtime['session_cookie_domain'];
+}
+if (is_string($avnl_cookie_domain)) {
+  ini_set('session.cookie_domain', $avnl_cookie_domain);
+}
 
 /**
  * @file
@@ -267,7 +304,10 @@ $databases = [];
  */
 $avnl_hash_salt = getenv('AVNL_HASH_SALT');
 if ($avnl_hash_salt === FALSE || $avnl_hash_salt === '') {
-  throw new \RuntimeException('AVNL_HASH_SALT must be configured in the environment.');
+  $avnl_hash_salt = $avnl_runtime['hash_salt'] ?? '';
+}
+if (!is_string($avnl_hash_salt) || $avnl_hash_salt === '') {
+  throw new \RuntimeException('AVNL_HASH_SALT or a captured UAT runtime-secrets file must be configured.');
 }
 $settings['hash_salt'] = $avnl_hash_salt;
 
@@ -512,7 +552,8 @@ $settings['update_free_access'] = FALSE;
  * the Drupal installation directory and be accessible over the web.
  */
 # $settings['file_public_path'] = 'sites/default/files';
-$settings['file_public_path'] = getenv('AVNL_PUBLIC_FILES_PATH') ?: 'files';
+$settings['file_public_path'] = getenv('AVNL_PUBLIC_FILES_PATH')
+  ?: ($avnl_runtime['settings']['file_public_path'] ?? 'files');
 
 /**
  * Additional public file schemes:
@@ -551,7 +592,7 @@ $settings['file_public_path'] = getenv('AVNL_PUBLIC_FILES_PATH') ?: 'files';
  * about securing private files.
  */
 $settings['file_private_path'] = getenv('AVNL_PRIVATE_FILES_PATH')
-  ?: dirname($app_root) . '/private';
+  ?: ($avnl_runtime['settings']['file_private_path'] ?? dirname($app_root) . '/private');
 
 /**
  * Temporary file path:
@@ -564,7 +605,8 @@ $settings['file_private_path'] = getenv('AVNL_PRIVATE_FILES_PATH')
  *
  * @see \Drupal\Component\FileSystem\FileSystem::getOsTemporaryDirectory()
  */
-$settings['file_temp_path'] = getenv('AVNL_TEMP_PATH') ?: sys_get_temp_dir();
+$settings['file_temp_path'] = getenv('AVNL_TEMP_PATH')
+  ?: ($avnl_runtime['settings']['file_temp_path'] ?? sys_get_temp_dir());
 
 /**
  * Session write interval:
@@ -715,12 +757,10 @@ $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
 $avnl_trusted_hosts = getenv('AVNL_TRUSTED_HOST_PATTERNS');
 $settings['trusted_host_patterns'] = $avnl_trusted_hosts
   ? array_values(array_filter(array_map('trim', explode(',', $avnl_trusted_hosts))))
-  : [
-    '^staging\.avnl\.org$',
-    '^.+\.staging\.avnl\.org$',
-    '^localhost$',
-    '^127\.0\.0\.1$',
-  ];
+  : ($avnl_runtime['settings']['trusted_host_patterns'] ?? [
+      '^localhost$',
+      '^127\.0\.0\.1$',
+    ]);
 /**
  * The default list of directories that will be ignored by Drupal's file API.
  *
@@ -824,27 +864,75 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
  *
  * Keep this code block at the end of this file to take full effect.
  */
+$avnl_runtime_database = is_array($avnl_runtime['database'] ?? NULL)
+  ? $avnl_runtime['database']
+  : [];
 $databases['default']['default'] = [
-  'database' => getenv('AVNL_DB_NAME') ?: 'avnl',
-  'username' => getenv('AVNL_DB_USER') ?: 'avnl',
-  'password' => getenv('AVNL_DB_PASSWORD') ?: '',
+  'database' => getenv('AVNL_DB_NAME') ?: ($avnl_runtime_database['database'] ?? 'avnl'),
+  'username' => getenv('AVNL_DB_USER') ?: ($avnl_runtime_database['username'] ?? 'avnl'),
+  'password' => (($avnl_db_password = getenv('AVNL_DB_PASSWORD')) !== FALSE)
+    ? $avnl_db_password
+    : ($avnl_runtime_database['password'] ?? ''),
   'prefix' => '',
-  'host' => getenv('AVNL_DB_HOST') ?: '127.0.0.1',
-  'port' => (int) (getenv('AVNL_DB_PORT') ?: 3306),
+  'host' => getenv('AVNL_DB_HOST') ?: ($avnl_runtime_database['host'] ?? '127.0.0.1'),
+  'port' => (int) (getenv('AVNL_DB_PORT') ?: ($avnl_runtime_database['port'] ?? 3306)),
   'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
   'driver' => 'mysql',
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 ];
+if (array_key_exists('prefix', $avnl_runtime_database)) {
+  $databases['default']['default']['prefix'] = $avnl_runtime_database['prefix'];
+}
 
 $avnl_db_socket = getenv('AVNL_DB_SOCKET');
 if ($avnl_db_socket !== FALSE && $avnl_db_socket !== '') {
   $databases['default']['default']['unix_socket'] = $avnl_db_socket;
 }
+elseif (!empty($avnl_runtime_database['unix_socket'])) {
+  $databases['default']['default']['unix_socket'] = $avnl_runtime_database['unix_socket'];
+}
 
 $settings['config_sync_directory'] = getenv('AVNL_CONFIG_SYNC_DIR')
-  ?: 'files/config_fc-AWpWchik1oyyNmowtvFqtZcTyhOYGy6Zzzbt-7Qc6N2P2hrfIubehAOkqcmI1p1AF1cgPYw/sync';
-$settings['locale_translation_path'] = getenv('AVNL_TRANSLATIONS_PATH') ?: 'files/translations';
+  ?: ($avnl_runtime['settings']['config_sync_directory']
+    ?? 'files/config_fc-AWpWchik1oyyNmowtvFqtZcTyhOYGy6Zzzbt-7Qc6N2P2hrfIubehAOkqcmI1p1AF1cgPYw/sync');
+$settings['locale_translation_path'] = getenv('AVNL_TRANSLATIONS_PATH')
+  ?: ($avnl_runtime['settings']['locale_translation_path'] ?? 'files/translations');
 $config['system.logging']['error_level'] = getenv('AVNL_ERROR_LEVEL') ?: 'hide';
+
+foreach (['reverse_proxy', 'reverse_proxy_addresses', 'reverse_proxy_trusted_headers'] as $avnl_setting_name) {
+  if (array_key_exists($avnl_setting_name, $avnl_runtime['settings'] ?? [])) {
+    $settings[$avnl_setting_name] = $avnl_runtime['settings'][$avnl_setting_name];
+  }
+}
+
+// SMTP secrets belong in the deployment platform's protected environment,
+// never in exported Drupal configuration or the release tree.
+$avnl_runtime_smtp = is_array($avnl_runtime['smtp'] ?? NULL) ? $avnl_runtime['smtp'] : [];
+foreach ($avnl_runtime_smtp as $avnl_smtp_name => $avnl_smtp_value) {
+  if (is_string($avnl_smtp_name) && !str_starts_with($avnl_smtp_name, '_')) {
+    $config['smtp.settings'][$avnl_smtp_name] = $avnl_smtp_value;
+  }
+}
+$avnl_smtp_username = getenv('AVNL_SMTP_USERNAME');
+if ($avnl_smtp_username !== FALSE && $avnl_smtp_username !== '') {
+  $config['smtp.settings']['smtp_username'] = $avnl_smtp_username;
+}
+$avnl_smtp_password = getenv('AVNL_SMTP_PASSWORD');
+if ($avnl_smtp_password !== FALSE && $avnl_smtp_password !== '') {
+  $config['smtp.settings']['smtp_password'] = $avnl_smtp_password;
+}
+
+// If the target's existing encryption key was securely captured, expose it
+// through a runtime-only config override. An explicit environment key wins.
+$avnl_environment_key = getenv('AVNL_ENCRYPTION_KEY');
+if (($avnl_environment_key === FALSE || $avnl_environment_key === '')
+  && !empty($avnl_runtime['encryption_key_base64'])) {
+  $config['key.key.avnl_encryption_key']['key_provider'] = 'config';
+  $config['key.key.avnl_encryption_key']['key_provider_settings'] = [
+    'key_value' => $avnl_runtime['encryption_key_base64'],
+    'base64_encoded' => TRUE,
+  ];
+}
 
 /*$cache_bins = array('bootstrap','config','data','default','discovery','dynamic_page_cache','entity','menu','migrate','render','rest','static','toolbar','page');
 foreach ($cache_bins as $bin) {
@@ -852,6 +940,10 @@ foreach ($cache_bins as $bin) {
 } 
 */
 $settings['state_cache'] = TRUE;
+
+// Test Drupal 12's form behavior now: browser-side HTML5 validation is
+// disabled, while Drupal's authoritative server-side validation remains on.
+$settings['enable_html5_validation'] = FALSE;
 
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = __DIR__ . '/settings.ddev.php';

@@ -1,0 +1,7 @@
+uuid: 0ea4f4ae-ec1c-4607-b634-18f96e22eeba
+langcode: en
+status: false
+dependencies: {  }
+formId: node_online_enquiry_form
+captchaType: image_captcha/Image
+label: node_online_enquiry_form

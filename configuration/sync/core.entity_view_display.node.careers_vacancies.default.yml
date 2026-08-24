@@ -1,0 +1,43 @@
+uuid: fe69f966-0378-4600-a896-9d68f0fd9e05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.careers_vacancies.body
+    - field.field.node.careers_vacancies.field_careers_archive_date
+    - field.field.node.careers_vacancies.field_careers_vacancies_document
+    - field.field.node.careers_vacancies.field_careers_vacancies_job_date
+    - field.field.node.careers_vacancies.field_careers_vacancies_order
+    - node.type.careers_vacancies
+  module:
+    - file
+    - user
+id: node.careers_vacancies.default
+targetEntityType: node
+bundle: careers_vacancies
+mode: default
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_careers_vacancies_document:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  field_careers_archive_date: true
+  field_careers_vacancies_job_date: true
+  field_careers_vacancies_order: true
+  langcode: true

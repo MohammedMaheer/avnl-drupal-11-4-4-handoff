@@ -1,0 +1,43 @@
+uuid: c30c7050-7b2a-43e0-bc50-2b098d4e747b
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.notification
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - menu_link_attributes
+    - node
+    - system
+    - toolbar
+id: notifications_creator
+label: 'Notifications Creator'
+weight: 8
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'create content translations'
+  - 'create notification content'
+  - 'delete own files'
+  - 'delete own notification content'
+  - 'edit own notification content'
+  - 'translate notification node'
+  - 'update content translations'
+  - 'use editorial transition create_new_draft'
+  - 'use menu link attributes'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view latest version'
+  - 'view the administration theme'

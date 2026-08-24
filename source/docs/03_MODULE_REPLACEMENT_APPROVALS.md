@@ -2,7 +2,7 @@
 
 ## Outcome
 
-No enabled business feature was removed or replaced. Composer resolved the active module set on Drupal 11.4.4. The following decisions require the receiving team's awareness:
+No enabled business feature was removed or replaced. Composer resolved the active module set on Drupal 11.4.5. The following decisions require the receiving team's awareness:
 
 | Project | Decision | Rationale / approval status |
 |---|---|---|

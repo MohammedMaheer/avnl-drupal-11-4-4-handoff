@@ -1,4 +1,4 @@
-# AVNL Drupal 11.4.4 Training Guide
+# AVNL Drupal 11.4.5 Training Guide
 
 ## Training objective
 
@@ -22,7 +22,7 @@ Prepare AVNL administrators, editors, creator/publisher roles, and operations st
 - `ADMINISTRATOR_MANUAL.md`, `DEPLOYMENT.md`, and `ROLLBACK.md` distributed
 - Attendance and issue records opened in the approved organizational system
 
-## Module 1 — Drupal 11.4.4 orientation
+## Module 1 — Drupal 11.4.5 orientation
 
 Explain the upgraded platform, retained editorial structure, changed login security, environment-driven secrets, archive permission, Composer-managed dependencies, and the separation between staging acceptance and production approval. Demonstrate the dashboard, content listing, status report, logs, and help resources.
 

@@ -1,0 +1,21 @@
+uuid: 8166755b-3193-4771-a2c4-f413f2659c4f
+langcode: en
+status: true
+dependencies:
+  module:
+    - dropdown_language
+  theme:
+    - olivero
+id: dropdownlanguage
+theme: olivero
+region: secondary_menu
+weight: 0
+provider: null
+plugin: 'dropdown_language:language_interface'
+settings:
+  id: 'dropdown_language:language_interface'
+  label: 'Dropdown Language'
+  label_display: '0'
+  provider: dropdown_language
+  labels: null
+visibility: {  }

@@ -64,7 +64,14 @@
     "drupal page heading": "h1",
     "drupal status messages": ".messages--status",
     "drupal error messages": ".messages--error",
-    "drupal access denied heading": "h1:has-text('Access denied')"
+    "drupal access denied heading": "h1:has-text('Access denied')",
+    "logger settings form": "form#admin-audit-trail-logger-settings-form",
+    "logger mode hybrid": "#edit-mode-hybrid",
+    "logger mode psr3 only": "#edit-mode-psr3-only",
+    "logger channel": "#edit-channel",
+    "dblog rows": ".view-watchdog table.views-view-table tbody tr, table#admin-dblog tbody tr",
+    "settings log cli": "#edit-log-cli",
+    "dblog message cells": ".view-watchdog table.views-view-table td.views-field-message, table#admin-dblog td"
   },
   "xpath": {}
 }

@@ -1,0 +1,14 @@
+uuid: fce62731-9fc8-4afc-8f21-372ed9e2d3aa
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.e_citizen_downloads_publisher
+  module:
+    - user
+id: user_remove_role_action.e_citizen_downloads_publisher
+label: 'Remove the E-Citizen/ Downloads Publisher role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: e_citizen_downloads_publisher

@@ -1,0 +1,21 @@
+uuid: e82a1d87-c7d1-495f-87dd-1a413825cfce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ecitizen_downloads_date
+    - node.type.ecitizen_downloads
+  module:
+    - datetime
+id: node.ecitizen_downloads.field_ecitizen_downloads_date
+field_name: field_ecitizen_downloads_date
+entity_type: node
+bundle: ecitizen_downloads
+label: Date
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

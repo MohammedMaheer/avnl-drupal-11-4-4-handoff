@@ -14,6 +14,8 @@
 /sites/default/files/*
 !/sites/default/files/.htaccess
 /sites/default/settings.local.php
+/sites/default/avnl.runtime-locator.php
+/sites/default/avnl.runtime-secrets.php
 
 *.sql
 *.sql.gz

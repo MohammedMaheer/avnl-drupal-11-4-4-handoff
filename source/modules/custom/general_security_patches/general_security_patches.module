@@ -67,7 +67,7 @@ function general_security_patches_form_alter(&$form, \Drupal\Core\Form\FormState
     $form['actions']['submit']['#value'] = t('Submit');
   }
   
-    if(strpos($form_id, 'ode_')){
+    if (str_starts_with($form_id, 'node_')) {
       $form['#attributes']['autocomplete'] = 'off';
       $form['#validate'][] = '_custom_title_validate';
       $form['actions']['submit']['#value'] = t('Submit');
@@ -80,13 +80,13 @@ function general_security_patches_form_alter(&$form, \Drupal\Core\Form\FormState
 }
 /**
  * @param array $form
- * @param array $form_state
- * @return array
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @return \Drupal\Core\Ajax\AjaxResponse
  * Ajax callback for validating the username
  */
-function username_validation_ajax(&$form, &$form_state) {
+function username_validation_ajax(&$form, FormStateInterface $form_state): AjaxResponse {
   
-  $username = $form_state->getvalues()['name'];
+  $username = (string) ($form_state->getValue('name') ?? '');
   $label = $form['account']['name']['#title'];
   $max_char = '10';
   $min_char = '3';
@@ -128,9 +128,9 @@ function username_validation_ajax(&$form, &$form_state) {
 
   return $ajax_response;
 }
-function mail_validation_ajax(&$form, &$form_state) {
+function mail_validation_ajax(&$form, FormStateInterface $form_state): AjaxResponse {
   
-  $mail = $form_state->getvalues()['mail'];
+  $mail = (string) ($form_state->getValue('mail') ?? '');
   $label = $form['account']['mail']['#title'];
   
   $ajax_response = new AjaxResponse();
@@ -161,9 +161,10 @@ function mail_validation_ajax(&$form, &$form_state) {
 
   return $ajax_response;
 }
-function mobile_validation_ajax(&$form, &$form_state) {
+function mobile_validation_ajax(&$form, FormStateInterface $form_state): AjaxResponse {
   
-  $mobile = $form_state->getvalues()['field_official_contact_number'][0]['value'];
+  $mobile_values = $form_state->getValue('field_official_contact_number') ?? [];
+  $mobile = (string) ($mobile_values[0]['value'] ?? '');
   $label = $form['field_official_contact_number']['widget'][0]['#title'];
   
   $ajax_response = new AjaxResponse();
@@ -185,7 +186,7 @@ function mobile_validation_ajax(&$form, &$form_state) {
   
   if($mobile != ""){
   $mobileObject = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['field_official_contact_number' => $mobile]);
-  if(empty($mobileObject)){
+  if(!empty($mobileObject)){
     $value = '<span class ="error ">' . $label . ' is already exists.</span>';
     $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', $value));
   }
@@ -203,14 +204,14 @@ function general_security_patches_form_views_exposed_form_alter(&$form, \Drupal\
     }else{
         $base_urls = $base_url;
     }
-    $view = $form_state->getStorage('view');
+    $view = $form_state->get('view');
     
     $alterCodeFormId = array('sttl_official'); // ADD VIEW MACHINE NAME
     
     if($form['actions']['reset']!=""){
         #$form['actions']['reset']['#attributes']['class'][] = 'resetLink';
     }
-    if($form_id == "views_exposed_form" && in_array($view['view']->id(), $alterCodeFormId) ){
+    if ($form_id === 'views_exposed_form' && $view instanceof \Drupal\views\ViewExecutable && in_array($view->id(), $alterCodeFormId, TRUE)) {
         #$form['actions']['submit']['#suffix'] = '<a class="button resetLink" href="'.$base_urls.'/who-is-who">'.t('Reset').'</a>';
     }
 
@@ -426,9 +427,6 @@ function general_security_patches_password_history_submit(array &$form, FormStat
     }
 
     $hash = \Drupal::service('password')->hash($new_password);
-    if ($hash === FALSE) {
-        return;
-    }
     \Drupal::database()->insert('login_attampt')
         ->fields([
             'uid' => $account->id(),
@@ -479,9 +477,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
     }
 
 
-    $title_value = is_object($form['title']['widget'][0]['#title']) ? $form['title']['widget'][0]['#title']->__toString() : $form['title']['widget'][0]['#title'];
+    $title_label = $form['title']['widget'][0]['#title'] ?? t('Title');
+    $title_value = is_object($title_label) ? $title_label->__toString() : (string) $title_label;
 
-    $body_value = is_object($form['body']['widget'][0]['#title']) ? $form['body']['widget'][0]['#title']->__toString() : $form['body']['widget'][0]['#title'];
+    $body_label = $form['body']['widget'][0]['#title'] ?? t('Body');
+    $body_value = is_object($body_label) ? $body_label->__toString() : (string) $body_label;
     $Subject_value = '';
     if (isset($form['field_subject_feedback']['widget'][0]['#title'])) {
         $Subject_value = is_object($form['field_subject_feedback']['widget'][0]['#title'])
@@ -491,12 +491,12 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
 
     $titlevalue = $form_state->getValue('title');
 
-    $title = isset($titlevalue['0']['value']) && $titlevalue['0']['value'] !== null ? trim($titlevalue['0']['value']) : '';
+    $title = trim((string) ($titlevalue[0]['value'] ?? ''));
   //exit;
     $bodyvalue = $form_state->getValue('body');
     $subjectvalue = $form_state->getValue('field_subject_feedback');
-    $body = isset($bodyvalue['0']['value']) && $bodyvalue['0']['value'] !== null ? trim($bodyvalue['0']['value']) : '';
-    $subject = isset($subjectvalue['0']['value']) && $subjectvalue['0']['value'] !== null ? trim($subjectvalue['0']['value']) : '';
+    $body = trim((string) ($bodyvalue[0]['value'] ?? ''));
+    $subject = trim((string) ($subjectvalue[0]['value'] ?? ''));
 
     // $field_contact_details = $form_state->getValue('field_contact_details');
     // $field_contact_details_name = is_object($form['field_contact_details']['widget'][0]['#title']) ? $form['field_contact_details']['widget'][0]['#title']->__toString() : $form['field_contact_details']['widget'][0]['#title'];
@@ -522,14 +522,14 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
             
             
         }
-        if (isset($field_album_cover_image) && $field_album_cover_image != "") {
+        if ($field_album_cover_image !== []) {
             $regex = '/<script[^>]*>.*?<\/script>/is';
             if (isset($field_album_cover_image[0]['alt']) && preg_match($regex, $field_album_cover_image[0]['alt'])) {
-                $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_album_cover_image_alt) ? $field_album_cover_image_alt : '') . '.'));
+                $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_album_cover_image_alt . '.'));
             }
         }
     
-        if (isset($field_video_album_cover_image) && $field_video_album_cover_image != "") {
+        if ($field_video_album_cover_image !== []) {
           // var_dump($field_video_album_cover_image); exit();
           $regex = '/<script[^>]*>.*?<\/script>/is';
           if (isset($field_video_album_cover_image[0]['alt']) && strlen($field_video_album_cover_image[0]['alt']) != strlen(strip_tags($field_video_album_cover_image[0]['alt']))) {
@@ -537,11 +537,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
           }
 
           if (isset($field_video_album_cover_image[0]['alt']) && preg_match($regex, $field_video_album_cover_image[0]['alt'])) {
-              $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_album_cover_image_alt) ? $field_album_cover_image_alt : '') . '.'));
+              $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_album_cover_image_alt . '.'));
           }
         }
        
-    if (isset($field_background_image) && $field_background_image != "") {
+    if ($field_background_image !== []) {
         // var_dump($field_background_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_background_image[0]['alt']) && strlen($field_background_image[0]['alt']) != strlen(strip_tags($field_background_image[0]['alt']))) {
@@ -549,11 +549,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_background_image[0]['alt']) && preg_match($regex, $field_background_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_background_image_alt) ? $field_background_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_background_image_alt . '.'));
         }
     }
     
-    if (isset($field_products_images) && $field_products_images != "") {
+    if ($field_products_images !== []) {
         // var_dump($field_products_images); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_products_images[0]['alt']) && strlen($field_products_images[0]['alt']) != strlen(strip_tags($field_products_images[0]['alt']))) {
@@ -561,11 +561,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_products_images[0]['alt']) && preg_match($regex, $field_products_images[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_products_images_alt) ? $field_products_images_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_products_images_alt . '.'));
         }
     }
     
-    if (isset($field_products_inner_image) && $field_products_inner_image != "") {
+    if ($field_products_inner_image !== []) {
         // var_dump($field_products_inner_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_products_inner_image[0]['alt']) && strlen($field_products_inner_image[0]['alt']) != strlen(strip_tags($field_products_inner_image[0]['alt']))) {
@@ -573,11 +573,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_products_inner_image[0]['alt']) && preg_match($regex, $field_products_inner_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_products_inner_image_alt) ? $field_products_inner_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_products_inner_image_alt . '.'));
         }
     }
     
-    if (isset($field_releted_link_image) && $field_releted_link_image != "") {
+    if ($field_releted_link_image !== []) {
         // var_dump($field_releted_link_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_releted_link_image[0]['alt']) && strlen($field_releted_link_image[0]['alt']) != strlen(strip_tags($field_releted_link_image[0]['alt']))) {
@@ -585,12 +585,12 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_releted_link_image[0]['alt']) && preg_match($regex, $field_releted_link_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_releted_link_image_alt) ? $field_releted_link_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_releted_link_image_alt . '.'));
         }
     }
     
     
-    if (isset($field_home_page_banner_image) && $field_home_page_banner_image != "") {
+    if ($field_home_page_banner_image !== []) {
         // var_dump($field_home_page_banner_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_home_page_banner_image[0]['alt']) && strlen($field_home_page_banner_image[0]['alt']) != strlen(strip_tags($field_home_page_banner_image[0]['alt']))) {
@@ -598,11 +598,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_home_page_banner_image[0]['alt']) && preg_match($regex, $field_home_page_banner_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_home_page_banner_image_alt) ? $field_home_page_banner_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_home_page_banner_image_alt . '.'));
         }
     }
     
-    if (isset($field_events_image) && $field_events_image != "") {
+    if ($field_events_image !== []) {
         // var_dump($field_events_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_events_image[0]['alt']) && strlen($field_events_image[0]['alt']) != strlen(strip_tags($field_events_image[0]['alt']))) {
@@ -610,11 +610,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_events_image[0]['alt']) && preg_match($regex, $field_events_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_events_image_alt) ? $field_events_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_events_image_alt . '.'));
         }
     }
     
-    if (isset($field_footer_logo) && $field_footer_logo != "") {
+    if ($field_footer_logo !== []) {
         // var_dump($field_footer_logo); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_footer_logo[0]['alt']) && strlen($field_footer_logo[0]['alt']) != strlen(strip_tags($field_footer_logo[0]['alt']))) {
@@ -622,12 +622,12 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_footer_logo[0]['alt']) && preg_match($regex, $field_footer_logo[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_footer_logo_alt) ? $field_footer_logo_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_footer_logo_alt . '.'));
         }
     }
     
       
-    if (isset($field_achievements_image) && $field_achievements_image != "") {
+    if ($field_achievements_image !== []) {
         // var_dump($field_achievements_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_achievements_image[0]['alt']) && strlen($field_achievements_image[0]['alt']) != strlen(strip_tags($field_achievements_image[0]['alt']))) {
@@ -635,10 +635,10 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_achievements_image[0]['alt']) && preg_match($regex, $field_achievements_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_achievements_image_alt) ? $field_achievements_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_achievements_image_alt . '.'));
         }
     }
-    if (isset($field_avnl_director_upload_photo) && $field_avnl_director_upload_photo != "") {
+    if ($field_avnl_director_upload_photo !== []) {
         // var_dump($field_avnl_director_upload_photo); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_avnl_director_upload_photo[0]['alt']) && strlen($field_avnl_director_upload_photo[0]['alt']) != strlen(strip_tags($field_avnl_director_upload_photo[0]['alt']))) {
@@ -646,11 +646,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_avnl_director_upload_photo[0]['alt']) && preg_match($regex, $field_avnl_director_upload_photo[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_avnl_director_upload_photo_alt) ? $field_avnl_director_upload_photo_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_avnl_director_upload_photo_alt . '.'));
         }
     }
 
-    if (isset($field_key_profiles_image) && $field_key_profiles_image != "") {
+    if ($field_key_profiles_image !== []) {
         // var_dump($field_key_profiles_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_key_profiles_image[0]['alt']) && strlen($field_key_profiles_image[0]['alt']) != strlen(strip_tags($field_key_profiles_image[0]['alt']))) {
@@ -658,11 +658,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_key_profiles_image[0]['alt']) && preg_match($regex, $field_key_profiles_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_key_profiles_image_alt) ? $field_key_profiles_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_key_profiles_image_alt . '.'));
         }
     }
 
-    if (isset($field_news_images) && $field_news_images != "") {
+    if ($field_news_images !== []) {
         // var_dump($field_news_images); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_news_images[0]['alt']) && strlen($field_news_images[0]['alt']) != strlen(strip_tags($field_news_images[0]['alt']))) {
@@ -670,11 +670,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_news_images[0]['alt']) && preg_match($regex, $field_news_images[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_news_images_alt) ? $field_news_images_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_news_images_alt . '.'));
         }
     }
 
-    if (isset($field_our_unit_cover_image) && $field_our_unit_cover_image != "") {
+    if ($field_our_unit_cover_image !== []) {
         // var_dump($field_our_unit_cover_image); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_our_unit_cover_image[0]['alt']) && strlen($field_our_unit_cover_image[0]['alt']) != strlen(strip_tags($field_our_unit_cover_image[0]['alt']))) {
@@ -682,11 +682,11 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_our_unit_cover_image[0]['alt']) && preg_match($regex, $field_our_unit_cover_image[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_our_unit_cover_image_alt) ? $field_our_unit_cover_image_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_our_unit_cover_image_alt . '.'));
         }
     }
 
-    if (isset($field_circulars_images) && $field_circulars_images != "") {
+    if ($field_circulars_images !== []) {
         // var_dump($field_circulars_images); exit();
         $regex = '/<script[^>]*>.*?<\/script>/is';
         if (isset($field_circulars_images[0]['alt']) && strlen($field_circulars_images[0]['alt']) != strlen(strip_tags($field_circulars_images[0]['alt']))) {
@@ -694,7 +694,7 @@ function _custom_title_validate(array &$form, FormStateInterface $form_state){
         }
 
         if (isset($field_circulars_images[0]['alt']) && preg_match($regex, $field_circulars_images[0]['alt'])) {
-            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_circulars_images_alt) ? $field_circulars_images_alt : '') . '.'));
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_circulars_images_alt . '.'));
         }
     }
 
@@ -881,7 +881,7 @@ function general_security_patches_file_validate(Drupal\file\FileInterface $file)
               $image = imagecreatefromjpeg($file->getFileUri());
             } else if ($ext == 'png'){
               $image = imagecreatefrompng($file->getFileUri());
-            } else if ($ext == 'gif'){
+            } else {
               $image = imagecreatefromgif($file->getFileUri());
             }
             if ($image == false) { 

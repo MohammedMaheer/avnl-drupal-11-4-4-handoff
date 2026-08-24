@@ -6,7 +6,7 @@ Database baseline: `staging_db_2026-08-20_12-17.sql`
 
 ## Executive assessment
 
-The supplied application is a flat-document-root Drupal 10.5.1 installation. Its Composer project, checked-in core, and lock file all identify Drupal 10.5.1. The target Drupal 11.4.4 release requires PHP 8.3 or later and Symfony 7.4 components.
+The supplied application is a flat-document-root Drupal 10.5.1 installation. Its Composer project, checked-in core, and lock file all identify Drupal 10.5.1. The target Drupal 11.4.5 release requires PHP 8.3 or later and Symfony 7.4 components.
 
 The upgrade risk is **high**. The current lock file contains numerous contributed extensions whose installed releases explicitly exclude Drupal 11, five custom modules whose metadata stops at Drupal 10, two large custom themes whose metadata stops at Drupal 10, deprecated custom APIs, unsafe raw rendering, embedded cryptographic private keys, production/staging database exports inside the public document root, and runtime cache artifacts under the public files directory.
 
@@ -18,8 +18,8 @@ The original ZIP and the separately supplied SQL dump have been preserved unchan
 |---|---|
 | Drupal document root | `extracted_source/var/www/html/webstaging` |
 | Drupal core | 10.5.1 (`core/lib/Drupal.php`, `composer.lock`) |
-| Target core | 11.4.4 |
-| Target PHP requirement | PHP >=8.3.0 (Drupal 11.4.4 package metadata) |
+| Target core | 11.4.5 |
+| Target PHP requirement | PHP >=8.3.0 (Drupal 11.4.5 package metadata) |
 | Current dependency family | Symfony 6.4; Twig 3.20 |
 | Target dependency family | Symfony 7.4; Twig >=3.27 |
 | Composer project layout | Flat root; core installed at `core`, modules at `modules/contrib` |
@@ -44,15 +44,15 @@ The original ZIP and the separately supplied SQL dump have been preserved unchan
 | `photo_gallery` | `^8.8 || ^9 || ^10` | No | Upgrade metadata and validate EVA/Colorbox dependencies/configuration | Medium |
 | `video_gallery` | `^8.8 || ^9 || ^10` | No | Upgrade metadata and validate EVA/YouTube dependencies/configuration | Medium |
 | `avnl` theme | `^9 || ^10` | No | Upgrade metadata; review core library overrides, Twig raw output, preprocess code, JavaScript and accessibility | Critical |
-| `avnl_admin` theme | `^9 || ^10` | No | Upgrade metadata; reconcile copied Claro-era templates/libraries with Drupal 11.4.4 | Critical |
+| `avnl_admin` theme | `^9 || ^10` | No | Upgrade metadata; reconcile copied Claro-era templates/libraries with Drupal 11.4.5 | Critical |
 
 ## Contributed dependency compatibility snapshot
 
-The following table records installed versions and blockers reported by Composer against Drupal core 11.4.4. “Blocked” means the installed release's declared core constraint excludes Drupal 11; it does not mean the project lacks a newer compatible release.
+The following table records installed versions and blockers reported by Composer against Drupal core 11.4.5. “Blocked” means the installed release's declared core constraint excludes Drupal 11; it does not mean the project lacks a newer compatible release.
 
 | Component | Installed version | Drupal 11 at installed version | Action | Risk |
 |---|---:|---:|---|---|
-| Drupal core/recommended/scaffold/project-message | 10.5.1 | No | Pin all core packages to 11.4.4 and resolve the full dependency graph | High |
+| Drupal core/recommended/scaffold/project-message | 10.5.1 | No | Pin all core packages to 11.4.5 and resolve the full dependency graph | High |
 | Admin Toolbar | 3.3.0 | Blocked | Upgrade to compatible release | Medium |
 | Block Class | 2.0.11 | Blocked | Upgrade to compatible release | Medium |
 | CAPTCHA | 2.0.0-beta1 | Blocked | Upgrade to compatible stable release if available | High |
@@ -88,7 +88,7 @@ Installed projects not listed as current Composer blockers still require securit
 - The custom security module ships a 1024-bit RSA private key and exposes an encryption endpoint to users with `access content`. This is not an acceptable secret-management or authorization boundary.
 - The response subscriber removes Drupal's frame protection, disables caching globally, emits a fake `Server` value, sets an HttpOnly flag to false, and performs a header/exit redirect from an event subscriber. These behaviors require replacement with supported response/session mechanisms.
 - Theme templates contain multiple `|raw` render paths for page and node titles. Each path requires source-specific safety review; raw output must not be retained merely for compatibility.
-- Both themes copy and override a substantial amount of Drupal core theme behavior. Drupal 11.4.4 library removals/renames and template changes are a significant regression risk.
+- Both themes copy and override a substantial amount of Drupal core theme behavior. Drupal 11.4.5 library removals/renames and template changes are a significant regression risk.
 
 ## Security and handoff concerns
 
@@ -112,7 +112,7 @@ Installed projects not listed as current Composer blockers still require securit
 ## Initial upgrade strategy
 
 1. Restore the separately supplied 2026-08-20 dump to an isolated local database and record entity/configuration totals.
-2. Pin Drupal core packages to 11.4.4 and PHP to >=8.3, then resolve contributed dependencies explicitly.
+2. Pin Drupal core packages to 11.4.5 and PHP to >=8.3, then resolve contributed dependencies explicitly.
 3. Upgrade custom extension metadata only after source compatibility fixes are applied.
 4. Replace the embedded cryptographic/session workaround and sanitize deployment configuration.
 5. Run Drupal database updates and cache rebuild against the isolated baseline.

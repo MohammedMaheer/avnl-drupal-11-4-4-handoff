@@ -1,0 +1,20 @@
+uuid: b761ff76-4902-45ad-9f3a-98836636256c
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime_range
+    - node
+id: node.field_careers_vacancies_job_date
+field_name: field_careers_vacancies_job_date
+entity_type: node
+type: daterange
+settings:
+  datetime_type: date
+module: datetime_range
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

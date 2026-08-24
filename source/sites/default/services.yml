@@ -1,4 +1,8 @@
 parameters:
+  # Use PHP's Argon2id implementation for new and rehashed passwords. Existing
+  # bcrypt passwords remain valid and are upgraded automatically after login.
+  password.algorithm: argon2id
+  password.options: {}
   session.storage.options:
     # Default ini options for sessions.
     #

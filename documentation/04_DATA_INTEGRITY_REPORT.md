@@ -28,7 +28,7 @@ Core removed two permissions that no longer exist (`translate inner_banner_manag
 
 The initial upgraded database contained 1,455 file entities. A package-level audit found 45 absent paths. A full scan of every Drupal file/image field showed that four were attached to published content; matching originals or equivalent duplicate versions were recovered from the supplied backup. The other 41 were verified-unreferenced migration leftovers, including three temporary/security-test records, and were removed after a fresh backup.
 
-The final database contains 1,414 managed-file records and zero missing managed public/private files. All 360 database tables passed integrity checks. The cleanup is documented separately from the upgrade's zero-loss before/after comparison.
+The final database contains 1,414 managed-file records and zero missing managed public/private files. The initial remediation validated 360 tables; the Drupal 11.4.5 handoff contains 359 after the deprecated History module and its table were cleanly uninstalled. A fresh restore confirmed the final table and entity totals. The cleanup is documented separately from the upgrade's zero-loss before/after comparison.
 
-Final dump: `database/avnl_drupal11_4_4_final_2026-08-24.sql.gz`  
-SHA-256: `d04d4dc914ac6409617bb1af130544c693c69a4a21663335ceb373367c409d6e`
+Final dump: `database/avnl_drupal11_4_5_final_2026-08-24.sql.gz`  
+SHA-256: `7e1239a114e7d7a18657c024d703403e33c269bcc176cb33b499dd613362d97e`

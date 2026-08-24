@@ -1,0 +1,116 @@
+uuid: 9a9452ae-cec7-4686-9732-676d4bad7cc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.basic
+    - node.type.acts_policies
+    - node.type.article
+    - node.type.avnl_directory
+    - node.type.awards_achievements
+    - node.type.careers_vacancies
+    - node.type.circulars
+    - node.type.ecitizen_downloads
+    - node.type.events
+    - node.type.faqs
+    - node.type.footer_logo
+    - node.type.holiday_list
+    - node.type.home_page_banner
+    - node.type.inner_banner_management
+    - node.type.key_profiles
+    - node.type.news
+    - node.type.notices
+    - node.type.notification
+    - node.type.our_units
+    - node.type.page
+    - node.type.photo_gallery
+    - node.type.products
+    - node.type.releted_link
+    - node.type.tenders
+    - node.type.video_gallery
+  module:
+    - content_moderation
+_core:
+  default_config_hash: T7gMMyFbTYLalxpIOnzJebvek2OW0b1RgLVE9I2y228
+id: editorial
+label: Editorial
+type: content_moderation
+type_settings:
+  states:
+    archived:
+      label: Unpublish
+      weight: 5
+      published: false
+      default_revision: true
+    draft:
+      label: Draft
+      weight: -5
+      published: false
+      default_revision: false
+    published:
+      label: Published
+      weight: 0
+      published: true
+      default_revision: true
+  transitions:
+    archive:
+      label: Archive
+      from:
+        - published
+      to: archived
+      weight: 2
+    archived_draft:
+      label: 'Restore to Draft'
+      from:
+        - archived
+      to: draft
+      weight: 3
+    archived_published:
+      label: Restore
+      from:
+        - archived
+      to: published
+      weight: 4
+    create_new_draft:
+      label: 'Create New Draft'
+      from:
+        - draft
+        - published
+      to: draft
+      weight: 0
+    publish:
+      label: Publish
+      from:
+        - draft
+        - published
+      to: published
+      weight: 1
+  entity_types:
+    block_content:
+      - basic
+    node:
+      - acts_policies
+      - article
+      - avnl_directory
+      - awards_achievements
+      - careers_vacancies
+      - circulars
+      - ecitizen_downloads
+      - events
+      - faqs
+      - footer_logo
+      - holiday_list
+      - home_page_banner
+      - inner_banner_management
+      - key_profiles
+      - news
+      - notices
+      - notification
+      - our_units
+      - page
+      - photo_gallery
+      - products
+      - releted_link
+      - tenders
+      - video_gallery
+  default_moderation_state: draft

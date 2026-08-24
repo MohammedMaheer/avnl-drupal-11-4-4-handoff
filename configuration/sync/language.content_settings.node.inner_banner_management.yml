@@ -1,0 +1,18 @@
+uuid: 5e73be9c-30fe-458e-bf19-f34bd2ef5be2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.inner_banner_management
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: node.inner_banner_management
+target_entity_type_id: node
+target_bundle: inner_banner_management
+default_langcode: site_default
+language_alterable: true

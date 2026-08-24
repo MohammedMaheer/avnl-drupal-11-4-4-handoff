@@ -1,0 +1,20 @@
+uuid: 2c6dc91d-3054-443b-83b2-4af2bfc0a917
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_contact_number
+  module:
+    - user
+id: user.user.field_contact_number
+field_name: field_contact_number
+entity_type: user
+bundle: user
+label: 'Contact Number'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,15 @@
+display:
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  page_1:
+    display_options:
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/releted_link">Add Related Link</a></div>'
+            format: full_html

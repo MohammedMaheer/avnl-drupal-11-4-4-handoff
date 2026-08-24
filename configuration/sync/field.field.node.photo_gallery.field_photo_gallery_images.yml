@@ -1,0 +1,47 @@
+uuid: 2fabc866-72fc-430e-af85-9e0c32e2f6dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_photo_gallery_images
+    - node.type.photo_gallery
+  module:
+    - content_translation
+    - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
+_core:
+  default_config_hash: JTs8_Th-uqtDT9TiOOo7qo0XjjxZXjXzSmN497LyN9M
+id: node.photo_gallery.field_photo_gallery_images
+field_name: field_photo_gallery_images
+entity_type: node
+bundle: photo_gallery
+label: 'Photo Gallery Images'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: photo_gallery_images
+  file_extensions: 'png gif jpg jpeg'
+  max_filesize: '2 MB'
+  max_resolution: ''
+  min_resolution: 480x325
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: 'Default Image'
+    title: 'Default Image'
+    width: 220
+    height: 293
+field_type: image

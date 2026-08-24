@@ -1,0 +1,19 @@
+uuid: 5d776381-5942-437d-8919-8e16d5875864
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_our_units_notification
+    - node.type.our_units
+id: node.our_units.field_our_units_notification
+field_name: field_our_units_notification
+entity_type: node
+bundle: our_units
+label: Notification
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

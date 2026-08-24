@@ -1,0 +1,8 @@
+uuid: fbe1bf69-5356-4301-a76c-fe02dffba37c
+langcode: en
+status: true
+dependencies: {  }
+id: news_date
+label: 'News Date'
+locked: false
+pattern: 'j  F  Y'

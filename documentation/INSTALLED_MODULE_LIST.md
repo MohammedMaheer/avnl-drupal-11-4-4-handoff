@@ -4,8 +4,9 @@ Authoritative versions are locked in `composer.lock`. Key direct projects after 
 
 | Project | Version |
 |---|---:|
-| Drupal core/recommended/scaffold/project-message | 11.4.4 |
+| Drupal core/recommended/scaffold/project-message | 11.4.5 |
 | Drush | 13.7.6 |
+| Admin Audit Trail | 1.0.12 |
 | Admin Toolbar | 3.6.3 |
 | Block Class | 4.0.2 |
 | CAPTCHA | 2.0.10 |
@@ -20,6 +21,7 @@ Authoritative versions are locked in `composer.lock`. Key direct projects after 
 | Metatag | 2.2.0 |
 | Paragraphs | 1.23.0 |
 | Pathauto | 1.15.0 |
+| Session Limit | 3.0.0 |
 | SMTP | 1.4.0 |
 | TFA | 1.12.0 |
 | Token | 1.17.0 |
@@ -28,3 +30,5 @@ Authoritative versions are locked in `composer.lock`. Key direct projects after 
 | YouTube | 3.0.0-beta1 |
 
 Custom modules: `archive_option`, `general_section`, `general_security_patches`, `photo_gallery`, and `video_gallery`. Custom themes: `avnl` and `avnl_admin`. Devel and Upgrade Status are development-only dependencies and are uninstalled from the delivered active configuration; production installation uses `composer install --no-dev`.
+
+The deprecated Drupal core History module is disabled and absent from the active extension configuration.

@@ -1,0 +1,14 @@
+uuid: b06b60eb-7eb3-4b1b-8a6a-650c7799cf67
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.related_link_creator
+  module:
+    - user
+id: user_add_role_action.related_link_creator
+label: 'Add the Related link Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: related_link_creator

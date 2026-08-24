@@ -1,0 +1,14 @@
+uuid: 3aae9eb0-7a3e-4eba-8b95-7c27e50d32dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.related_link_publisher
+  module:
+    - user
+id: user_remove_role_action.related_link_publisher
+label: 'Remove the Related link Publisher role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: related_link_publisher

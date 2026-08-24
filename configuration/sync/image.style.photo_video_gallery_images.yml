@@ -1,0 +1,17 @@
+uuid: 578278a1-19a0-4186-a2fd-c47668925ce3
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 7aVwMBP4DOp8qYrsjqwI1-RQUuxM44W6sEX5kTsPP68
+name: photo_video_gallery_images
+label: 'Photo Video Gallery Images'
+effects:
+  e3ca3e72-8f1b-4f0c-90be-019db4e80e7b:
+    uuid: e3ca3e72-8f1b-4f0c-90be-019db4e80e7b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 325
+      anchor: center-center

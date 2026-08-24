@@ -1,0 +1,21 @@
+uuid: 75e7f768-4724-48d8-9e5e-fd564048b6d0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_avnl_departmental_office
+field_name: field_avnl_departmental_office
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

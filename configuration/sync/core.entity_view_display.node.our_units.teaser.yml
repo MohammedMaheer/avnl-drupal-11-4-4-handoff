@@ -1,0 +1,66 @@
+uuid: 0de51772-4bb6-446a-99d8-2ac4cf1dd52f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.our_units.field_our_unit_cap_description
+    - field.field.node.our_units.field_our_unit_capabilities_name
+    - field.field.node.our_units.field_our_unit_catalogue
+    - field.field.node.our_units.field_our_unit_certifications
+    - field.field.node.our_units.field_our_unit_cover_image
+    - field.field.node.our_units.field_our_unit_decription
+    - field.field.node.our_units.field_our_unit_facebook_link
+    - field.field.node.our_units.field_our_unit_gst_details
+    - field.field.node.our_units.field_our_unit_location
+    - field.field.node.our_units.field_our_unit_map_links
+    - field.field.node.our_units.field_our_unit_preamble_title
+    - field.field.node.our_units.field_our_unit_quality_standards
+    - field.field.node.our_units.field_our_unit_rti_officers
+    - field.field.node.our_units.field_our_unit_twitter_link
+    - field.field.node.our_units.field_our_units_category
+    - field.field.node.our_units.field_our_units_contact_details
+    - field.field.node.our_units.field_our_units_notification
+    - field.field.node.our_units.field_our_units_order
+    - field.field.node.our_units.field_our_units_product
+    - field.field.node.our_units.field_unit_preamble_description
+    - node.type.our_units
+  module:
+    - user
+id: node.our_units.teaser
+targetEntityType: node
+bundle: our_units
+mode: teaser
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_our_unit_cap_description: true
+  field_our_unit_capabilities_name: true
+  field_our_unit_catalogue: true
+  field_our_unit_certifications: true
+  field_our_unit_cover_image: true
+  field_our_unit_decription: true
+  field_our_unit_facebook_link: true
+  field_our_unit_gst_details: true
+  field_our_unit_location: true
+  field_our_unit_map_links: true
+  field_our_unit_preamble_title: true
+  field_our_unit_quality_standards: true
+  field_our_unit_rti_officers: true
+  field_our_unit_twitter_link: true
+  field_our_units_category: true
+  field_our_units_contact_details: true
+  field_our_units_notification: true
+  field_our_units_order: true
+  field_our_units_product: true
+  field_unit_preamble_description: true
+  langcode: true

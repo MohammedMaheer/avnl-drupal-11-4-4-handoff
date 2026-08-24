@@ -28,9 +28,6 @@ function general_security_patches_update_11001(&$sandbox) {
       continue;
     }
     $hash = $password_hasher->hash($record->pass);
-    if ($hash === FALSE) {
-      continue;
-    }
     $database->update('login_attampt')
       ->fields(['pass' => $hash])
       ->condition('id', $record->id)

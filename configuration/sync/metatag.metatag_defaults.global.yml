@@ -1,0 +1,13 @@
+uuid: f7041599-51bf-413a-8e28-669307426f22
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: sL588ui1E_8-2c_UupwyYxcqX2OVyMFp3HTLbbFqvPc
+id: global
+label: Global
+tags:
+  canonical_url: '[current-page:url]'
+  description: '[current-page:title], [site:name]'
+  keywords: '[current-page:title], Armoured Vehicles, Armoured Vehicles Nigam, India'
+  title: '[current-page:title] | [site:name]'

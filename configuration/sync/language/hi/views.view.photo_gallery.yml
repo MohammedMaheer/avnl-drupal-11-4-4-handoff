@@ -1,0 +1,93 @@
+display:
+  page_2:
+    display_options:
+      header:
+        area:
+          content:
+            format: full_html
+            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/photo_gallery">Add Photo Gallery</a></div>'
+      fields:
+        title:
+          label: Title
+          separator: ', '
+        field_photo_gallery_images:
+          label: चित्र
+          separator: ', '
+        status:
+          label: अवस्था
+          separator: ', '
+        edit_node:
+          text: 'संपादित करें'
+        delete_node:
+          label: 'Action Delete'
+          text: Delete
+        dropbutton:
+          label: कार्रवाई
+      filters:
+        title:
+          expose:
+            label: Title
+        status:
+          expose:
+            label: प्रकाशित
+      menu:
+        title: 'फोटो गैलरी प्रबंधित करें'
+  page_1:
+    display_options:
+      fields:
+        view_node:
+          text: देखना
+        nid:
+          separator: ', '
+        title:
+          separator: ', '
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: Title
+      pager:
+        options:
+          tags:
+            first: '<< First'
+            last: 'Last >>'
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+    display_title: पृष्ठ
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  default:
+    display_options:
+      exposed_form:
+        options:
+          submit_button: खोजें
+          reset_button_label: रीसेट
+          exposed_sorts_label: 'क्रमबद्ध द्वारा'
+          sort_desc_label: अवरोही
+      pager:
+        options:
+          tags:
+            first: '<< First'
+            last: 'Last >>'
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+      fields:
+        title:
+          separator: ', '
+        field_photo_gallery_images:
+          separator: ', '
+      title: 'फोटो गैलरी'
+label: 'फोटो गैलरी'

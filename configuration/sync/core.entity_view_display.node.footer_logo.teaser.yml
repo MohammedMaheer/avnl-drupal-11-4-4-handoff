@@ -1,0 +1,40 @@
+uuid: dc6d6057-e3c5-46fd-a9fc-c9f0a8738b2f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.footer_logo.body
+    - field.field.node.footer_logo.field_footer_logo
+    - field.field.node.footer_logo.field_footer_logo_hyperlink
+    - node.type.footer_logo
+  module:
+    - text
+    - user
+id: node.footer_logo.teaser
+targetEntityType: node
+bundle: footer_logo
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_footer_logo: true
+  field_footer_logo_hyperlink: true
+  langcode: true

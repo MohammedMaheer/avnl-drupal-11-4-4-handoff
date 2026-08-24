@@ -9,6 +9,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\views\Entity\View;
 use Drupal\views\Views;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests that the report stylesheet is attached to the audit trail view.
@@ -20,6 +21,7 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
  * @group admin_audit_trail
  */
 #[RunTestsInSeparateProcesses]
+#[Group('admin_audit_trail')]
 class ReportLibraryAttachTest extends KernelTestBase {
 
   /**
@@ -28,6 +30,7 @@ class ReportLibraryAttachTest extends KernelTestBase {
   protected static $modules = [
     'system',
     'user',
+    'filter',
     'views',
     'admin_audit_trail',
   ];

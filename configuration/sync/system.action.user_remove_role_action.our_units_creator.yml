@@ -1,0 +1,14 @@
+uuid: 85f023b5-d686-41a7-adf9-1200a78295a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.our_units_creator
+  module:
+    - user
+id: user_remove_role_action.our_units_creator
+label: 'Remove the Our Units Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: our_units_creator

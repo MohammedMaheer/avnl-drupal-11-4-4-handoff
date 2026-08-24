@@ -1,0 +1,21 @@
+uuid: 79fd8176-50b1-451e-b295-55c79e924ac8
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - node.type.online_enquiry
+  module:
+    - user
+id: node.online_enquiry.teaser
+targetEntityType: node
+bundle: online_enquiry
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

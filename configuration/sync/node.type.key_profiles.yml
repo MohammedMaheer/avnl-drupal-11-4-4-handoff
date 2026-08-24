@@ -1,0 +1,17 @@
+uuid: d125135d-91ba-45c9-9e08-297edafbc4ec
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Key Profiles'
+type: key_profiles
+description: 'Add Key Profiles'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

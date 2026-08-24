@@ -1,12 +1,12 @@
-# AVNL Drupal 11.4.4 Administrator Manual
+# AVNL Drupal 11.4.5 Administrator Manual
 
 ## Purpose and audience
 
-This guide is for authorized AVNL Site Administrators, Content Editors, creator/publisher roles, and operations staff. It describes the retained administration model after the Drupal 11.4.4 upgrade. Perform training and operational work on staging first; use production only under the organization's approved change process.
+This guide is for authorized AVNL Site Administrators, Content Editors, creator/publisher roles, and operations staff. It describes the retained administration model after the Drupal 11.4.5 upgrade. Perform training and operational work on staging first; use production only under the organization's approved change process.
 
 ## What changed
 
-- Drupal core and dependencies are upgraded to 11.4.4-compatible versions.
+- Drupal core and dependencies are upgraded to 11.4.5-compatible versions.
 - Existing content types, multilingual configuration, media, menus, aliases, search, galleries, archives, roles, and moderation are retained.
 - The legacy jCryption login layer and bundled keys are removed. Authentication must use HTTPS.
 - Password-history values are one-way hashes.

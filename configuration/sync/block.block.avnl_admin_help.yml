@@ -1,0 +1,22 @@
+uuid: 1c774982-a537-4540-bd04-6e3be4c10038
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - avnl_admin
+_core:
+  default_config_hash: MG0GPnl6XyeXyo5PA-IXIAZXq0vsiFUudKVeTuIc-wo
+id: avnl_admin_help
+theme: avnl_admin
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

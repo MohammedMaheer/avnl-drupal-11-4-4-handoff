@@ -1,12 +1,14 @@
 # Security Audit Report
 
-Validation date: 2026-08-23
+Validation date: 2026-08-24
 
 ## Package checks completed
 
 - Composer lock audit found no known dependency advisories.
 - Public jCryption code, bundled RSA keys, legacy SQL/server inventories, and public backup artifacts are absent from the handoff.
 - Database credentials and hash salt are environment-driven; `.env.example` contains placeholders only.
+- SMTP credentials and Drupal/TFA encryption-key material are removed from exported configuration and mapped to protected `AVNL_*` environment variables.
+- The delivered database has zero active sessions and zero TFA user-data rows; SMTP secrets, encryption-key material, runtime logs/caches, and configuration-audit snapshots containing historical secrets were removed before a successful fresh-restore validation.
 - The DDEV-only local settings override is excluded from the final handoff.
 - Password-history data contains 11 one-way `$2y$` hashes and nine empty historical values; no plaintext password-history values remain.
 - CSP is enforced without `unsafe-eval`; response hardening includes `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, and `Permissions-Policy`.

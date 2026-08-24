@@ -6,3 +6,5 @@ Thumbs.db
 !/.env.example
 source/sites/default/settings.local.php
 source/sites/default/services.local.yml
+source/sites/default/avnl.runtime-locator.php
+source/sites/default/avnl.runtime-secrets.php

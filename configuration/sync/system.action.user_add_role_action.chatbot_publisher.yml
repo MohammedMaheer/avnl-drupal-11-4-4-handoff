@@ -1,0 +1,14 @@
+uuid: 916a5fb4-9c0b-4cec-b566-09a956e3cb67
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chatbot_publisher
+  module:
+    - user
+id: user_add_role_action.chatbot_publisher
+label: 'Add the Chatbot Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chatbot_publisher

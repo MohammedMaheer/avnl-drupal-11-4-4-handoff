@@ -1,0 +1,17 @@
+<?php
+
+use Symfony\Component\HttpFoundation\Request;
+
+// Preview-only example. Copy deliberately; do not ship this as active generic
+// UAT configuration. Restrict the proxy CIDR to the actual container network.
+$settings['reverse_proxy'] = TRUE;
+$settings['reverse_proxy_addresses'] = ['172.16.0.0/12'];
+$settings['reverse_proxy_trusted_headers'] =
+  Request::HEADER_X_FORWARDED_FOR |
+  Request::HEADER_X_FORWARDED_HOST |
+  Request::HEADER_X_FORWARDED_PORT |
+  Request::HEADER_X_FORWARDED_PROTO;
+
+$settings['file_private_path'] = getenv('AVNL_PRIVATE_FILES_PATH') ?: '/var/www/private';
+$settings['file_temp_path'] = getenv('AVNL_TEMP_PATH') ?: '/tmp';
+$config['system.logging']['error_level'] = getenv('AVNL_ERROR_LEVEL') ?: 'hide';

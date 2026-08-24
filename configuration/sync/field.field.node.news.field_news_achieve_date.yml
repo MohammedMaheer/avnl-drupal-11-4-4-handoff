@@ -1,0 +1,23 @@
+uuid: 514a3dd0-c2b3-4512-a36a-8542371d8163
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_news_achieve_date
+    - node.type.news
+id: node.news.field_news_achieve_date
+field_name: field_news_achieve_date
+entity_type: node
+bundle: news
+label: Archive
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

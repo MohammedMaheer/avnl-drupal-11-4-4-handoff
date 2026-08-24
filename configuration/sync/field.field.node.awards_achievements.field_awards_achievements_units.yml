@@ -1,0 +1,29 @@
+uuid: 02e9646d-0f65-4ddd-9406-94ddf5eb99e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_awards_achievements_units
+    - node.type.awards_achievements
+    - taxonomy.vocabulary.our_unit_category
+id: node.awards_achievements.field_awards_achievements_units
+field_name: field_awards_achievements_units
+entity_type: node
+bundle: awards_achievements
+label: 'Awards & Achievements Units'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      our_unit_category: our_unit_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,17 @@
+uuid: d9293398-0388-4b50-b52e-387caa69e59a
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Acts & Policies'
+type: acts_policies
+description: 'Add Acts & Policies'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

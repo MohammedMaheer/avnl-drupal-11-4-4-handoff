@@ -1,0 +1,23 @@
+uuid: d3ee5fbb-130b-4993-9091-f8bfade8a40b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_our_unit_catalogue
+    - node.type.our_units
+  module:
+    - text
+id: node.our_units.field_our_unit_catalogue
+field_name: field_our_unit_catalogue
+entity_type: node
+bundle: our_units
+label: Catalogue
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

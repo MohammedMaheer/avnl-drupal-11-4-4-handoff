@@ -8,8 +8,8 @@ smtp_port: '587'
 smtp_protocol: tls
 smtp_autotls: true
 smtp_timeout: 300
-smtp_username: ef03e4012f205647f4e0e425f8cce2e9
-smtp_password: a8b50f1ae39456c770412f88948667a3
+smtp_username: ''
+smtp_password: ''
 smtp_from: no-reply@avnl.org
 smtp_fromname: 'AVNL Team'
 smtp_client_hostname: ''

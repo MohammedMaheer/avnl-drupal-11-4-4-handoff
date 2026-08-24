@@ -1,0 +1,25 @@
+uuid: c6604e62-1637-42bc-b482-cb9a92f1f583
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - avnl
+_core:
+  default_config_hash: n_nlgjggHVfQt2H__zvLOKB2YtjPDbQ5tHijF9LE1aM
+id: avnl_site_branding
+theme: avnl
+region: header
+weight: -33
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: visible
+  provider: system
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: false
+visibility: {  }

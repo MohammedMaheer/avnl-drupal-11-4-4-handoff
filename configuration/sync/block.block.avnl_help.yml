@@ -1,0 +1,22 @@
+uuid: 333c7905-3e04-4a27-b374-aa533fb313af
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - avnl
+_core:
+  default_config_hash: VfPFqqxfkomud5CO8DUijw85QIl9GIxh_nIxLOYESxg
+id: avnl_help
+theme: avnl
+region: content_above
+weight: -32
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

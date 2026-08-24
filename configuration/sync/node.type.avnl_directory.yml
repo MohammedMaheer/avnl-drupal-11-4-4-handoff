@@ -1,0 +1,17 @@
+uuid: b127b998-c239-4821-bcd2-c3779e830a9d
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'AVNL Directory'
+type: avnl_directory
+description: 'Add AVNL Directory'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

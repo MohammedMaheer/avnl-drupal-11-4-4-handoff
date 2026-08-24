@@ -20,14 +20,12 @@ class ArchiveController extends ControllerBase {
         if (is_array($archive_options)) {
             foreach($archive_options as $key => $value){
                 if($value!=""){
-                    foreach ($node_types as $node_type) {
-                        if($node_type->id() == $value){
-                            $title = $node_type->label();
-                        }
+                    if (!isset($node_types[$value])) {
+                      continue;
                     }
                     $items[] = [
                       '#type' => 'link',
-                      '#title' => $title,
+                      '#title' => $node_types[$value]->label(),
                       '#url' => Url::fromRoute('archive_option.node_archive_list', [
                         'node_type' => str_replace('_', '-', $value),
                       ]),

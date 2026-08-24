@@ -1,0 +1,14 @@
+uuid: e00ff54c-5284-48eb-9abc-a8f5a6e16dc0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.video_gallery_creator
+  module:
+    - user
+id: user_add_role_action.video_gallery_creator
+label: 'Add the Video Gallery Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: video_gallery_creator

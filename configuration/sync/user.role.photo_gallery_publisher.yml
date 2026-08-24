@@ -1,0 +1,42 @@
+uuid: be67dfd8-eb33-404f-aaa1-de6375f40c7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.photo_gallery
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - node
+    - sitemap
+    - system
+    - toolbar
+id: photo_gallery_publisher
+label: 'Photo Gallery Publisher'
+weight: 11
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access sitemap'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'delete own files'
+  - 'edit any photo_gallery content'
+  - 'edit own photo_gallery content'
+  - 'translate photo_gallery node'
+  - 'use editorial transition archive'
+  - 'use editorial transition publish'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view any unpublished content'
+  - 'view latest version'
+  - 'view the administration theme'

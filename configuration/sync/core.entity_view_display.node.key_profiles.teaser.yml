@@ -1,0 +1,54 @@
+uuid: ae5bf4d5-0140-498a-9883-bd00d824a501
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.key_profiles.body
+    - field.field.node.key_profiles.field_key_cmd_images
+    - field.field.node.key_profiles.field_key_profile_contact_detail
+    - field.field.node.key_profiles.field_key_profiles_address
+    - field.field.node.key_profiles.field_key_profiles_category
+    - field.field.node.key_profiles.field_key_profiles_department
+    - field.field.node.key_profiles.field_key_profiles_email_id
+    - field.field.node.key_profiles.field_key_profiles_image
+    - field.field.node.key_profiles.field_key_profiles_order
+    - field.field.node.key_profiles.field_key_profiles_position
+    - node.type.key_profiles
+  module:
+    - text
+    - user
+id: node.key_profiles.teaser
+targetEntityType: node
+bundle: key_profiles
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_key_cmd_images: true
+  field_key_profile_contact_detail: true
+  field_key_profiles_address: true
+  field_key_profiles_category: true
+  field_key_profiles_department: true
+  field_key_profiles_email_id: true
+  field_key_profiles_image: true
+  field_key_profiles_order: true
+  field_key_profiles_position: true
+  langcode: true

@@ -1,0 +1,19 @@
+uuid: f835265f-5667-472a-b570-dd717988fa7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_avnl_directory_position
+    - node.type.avnl_directory
+id: node.avnl_directory.field_avnl_directory_position
+field_name: field_avnl_directory_position
+entity_type: node
+bundle: avnl_directory
+label: Position
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

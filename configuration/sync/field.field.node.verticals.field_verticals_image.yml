@@ -1,0 +1,45 @@
+uuid: 873bd00c-8797-4d1a-bf39-4f15f9b706c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_verticals_image
+    - node.type.verticals
+  module:
+    - content_translation
+    - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
+id: node.verticals.field_verticals_image
+field_name: field_verticals_image
+entity_type: node
+bundle: verticals
+label: 'Verticals Image'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: verticals-images
+  file_extensions: 'png gif jpg jpeg'
+  max_filesize: '10 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

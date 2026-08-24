@@ -1,0 +1,14 @@
+uuid: 469f28a0-01a3-4d30-91eb-316d785a9e82
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.our_units_publisher
+  module:
+    - user
+id: user_add_role_action.our_units_publisher
+label: 'Add the Our Units Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: our_units_publisher

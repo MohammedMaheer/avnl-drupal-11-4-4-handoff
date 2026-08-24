@@ -1,0 +1,53 @@
+uuid: 7709fb61-edec-44a1-879d-914d55901ed0
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.home_page_banner
+    - node.type.photo_gallery
+    - node.type.video_gallery
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - menu_link_attributes
+    - node
+    - system
+    - toolbar
+id: banner_creator
+label: 'Banner Creator'
+weight: -12
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'create content translations'
+  - 'create home_page_banner content'
+  - 'create photo_gallery content'
+  - 'create video_gallery content'
+  - 'delete own files'
+  - 'delete own home_page_banner content'
+  - 'delete own photo_gallery content'
+  - 'delete own video_gallery content'
+  - 'edit own home_page_banner content'
+  - 'edit own photo_gallery content'
+  - 'edit own video_gallery content'
+  - 'translate home_page_banner node'
+  - 'translate photo_gallery node'
+  - 'translate video_gallery node'
+  - 'update content translations'
+  - 'use editorial transition create_new_draft'
+  - 'use menu link attributes'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view latest version'
+  - 'view the administration theme'

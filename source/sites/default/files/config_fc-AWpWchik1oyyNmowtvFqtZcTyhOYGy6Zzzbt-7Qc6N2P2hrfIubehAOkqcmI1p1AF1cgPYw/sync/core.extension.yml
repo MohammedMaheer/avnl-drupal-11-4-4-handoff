@@ -49,7 +49,6 @@ module:
   general_security_patches: 0
   geolocation: 0
   help: 0
-  history: 0
   image: 0
   image_captcha: 0
   jquery_ui: 0
@@ -84,6 +83,8 @@ module:
   real_aes: 0
   responsive_image: 0
   search: 0
+  search_help: 0
+  search_node: 0
   session_limit: 0
   shortcut: 0
   sitemap: 0

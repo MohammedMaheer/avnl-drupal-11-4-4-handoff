@@ -29,7 +29,7 @@ Before production acceptance, AVNL and the supplier must record agreed definitio
 
 ## Warranty services
 
-Subject to the executed agreement, the support plan should cover reproducible upgrade defects, Drupal 11.4.4 compatibility issues, regression correction, custom-module/theme defects, security patches, applicable minor updates, deployment/rollback assistance, and documentation corrections. Security/minor updates must still follow staging, backup, QA, and approval procedures.
+Subject to the executed agreement, the support plan should cover reproducible upgrade defects, Drupal 11.4.5 compatibility issues, regression correction, custom-module/theme defects, security patches, applicable minor updates, deployment/rollback assistance, and documentation corrections. Security/minor updates must still follow staging, backup, QA, and approval procedures.
 
 ## Exclusions and change control
 

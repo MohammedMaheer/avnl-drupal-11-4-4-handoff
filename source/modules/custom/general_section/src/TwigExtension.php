@@ -45,21 +45,15 @@ class TwigExtension extends AbstractExtension {
    public function get_body_email_with_format($edata) {
     //echo 'hi';exit;
     if(!empty($edata)){
-        preg_match_all('/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})/', $edata["#text"], $potentialEmails);
-        $detail = [];
-        $email = [];
-        $i=0;
-        foreach($potentialEmails as $pos){
-          foreach($pos as $pos1){
-          //print_r($pos1);
-            $detail[] = $pos[$i];
-            $email_at = str_replace("@", "[at]", $pos[$i]);
-            $email[] = str_replace(".", "[dot]",$email_at);
-            $i++;
-          }
-        }
-      
-      $edata = str_replace(array_values($detail),array_values($email),$edata);
+      $text = (string) ($edata['#text'] ?? '');
+      preg_match_all('/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})/', $text, $potentialEmails);
+      $detail = $potentialEmails[0];
+      $email = array_map(
+        static fn(string $address): string => str_replace('.', '[dot]', str_replace('@', '[at]', $address)),
+        $detail,
+      );
+
+      $edata = str_replace($detail, $email, $edata);
       
       return $edata;
     }else{

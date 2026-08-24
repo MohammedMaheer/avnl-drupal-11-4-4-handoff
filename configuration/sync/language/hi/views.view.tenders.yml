@@ -1,0 +1,105 @@
+display:
+  page_1:
+    display_options:
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/tenders">Add Tenders</a></div>'
+            format: full_html
+  page_2:
+    display_options:
+      title: निविदाओं
+      fields:
+        counter:
+          label: क्रमांक
+        title:
+          label: शीर्षक
+        field_tenders_document:
+          label: विवरण
+        field_tenders_category:
+          label: 'यूनिट का नाम'
+        field_tenders_date:
+          label: 'अंतिम अपलोड तिथि'
+      pager:
+        options:
+          tags:
+            next: 'अगला ›'
+            previous: '‹ पहले का'
+            first: '« पहला'
+            last: 'अंतिम »'
+          expose:
+            items_per_page_label: 'आइटम प्रति पेज'
+            items_per_page_options_all_label: '- सभी -'
+            offset_label: ओफ़्सेट
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      exposed_form:
+        options:
+          submit_button: खोज
+          reset_button_label: रीसेट
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/archive/tenders">पुरालेख</a></div>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+  default:
+    display_options:
+      exposed_form:
+        options:
+          submit_button: खोज
+  page_3:
+    display_title: पुरालेख
+    display_options:
+      title: 'पुरालेख निविदाओं'
+      fields:
+        counter:
+          label: क्रमांक
+        title:
+          label: शीर्षक
+        field_tenders_document:
+          label: विवरण
+        field_tenders_category:
+          label: 'यूनिट का नाम'
+        field_tenders_date:
+          label: 'अंतिम अपलोड तिथि'
+      pager:
+        options:
+          tags:
+            next: 'अगला ›'
+            previous: '‹ पहले का'
+            first: '« पहला'
+            last: 'अंतिम »'
+          expose:
+            items_per_page_label: 'आइटम प्रति पेज'
+      exposed_form:
+        options:
+          submit_button: खोज
+          reset_button_label: रीसेट
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/tenders">निविदाओं पर वापस जाएँ</a></div>'
+            format: full_html
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html

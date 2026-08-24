@@ -1,0 +1,29 @@
+uuid: c8eb9265-6e3c-4852-8189-70bd7e5db23f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_photo_gallery_type
+    - node.type.photo_gallery
+    - taxonomy.vocabulary.photo_gallery_category
+id: node.photo_gallery.field_photo_gallery_type
+field_name: field_photo_gallery_type
+entity_type: node
+bundle: photo_gallery
+label: Type
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      photo_gallery_category: photo_gallery_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

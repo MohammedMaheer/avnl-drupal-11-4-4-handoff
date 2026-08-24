@@ -1,0 +1,24 @@
+uuid: 68f0837c-e839-4eee-ae6e-eeb34ed79416
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_careers_vacancies_order
+    - node.type.careers_vacancies
+  module:
+    - weight
+id: node.careers_vacancies.field_careers_vacancies_order
+field_name: field_careers_vacancies_order
+entity_type: node
+bundle: careers_vacancies
+label: Order
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings:
+  range: '20'
+field_type: weight

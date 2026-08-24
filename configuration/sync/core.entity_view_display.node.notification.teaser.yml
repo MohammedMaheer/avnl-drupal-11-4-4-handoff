@@ -1,0 +1,42 @@
+uuid: ff65cd0d-e78d-46c1-ad5c-3bb51481160a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.notification.body
+    - field.field.node.notification.field_notification_archive_date
+    - field.field.node.notification.field_notification_date
+    - field.field.node.notification.field_notification_hyperlink
+    - node.type.notification
+  module:
+    - text
+    - user
+id: node.notification.teaser
+targetEntityType: node
+bundle: notification
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_notification_archive_date: true
+  field_notification_date: true
+  field_notification_hyperlink: true
+  langcode: true

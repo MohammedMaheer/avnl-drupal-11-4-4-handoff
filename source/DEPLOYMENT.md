@@ -1,77 +1,124 @@
-# Deployment Runbook
+# Staging-First Deployment Runbook
 
-This release must be rehearsed and accepted on staging before any production cutover. Source, database, public files, private files, and environment configuration form one release set and must be backed up and rolled back together.
+This runbook deploys the AVNL Drupal 11.4.5 handoff to an existing staging environment without rotating or exposing credentials. Stop after staging QA. Production requires a separate approval and fresh backup set.
 
-## 1. Preflight
+## 1. Confirm the target
 
-1. Read `docs/UPGRADE_REPORT.md`, `docs/03_MODULE_REPLACEMENT_APPROVALS.md`, `docs/08_TEST_REPORT.md`, and `docs/09_FINAL_PACKAGE_VALIDATION.md`.
-2. Positively identify the staging hostname, document root, database, public/private file paths, and release directory. Stop if staging and production cannot be distinguished.
-3. Verify PHP 8.3 or later, Composer 2, required PHP extensions, MySQL 8 or a compatible MariaDB release, HTTPS, and at least 1 GB of available PHP CLI memory for deployment commands.
-4. Verify the package and database checksums before extraction or import.
-5. Obtain the documented module/patch approvals before production. Approval may remain a staging acceptance item during rehearsal.
+1. Positively identify the staging hostname, document root, database, public/private file paths, release path, web/PHP service, and configuration-sync path.
+2. Confirm that none of those resources are shared with production.
+3. Record the currently deployed Drupal version and release identifier.
+4. Stop immediately if staging and production cannot be distinguished.
 
-## 2. Back up staging
+## 2. Verify prerequisites
 
-Create timestamped, restorable backups of the current staging source, database, public files, private files, `settings.php`, any local settings file, environment configuration, and relevant web-server configuration. Verify that each backup is readable. Never overwrite the last known-good release.
+- PHP 8.3 or later with the extensions required by Drupal; APCu and upload-progress are recommended and included in the tested container template.
+- Composer 2 and at least 1 GB CLI memory for deployment operations.
+- MySQL 8 or compatible MariaDB with transaction isolation set to `READ-COMMITTED`.
+- HTTPS, trusted-host configuration, writable public/private files, and non-writable PHP/YAML configuration files.
+- Sufficient disk space for the new release plus two complete rollback sets.
 
-## 3. Preserve staging secrets
+Verify `CHECKSUMS.md`, test the database gzip stream, and run Composer validation before deployment.
 
-Staging deployment must preserve existing credential and secret values exactly. Do not rotate, regenerate, reveal, or replace database credentials, API keys, certificates, SSH keys, hash salt, or administrator passwords during the rehearsal. `.env.example` is a variable-name reference only and must never overwrite real values.
+## 3. Create a matched rollback set
 
-If the receiving environment does not already provide the required `AVNL_*` variables, stop and have the authorized infrastructure owner map the existing values into the protected environment or secret store. Do not write secrets into the release tree or command history.
+Back up the current staging source, database, public files, private files, configuration sync, `settings.php`, `services.yml`, local settings, environment/secret configuration, scheduled jobs, PHP configuration, and web-server configuration. Verify that the database dump can be read and the file archives can be listed. Do not overwrite the last known-good release.
 
-Any production credential or historical TLS-key rotation is a separately approved security operation. It is not part of the staging source replacement.
+## 4. Extract the inactive release and preserve credentials
 
-## 4. Deploy source and files
+Do not rotate, replace, print, or copy into the release tree any database credential, administrator password, TFA seed/recovery code, Drupal hash salt, SMTP credential, API key, certificate, SSH key, cookie domain, or trusted-host value.
+
+Extract `source/` into a new versioned release directory but do not switch traffic. Keep the target's existing protected environment or secret-store values. Treat `source/.env.example` only as a variable-name reference. Preserve approved staging-specific settings without copying a preview-specific `settings.local.php` onto an unrelated target.
+
+From an account authorized to read the current Drupal settings and write the new release, run:
+
+```bash
+NEW_RELEASE_ROOT/scripts/preserve-uat-runtime.sh CURRENT_DRUPAL_ROOT NEW_RELEASE_ROOT
+```
+
+This securely captures the current database connection, hash salt, host/path/proxy settings, cookie domain, SMTP configuration, and resolved AVNL/TFA encryption key into the existing private-files area (outside the document root) and creates a non-secret locator in the new release. It does not print values or modify the active site. Confirm the protected file is mode `0640` or stricter and readable by the new release's PHP service identity.
+
+If the platform already provides `AVNL_SMTP_USERNAME`, `AVNL_SMTP_PASSWORD`, `AVNL_ENCRYPTION_KEY`, database variables, and hash salt through a protected secret store, those values take precedence and may be retained unchanged. Do not generate a replacement encryption key during a credential-preserving deployment.
+
+Before database updates, configuration import, or traffic switching, bootstrap the inactive release and verify:
+
+```bash
+php -d memory_limit=1G NEW_RELEASE_ROOT/vendor/bin/drush.php \
+  --root=NEW_RELEASE_ROOT php:script scripts/verify-uat-runtime.php
+```
+
+All checks must pass. If capture or verification fails, stop and keep the current release active.
+
+## 5. Choose the database mode
+
+### Mode A — Existing staging database (default and credential-preserving)
+
+Keep the existing staging database. This preserves administrator users, password hashes, TFA enrollment, staging content, SMTP state, and environment-specific runtime data. Deploy the new source, run Drupal updates, review configuration differences, and import approved configuration.
+
+### Mode B — Full preview clone (explicit authorization required)
+
+Import `database/avnl_drupal11_4_5_final_2026-08-24.sql.gz` only when the authorized owner has requested a full clone or isolated restore. Importing replaces the target database contents, including users, password hashes, content, and configuration. For security, the delivered copy contains no active sessions, copied TFA seeds/recovery data, SMTP credentials, or encryption-key material. Configure protected environment secrets and enroll authorized administrators in TFA after the isolated restore. Never use this preview database as a production database.
+
+Do not combine parts of two databases. For production, upgrade a fresh authorized production clone during the approved maintenance window instead of importing this staging snapshot.
+
+## 6. Deploy source atomically
 
 1. Enable maintenance mode on staging only.
-2. Extract into a new release directory; do not extract directly over the active document root.
-3. Deploy `source/` while preserving staging-only secret configuration.
-4. Merge public files without deleting newer staging uploads. Keep private files outside the public document root.
-5. Apply the server's existing least-privilege ownership and permission policy. Do not use `777`.
+2. Use the already extracted and runtime-verified release from section 4; do not overwrite the active document root.
+3. Retain the generated runtime locator and protected-file access established in section 4. Do not copy secret values into tracked source files.
+4. Merge `source/files/` with staging public files without deleting newer target uploads.
+5. Deploy private files outside the public document root.
 6. Install exactly the locked production dependencies:
 
    ```bash
    composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+   composer validate --no-check-publish
+   composer audit --no-interaction
    ```
 
-   Do not run `composer update`. Confirm that the locked Klaro patch is applied.
+7. Do not run `composer update` on the target.
+8. Set `sites/default/services.yml` and `sites/default/settings.php` readable by PHP but non-writable by the web-service account. Never use permission `777`.
+9. Switch the staging release pointer only after preflight validation succeeds.
 
-## 5. Deploy database
+## 7. Apply Drupal updates and configuration
 
-For the staging handoff rehearsal, import `database/avnl_drupal11_4_4_final_2026-08-24.sql.gz` into the backed-up staging database using the environment's protected connection method. Do not put credentials in commands or logs.
-
-For a later production cutover, do not reuse an old staging database. Upgrade a fresh production database clone during the approved maintenance window and preserve its matching deployment-time backup.
-
-## 6. Run Drupal deployment commands
-
-The supplied Views configuration exceeds a 128 MB CLI memory limit during some rebuild/update operations. Use the tested 1 GB CLI profile for deployment commands without changing the web runtime memory limit:
+Use the target's normal PHP/Drush entry point. The tested sequence is:
 
 ```bash
 php -d memory_limit=1G vendor/bin/drush.php updatedb -y
-php -d memory_limit=1G vendor/bin/drush.php config:import -y
-php -d memory_limit=1G vendor/bin/drush.php cache:rebuild
 php -d memory_limit=1G vendor/bin/drush.php updatedb:status
 php -d memory_limit=1G vendor/bin/drush.php config:status
+php -d memory_limit=1G vendor/bin/drush.php config:import -y
+php -d memory_limit=1G vendor/bin/drush.php cache:rebuild
+php -d memory_limit=1G vendor/bin/drush.php cron
 php -d memory_limit=1G vendor/bin/drush.php status
+php -d memory_limit=1G vendor/bin/drush.php core:requirements --severity=1
 ```
 
-Required results: Drupal 11.4.4, successful bootstrap and database connection, no pending updates, and no unexplained configuration differences.
+Before configuration import, export the target's active configuration and review the diff. Confirm that approved staging-only mail, trusted-host, integration, consent, security, and role settings are preserved by protected overrides or explicitly reconciled.
 
-## 7. Clear staging-only caches
+Required results are Drupal 11.4.5, successful bootstrap/database connection, no pending database updates, no unexplained configuration differences, and no Drupal status warnings.
 
-Rebuild Drupal caches after source deployment, database import, and configuration import. Clear aggregated staging CSS/JavaScript and any staging-only reverse-proxy or application cache. Do not flush Redis, Memcached, Varnish, CDN, PHP OPcache, or another service unless it is confirmed to be isolated from production. Never restart a service shared with production.
+## 8. Clear only staging caches
 
-## 8. Quality assurance
+Rebuild Drupal caches after source deployment, database work, and configuration import. Clear generated CSS/JavaScript and any staging-only reverse-proxy cache. Restart PHP/Apache only if isolated to staging and required to activate PHP extensions or OPcache changes. Never flush or restart a service shared with production.
 
-Execute the complete staging matrix in `docs/08_TEST_REPORT.md` and `docs/TRAINING_GUIDE.md`, including anonymous pages, existing administrator login, every editorial role, moderation, media/file operations, multilingual publishing, search, archives, galleries, forms, mail, TFA, CAPTCHA, cron, external services, mobile layouts, accessibility, logs, and security headers.
+## 9. Staging QA
 
-Review the 41 pre-existing unresolved managed-file references recorded in `docs/04_DATA_INTEGRITY_REPORT.md`. Confirm with content owners whether the affected records are stale, unpublished, or require source files from an external archive.
+Verify at minimum:
 
-## 9. Complete staging deployment
+- Homepage, login, search, sitemap, robots, English/Hindi routes, navigation, assets, downloads, archives, galleries, and responsive layouts.
+- Existing administrator login and TFA; do not reset credentials merely to perform deployment.
+- Creator/publisher roles, moderation, media/files, aliases, menus, forms, CAPTCHA, SMTP, consent, cron, search indexing, and translation status.
+- Database updates, configuration status, filesystem permissions, local `js-cookie`, APCu, upload progress, transaction isolation, password hashing, trusted hosts, security headers, and recent logs.
+- Composer audit and Drupal update status.
+- Browser console, broken resources, server errors, and accessibility smoke checks.
 
-Disable staging maintenance mode only after smoke checks pass. Rebuild caches once more, verify the homepage and login page, review PHP/web/Drupal logs, and leave staging available for AVNL UAT. Stop before production. Production requires separate written approval after UAT, compliance/security sign-off, verified rollback rehearsal, and change authorization.
+Record results and unresolved acceptance items. Do not solve or bypass CAPTCHA outside an approved test case.
 
-## 10. Failure handling
+## 10. Complete staging only
 
-On a critical failure, stop; restore the previous source and its matching database backup; restore environment-specific configuration and affected files; rebuild caches; and verify the previous staging site. Follow `ROLLBACK.md`. Never use production as a troubleshooting target.
+Disable maintenance mode only after smoke tests pass, rebuild caches once more, and verify the homepage and login page anonymously. Leave staging available for AVNL UAT and stop. Do not deploy to production until AVNL provides explicit written approval after UAT, security/compliance review, rollback rehearsal, and a fresh production database/files backup.
+
+## 11. Failure handling
+
+On a critical failure, stop the deployment and follow `ROLLBACK.md`. Restore the previous source, matching database backup, configuration, and affected files together. Do not attempt a code-only rollback after database updates, and never use production as a troubleshooting target.

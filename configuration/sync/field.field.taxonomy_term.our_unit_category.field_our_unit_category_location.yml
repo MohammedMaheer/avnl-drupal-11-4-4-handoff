@@ -1,0 +1,19 @@
+uuid: b4fc68d4-1267-4e49-8a58-3433e45f5716
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_our_unit_category_location
+    - taxonomy.vocabulary.our_unit_category
+id: taxonomy_term.our_unit_category.field_our_unit_category_location
+field_name: field_our_unit_category_location
+entity_type: taxonomy_term
+bundle: our_unit_category
+label: Location
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

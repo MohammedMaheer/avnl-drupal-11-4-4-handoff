@@ -1,0 +1,14 @@
+uuid: bae3ee43-31d8-4527-8cca-9681bfd50a28
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.notices_publisher
+  module:
+    - user
+id: user_add_role_action.notices_publisher
+label: 'Add the Notices Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: notices_publisher

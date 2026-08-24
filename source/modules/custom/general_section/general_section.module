@@ -11,11 +11,12 @@ use \Drupal\encrypt\Entity\EncryptionProfile;
 use Drupal\user\UserInterface;
 use \Drupal\views\ViewExecutable;
 use \Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\Plugin\views\query\Sql;
 use \Drupal\Core\File;
 use \Drupal\Core\File\MimeType;
 use \Drupal\Core\File\MimeType\ExtensionMimeTypeGuesser;
 use \Drupal\Core\File\MimeType\MimeTypeGuesser;
-use \Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Database\Query\SelectInterface;
 use \Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Component\Datetime;
 use Drupal\Core\Access\AccessResult;
@@ -423,7 +424,7 @@ function _custom_feedback_validate(array &$form, FormStateInterface $form_state)
   //$f_email = trim($field_email['0']['value']);
   $current_ip_address = Drupal::request()->getClientIp();
   $connection = \Drupal::database();
-  $date = REQUEST_TIME; //strtotime(date("Y-m-d")); // CURRENT TIME STAMP
+  $date = \Drupal::time()->getRequestTime();
   $sDate = 86400; // 60*60*24 //timestamp("+1 day"); // day after original date
   $eDate = 86400; // 60*60*24 strtotime("-1 day"); // day after original date
   $startDate = ($date + $sDate);
@@ -435,9 +436,9 @@ function _custom_feedback_validate(array &$form, FormStateInterface $form_state)
   $query = $connection->query("SELECT node_field_data.created AS node_field_data_created, node_field_data.nid AS nid
     FROM
     {node_field_data} node_field_data
-    WHERE (node_field_data.type IN ('feedback')) AND ((node_field_data.created <= $date+600)) AND ((node_field_data.created >= $date-600))
+    WHERE node_field_data.type = :type AND node_field_data.created <= :maximum AND node_field_data.created >= :minimum
     ORDER BY node_field_data_created DESC
-    LIMIT 1 OFFSET 0");
+    LIMIT 1 OFFSET 0", [':type' => 'feedback', ':maximum' => $date + 600, ':minimum' => $date - 600]);
   $result = $query->fetchAll();
   if(!empty($result)){
       $form_state->setErrorByName('title', t('We have received your feedback recently, please wait and submit after sometime.'));
@@ -486,7 +487,7 @@ function _custom_enquiry_validate(array &$form, FormStateInterface $form_state){
   //$f_email = trim($field_email['0']['value']);
   $current_ip_address = Drupal::request()->getClientIp();
   $connection = \Drupal::database();
-  $date = REQUEST_TIME; //strtotime(date("Y-m-d")); // CURRENT TIME STAMP
+  $date = \Drupal::time()->getRequestTime();
   $sDate = 86400; // 60*60*24 //timestamp("+1 day"); // day after original date
   $eDate = 86400; // 60*60*24 strtotime("-1 day"); // day after original date
   $startDate = ($date + $sDate);
@@ -498,9 +499,9 @@ function _custom_enquiry_validate(array &$form, FormStateInterface $form_state){
   $query = $connection->query("SELECT node_field_data.created AS node_field_data_created, node_field_data.nid AS nid
     FROM
     {node_field_data} node_field_data
-    WHERE (node_field_data.type IN ('online_enquiry')) AND ((node_field_data.created <= $date+600)) AND ((node_field_data.created >= $date-600))
+    WHERE node_field_data.type = :type AND node_field_data.created <= :maximum AND node_field_data.created >= :minimum
     ORDER BY node_field_data_created DESC
-    LIMIT 1 OFFSET 0");
+    LIMIT 1 OFFSET 0", [':type' => 'online_enquiry', ':maximum' => $date + 600, ':minimum' => $date - 600]);
   $result = $query->fetchAll();
   if(!empty($result)){
       $form_state->setErrorByName('title', t('We have received your online enquiry recently, please wait and submit after sometime.'));
@@ -1528,6 +1529,9 @@ function _druapl_send_custom_mail($module, $key, $to, $langcode, $params = array
  * Implements hook_node_presave().
  */
 function general_section_views_query_alter(ViewExecutable $view, QueryPluginBase $query){
+  if (!$query instanceof Sql) {
+    return;
+  }
   global $base_url;
 
   $user = \Drupal::currentUser(); // GET CURRENT USER DATA
@@ -1556,7 +1560,7 @@ function general_section_views_query_alter(ViewExecutable $view, QueryPluginBase
    // var_dump($menu_link_id);
     //exit;
     //echo "<pre>"; print_r($query->where); echo "</pre>"; //exit('--');
-     if($menu_link_id){
+     if ($menu_link_id && isset($query->where[1]['conditions'][2])) {
        //$query->where['1']['conditions'][3]['value'] = $menu_link_id;
        $query->where['1']['conditions'][2]['value'] = $menu_link_id;
      }
@@ -1566,20 +1570,23 @@ function general_section_views_query_alter(ViewExecutable $view, QueryPluginBase
   }
 
   if($view->id() == "moderated_content" && $view->current_display == "moderated_content"){
-    if(!in_array('administrator',$roles)){      
+    if (!in_array('administrator', $roles, TRUE)) {
+      if (!$userObj || !$userObj->hasField('field_user_unit_type')) {
+        return;
+      }
       // if($_GET['type'] == 'awards_achievements'){
         $userUnitType = $userObj->field_user_unit_type->target_id;
         if(in_array('awards_achievements_publisher',$roles) || in_array('our_units_publisher',$roles) || in_array('tender_admin', $roles)){
             // echo "<pre>"; var_dump($query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id']); echo "</pre>"; //exit('--');
             $query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id'] = $userUnitType;
             // echo "<pre>"; var_dump($query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id']); echo "</pre>"; //exit('--');
-        } else {
+        } elseif (isset($query->where[0]['conditions'][0])) {
             unset($query->where[0]['conditions']['0']);
         }
       // } else {
       //     unset($query->where[0]['conditions']['0']);
       // }
-    } else {
+    } elseif (isset($query->where[0]['conditions'][0])) {
         unset($query->where[0]['conditions']['0']);
     }
   }
@@ -1592,7 +1599,7 @@ function general_section_form_views_exposed_form_alter(&$form, \Drupal\Core\Form
 function general_section_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
     
 }
-function general_section_query_group_by_node_id_alter(AlterableInterface $query) {
+function general_section_query_group_by_node_id_alter(SelectInterface $query) {
     $query->groupBy('nid');
 }
 

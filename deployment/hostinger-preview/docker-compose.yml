@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    command: ["--transaction-isolation=READ-COMMITTED"]
+    environment:
+      MARIADB_DATABASE: ${AVNL_DB_NAME}
+      MARIADB_USER: ${AVNL_DB_USER}
+      MARIADB_PASSWORD: ${AVNL_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - avnl_drupal_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  drupal:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${DRUPAL_PORT}:80"
+    environment:
+      AVNL_DB_NAME: ${AVNL_DB_NAME}
+      AVNL_DB_USER: ${AVNL_DB_USER}
+      AVNL_DB_PASSWORD: ${AVNL_DB_PASSWORD}
+      AVNL_DB_HOST: db
+      AVNL_DB_PORT: 3306
+      AVNL_HASH_SALT: ${AVNL_HASH_SALT}
+      AVNL_TRUSTED_HOST_PATTERNS: ${AVNL_TRUSTED_HOST_PATTERNS}
+      AVNL_PUBLIC_FILES_PATH: files
+      AVNL_PRIVATE_FILES_PATH: /var/www/private
+      AVNL_TEMP_PATH: /tmp
+      AVNL_CONFIG_SYNC_DIR: /var/www/config/sync
+      AVNL_TRANSLATIONS_PATH: /var/www/translations
+      AVNL_ERROR_LEVEL: hide
+      AVNL_SESSION_COOKIE_DOMAIN: ${AVNL_SESSION_COOKIE_DOMAIN}
+      AVNL_SMTP_USERNAME: ${AVNL_SMTP_USERNAME:-}
+      AVNL_SMTP_PASSWORD: ${AVNL_SMTP_PASSWORD:-}
+      AVNL_ENCRYPTION_KEY: ${AVNL_ENCRYPTION_KEY:-}
+    volumes:
+      - ${AVNL_RELEASE_SOURCE}:/opt/drupal/web
+      - ./private:/var/www/private
+      - ./config-sync:/var/www/config/sync:ro
+      - ./translations:/var/www/translations
+      - ./settings.local.php.example:/opt/drupal/web/sites/default/settings.local.php:ro
+
+volumes:
+  avnl_drupal_db:

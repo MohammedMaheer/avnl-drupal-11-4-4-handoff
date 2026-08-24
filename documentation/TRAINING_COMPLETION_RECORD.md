@@ -19,7 +19,7 @@ Record attendee name, role, organization/unit, attendance, and acknowledgement i
 
 ## Topics demonstrated
 
-- Drupal 11.4.4 changes and secure login/TFA
+- Drupal 11.4.5 changes and secure login/TFA
 - Content, revision, moderation, and multilingual workflows
 - Media, alternative text, documents, galleries, menus, aliases, search, and archives
 - Users, roles, logs, cron, cache rebuild, backup/restore, and escalation

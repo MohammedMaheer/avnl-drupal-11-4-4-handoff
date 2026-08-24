@@ -1,0 +1,19 @@
+uuid: e1bf8f8f-d91e-45c6-a0cf-863b574db607
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+_core:
+  default_config_hash: w9H5h-2nrlBUBM2DCuhkmHL1jQi7rY5WY8uc-ys23CE
+name: 'Video Gallery'
+type: video_gallery
+description: 'Add Video Gallery'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false
