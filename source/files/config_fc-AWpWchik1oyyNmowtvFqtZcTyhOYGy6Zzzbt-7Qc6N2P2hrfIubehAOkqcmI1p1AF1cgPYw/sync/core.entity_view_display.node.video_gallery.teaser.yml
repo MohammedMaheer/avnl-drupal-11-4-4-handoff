@@ -1,0 +1,37 @@
+uuid: d5019f14-7625-45b6-94ac-c12003f195c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.video_gallery.field_video_album_cover_image
+    - field.field.node.video_gallery.field_youtube_video
+    - node.type.video_gallery
+  module:
+    - user
+_core:
+  default_config_hash: mNuP1tfxhmipKwKfsXIr8yLNykV4QHoaYKTjKpduJKQ
+id: node.video_gallery.teaser
+targetEntityType: node
+bundle: video_gallery
+mode: teaser
+content:
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  video_gallery_entity_view_1:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+hidden:
+  field_video_album_cover_image: true
+  field_youtube_video: true
+  langcode: true

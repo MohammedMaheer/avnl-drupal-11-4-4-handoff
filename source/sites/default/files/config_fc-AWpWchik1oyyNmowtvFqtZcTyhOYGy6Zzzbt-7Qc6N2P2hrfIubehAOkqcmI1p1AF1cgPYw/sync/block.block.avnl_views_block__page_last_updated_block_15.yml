@@ -1,0 +1,29 @@
+uuid: f88c9f87-dda2-4518-8a3a-a2800086dcaa
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_15
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_15'
+settings:
+  id: 'views_block:page_last_updated-block_15'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/our-unit-category\r\n/heavy-vehicles-factory\r\n/engine-factory-avadi\r\n/ordnance-factory-medak\r\n/vehicle-factory-jabalpur\r\n/machine-tool-prototype-factory\r\n/avnl-institute-learning-avadi\r\n/avnliol-medak\r\n/armoured-vehicles-nigam-limited-institute-learning-ambernath"

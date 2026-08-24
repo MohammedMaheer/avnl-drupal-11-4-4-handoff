@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+{%
+  set classes = [
+    'search-form',
+    'search-block-form',
+  ]
+%}
+<form{{attributes.addClass(classes)}}>
+
+	{# {{input}} #}
+	{# {{ children }} #}
+
+		<div class="d-flex justify-content-between align-items-center search-input-container"> 
+    <input type="text" name="keys" class="form-control flex-grow-1 border-0 search-input" placeholder="Search" aria-label="Search ">
+
+		<button class="search-button me-3" type="submit" aria-label="Search">
+			<i class="fas fa-search" area-hidden="true"></i>
+		</button>
+
+	</div>
+
+
+	{# 
+				  {{form|without('form_build_id', 'form_token', 'form_id')}} #}
+</form>

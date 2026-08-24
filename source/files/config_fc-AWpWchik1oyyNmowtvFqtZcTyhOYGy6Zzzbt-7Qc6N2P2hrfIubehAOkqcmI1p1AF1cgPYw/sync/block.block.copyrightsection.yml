@@ -1,0 +1,23 @@
+uuid: 778442a6-8c12-4ecb-aefe-ecca005f2183
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:0e7d3bb7-2698-4f71-a96b-d7780d164508'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: copyrightsection
+theme: avnl
+region: copyright
+weight: 0
+provider: null
+plugin: 'block_content:0e7d3bb7-2698-4f71-a96b-d7780d164508'
+settings:
+  id: 'block_content:0e7d3bb7-2698-4f71-a96b-d7780d164508'
+  label: 'Copyright Section'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

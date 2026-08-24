@@ -1,0 +1,23 @@
+uuid: 0018affe-10bc-4fc1-b413-6c835b1ef71b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_footer_logo_hyperlink
+    - node.type.footer_logo
+  module:
+    - link
+id: node.footer_logo.field_footer_logo_hyperlink
+field_name: field_footer_logo_hyperlink
+entity_type: node
+bundle: footer_logo
+label: Hyperlink
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

@@ -1,0 +1,11 @@
+uuid: f7b4fda9-f217-45d8-b2b1-5cba6c1f0921
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: ucrVrFoQYyF1ywUg2_b2rybD9IQVuWPubFdeq0xPOjQ
+name: 'Photo Gallery Category'
+vid: photo_gallery_category
+description: null
+weight: 0
+new_revision: false

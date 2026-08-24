@@ -1,0 +1,43 @@
+uuid: 17d3f1e3-96d9-435a-ae35-5a63a2dd2690
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.photo_gallery
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - menu_link_attributes
+    - node
+    - system
+    - toolbar
+id: photo_gallery_creator
+label: 'Photo Gallery Creator'
+weight: 10
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'create content translations'
+  - 'create photo_gallery content'
+  - 'delete own files'
+  - 'delete own photo_gallery content'
+  - 'edit own photo_gallery content'
+  - 'translate photo_gallery node'
+  - 'update content translations'
+  - 'use editorial transition create_new_draft'
+  - 'use menu link attributes'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view latest version'
+  - 'view the administration theme'

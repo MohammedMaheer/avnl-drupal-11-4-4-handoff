@@ -1,0 +1,29 @@
+uuid: 1ab7c5f7-f10c-4bd6-81a3-f5107408bd02
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_4
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_4'
+settings:
+  id: 'views_block:page_last_updated-block_4'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /acts-policies

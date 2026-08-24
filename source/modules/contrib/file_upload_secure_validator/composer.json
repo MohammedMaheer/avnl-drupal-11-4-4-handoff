@@ -1,0 +1,29 @@
+{
+  "name": "drupal/file_upload_secure_validator",
+  "description": "Provides enhanced security for file uploads by validating that the actual file content matches the declared file extension and MIME type.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/file_upload_secure_validator",
+  "authors": [
+    {
+      "name": "Stefanos Petrakis",
+      "homepage": "https://www.drupal.org/u/stefanospetrakis"
+    },
+    {
+      "name": "_dcre_",
+      "homepage": "https://www.drupal.org/u/_dcre_"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/file_upload_secure_validator",
+    "source": "https://git.drupalcode.org/project/file_upload_secure_validator"
+  },
+  "require": {
+    "php": ">=8.1",
+    "drupal/core": "^11",
+    "ext-fileinfo": "*"
+  },
+  "require-dev": {
+    "drupal/core-dev": "^11"
+  }
+}

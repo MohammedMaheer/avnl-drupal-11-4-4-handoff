@@ -1,0 +1,23 @@
+uuid: f2ffc3ff-65e7-42d1-a9e6-6d33d5f3d580
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_releted_link
+    - node.type.releted_link
+  module:
+    - link
+id: node.releted_link.field_releted_link
+field_name: field_releted_link
+entity_type: node
+bundle: releted_link
+label: Link
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

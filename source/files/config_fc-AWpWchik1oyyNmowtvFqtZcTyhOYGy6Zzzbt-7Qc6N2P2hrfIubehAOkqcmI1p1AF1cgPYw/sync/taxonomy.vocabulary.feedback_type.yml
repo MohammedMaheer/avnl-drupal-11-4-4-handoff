@@ -1,0 +1,9 @@
+uuid: 930499ad-5e55-4e42-8919-2ebe60658ae8
+langcode: en
+status: true
+dependencies: {  }
+name: 'Feedback Type'
+vid: feedback_type
+description: 'Add Feedback Type'
+weight: 0
+new_revision: false

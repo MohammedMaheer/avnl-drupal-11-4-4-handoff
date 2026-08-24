@@ -1,0 +1,6 @@
+name: Archive Setting  
+type: module  
+description: Archive Setting With Cotnent Type
+#core: 8.x  
+package: Custom 
+core_version_requirement: ^11

@@ -1,0 +1,45 @@
+uuid: c2a09ec4-379a-412c-9a2c-3229756ed21f
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.news
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - menu_link_attributes
+    - node
+    - sitemap
+    - system
+    - toolbar
+id: news_creator
+label: 'News Creator'
+weight: -10
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'administer sitemap'
+  - 'create content translations'
+  - 'create news content'
+  - 'delete own files'
+  - 'delete own news content'
+  - 'edit own news content'
+  - 'translate news node'
+  - 'update content translations'
+  - 'use editorial transition create_new_draft'
+  - 'use menu link attributes'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view latest version'
+  - 'view the administration theme'

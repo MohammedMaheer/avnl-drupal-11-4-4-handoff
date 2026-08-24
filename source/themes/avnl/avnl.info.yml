@@ -1,0 +1,113 @@
+# This theme is marked as @internal. It is intended to evolve and change over
+# minor releases.
+# As the UI of Drupal improves between minor versions, the markup and assets in
+# the avnl theme will change. The avnl theme is not backwards compatible
+# If you wish to modify the output or assets of avnl you can:
+# 1. Copy the whole of avnl and rename it as your own theme. You will need to
+# manually manage your own updates if you want to stay up to date with avnl's
+# bug fixes and feature support.
+#
+# 2. Sub-theme avnl. This is only recommended if you want to make minor
+# tweaks and understand that avnl could break your modifications as it
+# changes.
+name: AVNL
+type: theme
+base theme: false
+description: 'A clean, accessible, and flexible Drupal Custom front-end theme by STTL.'
+alt text: 'Screenshot of avnl, Drupal front-end theme.'
+package: Core
+version: VERSION
+core_version_requirement: ^11
+
+libraries:
+  - avnl/global-styling
+regions:
+  header: Header
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  popup_menu: 'Popup Menu'
+  hero: 'Hero (full width)'
+  highlighted: Highlighted
+  breadcrumb: Breadcrumb
+  social: Social Bar
+  content_above: Content Above
+  content: Content
+  sidebar: 'Sidebar'
+  content_below: 'Content Below'
+  footer_top: 'Footer Top'
+  footer_bottom: 'Footer Bottom'
+  left_site_menu: 'Left Site Menu'
+  language: 'Language Dropdown Section'
+  search: 'Search Box Section'
+  home_page_logo: 'Home Page Logo'
+  home_page_right_logo: 'Home Page Right Logo'
+  home_page_banner: 'Home Page Banner'
+  notifications: 'Notifications'
+  welcome_to_avnl: 'Welcome to AVNL'
+  key_profiles : 'Key Profiles'
+  products : 'products'
+  news: 'News'
+  circulars  : 'Circulars '
+  events: 'Events '
+  achievements: 'Achievements'
+  photo_gallery: 'Photo Gallery'
+  releted_link: 'Releted Link'
+  footer_logo: 'Footer Logo'
+  footer_address: 'Footer Address'
+  social_connections: 'Social Connections'
+  cyber_section: 'Cyber Section'
+  copyright: 'Copyright'
+  last_updated: 'Last Updated'
+  last_updated2: 'Inner Last Updated'
+  visitors: 'Visitors'
+  inner_banner: 'Inner Banner'
+  board_of_directors: 'Board of Directors'
+  video_gallery: 'Video Gallery'
+  footer_logo1: 'Footer Home Logo'
+  
+libraries-override:
+  system/admin:
+    css:
+      theme:
+        css/system.admin.css: false
+  system/base:
+    css:
+      component:
+        css/components/ajax-progress.module.css: css/components/ajax-progress.module.css
+        css/components/autocomplete-loading.module.css: css/components/autocomplete-loading.module.css
+  core/drupal.checkbox: false
+  core/drupal.dropbutton:
+    css:
+      component:
+        misc/dropbutton/dropbutton.css: css/components/dropbutton.css
+  core/drupal.vertical-tabs:
+    css:
+      component:
+        misc/vertical-tabs.css: css/components/vertical-tabs.css
+  media/oembed.formatter: false
+  layout_builder/twocol_section: avnl/layout_builder_twocol_section
+  layout_builder/threecol_section: avnl/layout_builder_threecol_section
+  layout_builder/fourcol_section: avnl/layout_builder_fourcol_section
+libraries-extend:
+  core/drupal.message:
+    - avnl/drupal.message
+  core/drupal.collapse:
+    - avnl/details
+  core/drupal.dialog:
+    - avnl/drupal.dialog
+  core/drupal.progress:
+    - avnl/progress
+  layout_discovery/onecol:
+    - avnl/layout_discovery_section
+  layout_discovery/twocol_bricks:
+    - avnl/layout_discovery_section
+  layout_discovery/twocol:
+    - avnl/layout_discovery_section
+  layout_discovery/threecol_25_50_25:
+    - avnl/layout_discovery_section
+  layout_discovery/threecol_33_34_33:
+    - avnl/layout_discovery_section
+  node/drupal.node.preview:
+    - avnl/drupal.node.preview
+  content_moderation/content_moderation:
+    - avnl/content_moderation

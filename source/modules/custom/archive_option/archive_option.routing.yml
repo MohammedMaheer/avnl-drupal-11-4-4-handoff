@@ -1,0 +1,27 @@
+archive_option.admin_settings_form:  
+  path: '/admin/config/archive_option/adminsettings'  
+  defaults:  
+    _form: '\Drupal\archive_option\Form\ArchvieOptionForm'  
+    _title: 'Archive Option Form'  
+  requirements:  
+    _permission: 'administer archive settings'  
+  options:  
+    _admin_route: TRUE 
+    
+archive_option.archive_list:
+  path: '/archives'
+  defaults:
+    _controller: '\Drupal\archive_option\Controller\ArchiveController::listing'
+    _title: 'Archives'
+  requirements:
+    _permission: 'access content'
+    
+archive_option.node_archive_list:
+  path: '/archives/{node_type}'
+  defaults:
+    _controller: '\Drupal\archive_option\Controller\ArchiveController::archivedatalisting'
+    _title: 'Node Archives Listing'
+  requirements:
+    _permission: 'access content'
+    node_type: '[a-zA-Z0-9_-]+'
+  

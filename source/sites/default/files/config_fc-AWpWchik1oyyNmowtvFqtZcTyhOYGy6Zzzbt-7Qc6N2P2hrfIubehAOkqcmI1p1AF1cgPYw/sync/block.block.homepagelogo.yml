@@ -1,0 +1,25 @@
+uuid: d91cc879-7027-4780-b378-cc1a120fbec9
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:19aa0cfe-681b-4224-9252-6e92bd35c4ed'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: homepagelogo
+theme: avnl
+region: home_page_logo
+weight: 0
+provider: null
+plugin: 'block_content:19aa0cfe-681b-4224-9252-6e92bd35c4ed'
+settings:
+  id: 'block_content:19aa0cfe-681b-4224-9252-6e92bd35c4ed'
+  label: 'Home Page Logo'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

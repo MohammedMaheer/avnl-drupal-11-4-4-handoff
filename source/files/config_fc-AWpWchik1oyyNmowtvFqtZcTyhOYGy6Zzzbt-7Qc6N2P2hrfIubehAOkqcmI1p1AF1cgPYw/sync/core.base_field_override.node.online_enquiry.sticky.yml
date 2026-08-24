@@ -1,0 +1,22 @@
+uuid: 1db47635-e01e-4a31-a7ed-b347da5bca96
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.online_enquiry
+id: node.online_enquiry.sticky
+field_name: sticky
+entity_type: node
+bundle: online_enquiry
+label: 'Sticky at top of lists'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,14 @@
+uuid: e9d3ca12-5644-4ea9-9c3e-21bc3a043d2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.awards_achievements_efa_publisher
+  module:
+    - user
+id: user_add_role_action.awards_achievements_efa_publisher
+label: 'Add the Awards / Achievements EFA Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: awards_achievements_efa_publisher

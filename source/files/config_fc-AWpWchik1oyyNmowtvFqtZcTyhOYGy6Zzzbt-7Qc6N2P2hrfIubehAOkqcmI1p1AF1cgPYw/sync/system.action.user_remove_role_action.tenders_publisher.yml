@@ -1,0 +1,14 @@
+uuid: a7c74768-70d7-4414-b040-0cfbee4274d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.tenders_publisher
+  module:
+    - user
+id: user_remove_role_action.tenders_publisher
+label: 'Remove the Tenders Publisher role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: tenders_publisher

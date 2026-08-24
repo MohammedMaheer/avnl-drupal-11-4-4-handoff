@@ -1,0 +1,14 @@
+uuid: e5cd6e9c-f835-4fd1-ad14-cbda338ec656
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.banner_publisher
+  module:
+    - user
+id: user_remove_role_action.banner_publisher
+label: 'Remove the Banner Publisher role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: banner_publisher

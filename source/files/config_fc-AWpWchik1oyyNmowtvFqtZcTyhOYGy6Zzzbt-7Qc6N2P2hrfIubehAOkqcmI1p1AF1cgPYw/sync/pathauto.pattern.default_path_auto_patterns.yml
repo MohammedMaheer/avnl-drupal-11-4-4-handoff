@@ -1,0 +1,57 @@
+uuid: 24c2171b-a801-466b-92ad-dfa42f825a91
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.avnl_directory
+    - node.type.awards_achievements
+    - node.type.careers_vacancies
+    - node.type.ecitizen_downloads
+    - node.type.faqs
+    - node.type.feedback
+    - node.type.footer_logo
+    - node.type.holiday_list
+    - node.type.home_page_banner
+    - node.type.inner_banner_management
+    - node.type.key_profiles
+    - node.type.notification
+    - node.type.online_enquiry
+    - node.type.our_units
+    - node.type.page
+    - node.type.releted_link
+    - node.type.tenders
+    - node.type.verticals
+  module:
+    - node
+id: default_path_auto_patterns
+label: 'Default path auto patterns'
+type: 'canonical_entities:node'
+pattern: '/[node:title]'
+selection_criteria:
+  a40a72f4-334a-4afb-b8e4-14572ca107c7:
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      avnl_directory: avnl_directory
+      careers_vacancies: careers_vacancies
+      ecitizen_downloads: ecitizen_downloads
+      faqs: faqs
+      feedback: feedback
+      footer_logo: footer_logo
+      holiday_list: holiday_list
+      inner_banner_management: inner_banner_management
+      online_enquiry: online_enquiry
+      our_units: our_units
+      tenders: tenders
+      verticals: verticals
+      awards_achievements: awards_achievements
+      home_page_banner: home_page_banner
+      key_profiles: key_profiles
+      notification: notification
+      page: page
+      releted_link: releted_link
+selection_logic: and
+weight: -5
+relationships: {  }

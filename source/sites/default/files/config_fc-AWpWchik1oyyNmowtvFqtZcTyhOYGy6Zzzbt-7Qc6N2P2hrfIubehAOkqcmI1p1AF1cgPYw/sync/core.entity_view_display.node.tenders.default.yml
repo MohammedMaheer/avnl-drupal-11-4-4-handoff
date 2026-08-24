@@ -1,0 +1,94 @@
+uuid: ced4ea4b-0904-460e-aeae-7a40c79934cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.tenders.body
+    - field.field.node.tenders.field_tender_date
+    - field.field.node.tenders.field_tender_order
+    - field.field.node.tenders.field_tenders_archive_date
+    - field.field.node.tenders.field_tenders_category
+    - field.field.node.tenders.field_tenders_date
+    - field.field.node.tenders.field_tenders_document
+    - node.type.tenders
+  module:
+    - datetime
+    - datetime_range
+    - file
+    - text
+    - user
+id: node.tenders.default
+targetEntityType: node
+bundle: tenders
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_tender_date:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: indian_date_format
+      separator: '-'
+      from_to: both
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tender_order:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_tenders_archive_date:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_tenders_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_tenders_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_tenders_document:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  links: true

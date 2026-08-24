@@ -1,0 +1,24 @@
+uuid: 1ba555a6-0793-44c7-a113-d2dcc8d30084
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_tenders_category_order
+    - taxonomy.vocabulary.avnl_tenders_category
+  module:
+    - weight
+id: taxonomy_term.avnl_tenders_category.field_tenders_category_order
+field_name: field_tenders_category_order
+entity_type: taxonomy_term
+bundle: avnl_tenders_category
+label: Order
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings:
+  range: '20'
+field_type: weight

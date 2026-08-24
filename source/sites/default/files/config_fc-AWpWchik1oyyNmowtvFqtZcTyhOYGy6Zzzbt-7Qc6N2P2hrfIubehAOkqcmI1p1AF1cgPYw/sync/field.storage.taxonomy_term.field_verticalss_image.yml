@@ -1,0 +1,30 @@
+uuid: 5bbec4b3-cf45-4736-a779-3f7dcb33781f
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - image
+    - taxonomy
+id: taxonomy_term.field_verticalss_image
+field_name: field_verticalss_image
+entity_type: taxonomy_term
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  default_image:
+    uuid: 12fa32db-7dde-4404-b09d-712195f88c8c
+    alt: ''
+    title: ''
+    width: 400
+    height: 255
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

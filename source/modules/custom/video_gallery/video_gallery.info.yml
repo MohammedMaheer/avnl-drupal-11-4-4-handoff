@@ -1,0 +1,8 @@
+name: Video Gallery
+type: module
+description: 'This is custom video gallery module for drupal 8, 9 and 10'
+#core: 8.x
+dependencies:
+  - eva:eva
+  - youtube:youtube
+core_version_requirement: ^11

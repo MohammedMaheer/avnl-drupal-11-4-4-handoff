@@ -1,0 +1,22 @@
+uuid: 43b72050-dc6b-4152-9a1d-c3bd940f733e
+langcode: en
+status: true
+dependencies:
+  theme:
+    - avnl_admin
+_core:
+  default_config_hash: 3UkfDS5x_Kbug2ZFapAuBZP93HRTURbqc5vC8w6ttuA
+id: avnl_admin_secondary_local_tasks
+theme: avnl_admin
+region: pre_content
+weight: 0
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Secondary tabs'
+  label_display: '0'
+  provider: core
+  primary: false
+  secondary: true
+visibility: {  }

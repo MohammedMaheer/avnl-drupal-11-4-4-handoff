@@ -1,0 +1,23 @@
+uuid: 97a3d196-ef0f-47c0-85d5-d0ad80b10f21
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.awards_achievements
+  module:
+    - text
+id: node.awards_achievements.body
+field_name: body
+entity_type: node
+bundle: awards_achievements
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

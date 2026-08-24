@@ -1,0 +1,23 @@
+uuid: 386f134f-b27e-4d19-9fa9-ff4186cfb088
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.acts_policies
+  module:
+    - text
+id: node.acts_policies.body
+field_name: body
+entity_type: node
+bundle: acts_policies
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

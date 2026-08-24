@@ -1,0 +1,24 @@
+uuid: d812dc49-8225-4d90-b57f-50484ac7499e
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.inner_banner
+  module:
+    - views
+  theme:
+    - avnl
+id: views_block__inner_banner_block_1
+theme: avnl
+region: inner_banner
+weight: 0
+provider: null
+plugin: 'views_block:inner_banner-block_1'
+settings:
+  id: 'views_block:inner_banner-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility: {  }

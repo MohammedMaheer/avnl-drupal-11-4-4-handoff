@@ -1,0 +1,20 @@
+uuid: 983ececf-0850-4be2-9305-8a182062e42e
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - avnl
+id: messages
+theme: avnl
+region: sidebar
+weight: -33
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: Messages
+  label_display: '0'
+  provider: system
+visibility: {  }

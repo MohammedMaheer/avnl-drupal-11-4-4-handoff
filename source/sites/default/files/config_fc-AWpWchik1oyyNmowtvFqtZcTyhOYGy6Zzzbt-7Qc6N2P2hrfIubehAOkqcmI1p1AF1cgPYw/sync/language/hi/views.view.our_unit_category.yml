@@ -1,0 +1,19 @@
+label: 'हमारी इकाई श्रेणी'
+display:
+  default:
+    display_options:
+      title: 'हमारी इकाई श्रेणी'
+  entity_reference_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  page_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html

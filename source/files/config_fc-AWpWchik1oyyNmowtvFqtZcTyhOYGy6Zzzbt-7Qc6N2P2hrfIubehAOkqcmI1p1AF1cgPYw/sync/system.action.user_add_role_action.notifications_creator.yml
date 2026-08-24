@@ -1,0 +1,14 @@
+uuid: 8cc00ff3-f067-45a7-83c8-eba832b2742a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.notifications_creator
+  module:
+    - user
+id: user_add_role_action.notifications_creator
+label: 'Add the Notifications Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: notifications_creator

@@ -1,0 +1,17 @@
+uuid: f76c896c-7127-427e-8734-dcc22a6a73eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Our Units'
+type: our_units
+description: 'Add Our Units'
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false

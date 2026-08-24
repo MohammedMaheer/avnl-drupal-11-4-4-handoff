@@ -1,0 +1,17 @@
+uuid: c0e3c7d0-f649-41f3-933a-20ff94a40bf0
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Holiday List'
+type: holiday_list
+description: 'Add Holiday List'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

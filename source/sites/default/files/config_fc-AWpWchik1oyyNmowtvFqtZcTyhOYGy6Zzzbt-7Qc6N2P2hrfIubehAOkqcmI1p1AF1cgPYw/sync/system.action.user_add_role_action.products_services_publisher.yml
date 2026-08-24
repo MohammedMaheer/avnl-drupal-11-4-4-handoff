@@ -1,0 +1,14 @@
+uuid: 60351f06-cf79-480f-9829-0d28cb4e5984
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.products_services_publisher
+  module:
+    - user
+id: user_add_role_action.products_services_publisher
+label: 'Add the Products &amp; Services Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: products_services_publisher

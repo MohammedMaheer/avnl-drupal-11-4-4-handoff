@@ -1,0 +1,9 @@
+name: Photo Gallery
+type: module
+description: 'This is custom photo gallery module for drupal 8, 9 and 10'
+#core: 8.x
+dependencies:
+  - eva:eva
+  - colorbox:colorbox
+  
+core_version_requirement: ^11

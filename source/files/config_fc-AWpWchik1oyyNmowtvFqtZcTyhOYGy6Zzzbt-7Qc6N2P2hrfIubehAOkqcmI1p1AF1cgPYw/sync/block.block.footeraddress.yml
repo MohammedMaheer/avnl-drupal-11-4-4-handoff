@@ -1,0 +1,23 @@
+uuid: 6952b834-acfa-4875-8a54-8a8055f7290b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:ad3d0562-8c48-41bd-966e-ad6a86bede1c'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: footeraddress
+theme: avnl
+region: footer_address
+weight: 0
+provider: null
+plugin: 'block_content:ad3d0562-8c48-41bd-966e-ad6a86bede1c'
+settings:
+  id: 'block_content:ad3d0562-8c48-41bd-966e-ad6a86bede1c'
+  label: 'Footer Address'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

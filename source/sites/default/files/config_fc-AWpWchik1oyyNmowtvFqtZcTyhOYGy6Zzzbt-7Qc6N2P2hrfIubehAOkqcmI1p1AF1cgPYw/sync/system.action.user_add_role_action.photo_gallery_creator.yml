@@ -1,0 +1,14 @@
+uuid: 3abb6fcb-371d-4f6c-a39c-7c8b8a4fca49
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.photo_gallery_creator
+  module:
+    - user
+id: user_add_role_action.photo_gallery_creator
+label: 'Add the Photo Gallery Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: photo_gallery_creator

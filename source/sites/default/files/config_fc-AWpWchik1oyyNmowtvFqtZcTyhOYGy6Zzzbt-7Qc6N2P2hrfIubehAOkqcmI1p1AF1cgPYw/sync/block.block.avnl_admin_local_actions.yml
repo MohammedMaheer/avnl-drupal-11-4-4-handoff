@@ -1,0 +1,20 @@
+uuid: 51c19d93-1e36-4119-af49-c49b13d81f72
+langcode: en
+status: true
+dependencies:
+  theme:
+    - avnl_admin
+_core:
+  default_config_hash: ddwUrUR558W4peWBTHa9QRaElIVPo8O8KgIktB79QbQ
+id: avnl_admin_local_actions
+theme: avnl_admin
+region: content
+weight: -4
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

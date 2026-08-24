@@ -1,0 +1,24 @@
+uuid: d24b84b9-ca6b-4752-8b3b-b195b61bbc22
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.releted_link
+  module:
+    - views
+  theme:
+    - avnl
+id: views_block__releted_link_block_1
+theme: avnl
+region: releted_link
+weight: 0
+provider: null
+plugin: 'views_block:releted_link-block_1'
+settings:
+  id: 'views_block:releted_link-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility: {  }

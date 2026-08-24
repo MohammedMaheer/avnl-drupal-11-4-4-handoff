@@ -1,0 +1,14 @@
+uuid: e5bd87de-53c2-4c7d-bf47-29d382ff078e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.notifications_creator
+  module:
+    - user
+id: user_remove_role_action.notifications_creator
+label: 'Remove the Notifications Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: notifications_creator

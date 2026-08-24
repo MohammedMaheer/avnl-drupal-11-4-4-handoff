@@ -1,0 +1,33 @@
+{
+  "name": "drupal/captcha_pack",
+  "description": "Provides several CAPTCHA types for use with the CAPTCHA module.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["Drupal"],
+  "homepage": "https://www.drupal.org/project/captcha_pack",
+  "authors": [
+    {
+      "name": "Oleksandr Lunov (alunyov)",
+      "homepage": "https://www.drupal.org/u/alunyov",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Ev Maslovskiy (spleshka)",
+      "homepage": "https://www.drupal.org/u/spleshka",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Viktor Holovachek (AstonVictor)",
+      "homepage": "https://www.drupal.org/u/astonvictor",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/captcha_pack",
+    "source": "https://git.drupalcode.org/project/captcha_pack"
+  },
+  "require": {
+    "drupal/captcha": "^2.0"
+  }
+}

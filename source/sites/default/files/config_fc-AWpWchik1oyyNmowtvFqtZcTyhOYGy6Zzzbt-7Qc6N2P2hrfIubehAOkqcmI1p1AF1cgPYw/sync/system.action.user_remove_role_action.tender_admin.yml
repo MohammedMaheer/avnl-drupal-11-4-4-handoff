@@ -1,0 +1,14 @@
+uuid: c680c526-6a2d-4a63-a8ae-77a3770f10d2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.tender_admin
+  module:
+    - user
+id: user_remove_role_action.tender_admin
+label: 'Remove the Tender Admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: tender_admin

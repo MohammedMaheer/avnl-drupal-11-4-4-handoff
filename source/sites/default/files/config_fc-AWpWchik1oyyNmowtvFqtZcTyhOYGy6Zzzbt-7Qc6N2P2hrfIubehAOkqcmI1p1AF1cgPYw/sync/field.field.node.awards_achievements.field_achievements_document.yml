@@ -1,0 +1,27 @@
+uuid: ebc5b4a4-0533-49c7-842f-20b5feb7d074
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_achievements_document
+    - node.type.awards_achievements
+  module:
+    - file
+id: node.awards_achievements.field_achievements_document
+field_name: field_achievements_document
+entity_type: node
+bundle: awards_achievements
+label: Document
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: awards-achievements-document
+  file_extensions: pdf
+  max_filesize: '5 MB'
+  description_field: true
+field_type: file

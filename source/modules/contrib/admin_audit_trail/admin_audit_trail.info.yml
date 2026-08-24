@@ -1,0 +1,11 @@
+name: "Admin Audit Trail"
+description: "Logs general CUD events performed by the user (using the forms) on the website."
+type: module
+core_version_requirement: ^10 || ^11
+package: Administration
+configure: admin_audit_trail.settings
+
+# Information added by Drupal.org packaging script on 2026-06-05
+version: '1.0.10'
+project: 'admin_audit_trail'
+datestamp: 1780682441

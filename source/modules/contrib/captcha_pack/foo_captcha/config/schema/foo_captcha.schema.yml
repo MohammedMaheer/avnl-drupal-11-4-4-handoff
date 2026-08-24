@@ -1,0 +1,6 @@
+foo_captcha.settings:
+  type: config_object
+  label: 'Foo CAPTCHA settings'
+  mapping:
+    foo_captcha_ignore_spaces:
+      type: boolean

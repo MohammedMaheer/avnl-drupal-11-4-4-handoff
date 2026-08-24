@@ -1,0 +1,29 @@
+uuid: f0b97e8c-5198-4da7-ae8a-f7aff8b85cd5
+langcode: hi
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_22
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_22'
+settings:
+  id: 'views_block:page_last_updated-block_22'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /feedback

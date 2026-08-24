@@ -1,0 +1,209 @@
+uuid: 2f18052d-93c9-47db-80a7-4de92ec79674
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.our_units.field_our_unit_cap_description
+    - field.field.node.our_units.field_our_unit_capabilities_name
+    - field.field.node.our_units.field_our_unit_catalogue
+    - field.field.node.our_units.field_our_unit_certifications
+    - field.field.node.our_units.field_our_unit_cover_image
+    - field.field.node.our_units.field_our_unit_decription
+    - field.field.node.our_units.field_our_unit_facebook_link
+    - field.field.node.our_units.field_our_unit_gst_details
+    - field.field.node.our_units.field_our_unit_location
+    - field.field.node.our_units.field_our_unit_map_links
+    - field.field.node.our_units.field_our_unit_preamble_title
+    - field.field.node.our_units.field_our_unit_quality_standards
+    - field.field.node.our_units.field_our_unit_rti_officers
+    - field.field.node.our_units.field_our_unit_twitter_link
+    - field.field.node.our_units.field_our_units_category
+    - field.field.node.our_units.field_our_units_contact_details
+    - field.field.node.our_units.field_our_units_notification
+    - field.field.node.our_units.field_our_units_order
+    - field.field.node.our_units.field_our_units_product
+    - field.field.node.our_units.field_unit_preamble_description
+    - node.type.our_units
+  module:
+    - image
+    - link
+    - text
+    - user
+    - weight
+id: node.our_units.default
+targetEntityType: node
+bundle: our_units
+mode: default
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_our_unit_cap_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_our_unit_capabilities_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_our_unit_catalogue:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  field_our_unit_certifications:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 16
+    region: content
+  field_our_unit_cover_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  field_our_unit_decription:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_our_unit_facebook_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  field_our_unit_gst_details:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_our_unit_location:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_our_unit_map_links:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_our_unit_preamble_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_our_unit_quality_standards:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 19
+    region: content
+  field_our_unit_rti_officers:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_our_unit_twitter_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  field_our_units_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_our_units_contact_details:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_our_units_notification:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_our_units_order:
+    type: default_weight
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_our_units_product:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_unit_preamble_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  langcode: true

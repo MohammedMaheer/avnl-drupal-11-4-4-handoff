@@ -1,0 +1,14 @@
+uuid: 21237eab-2b42-4309-bf29-00b7eb9f9ed5
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.photo_gallery_publisher
+  module:
+    - user
+id: user_add_role_action.photo_gallery_publisher
+label: 'Add the Photo Gallery Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: photo_gallery_publisher

@@ -1,0 +1,23 @@
+uuid: 0cee96f8-b4c6-45df-b77e-2e0f18a6a0ef
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:e70c16ef-3691-44b8-947a-d5d7e3ec5914'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: avnl_cybersectionlinks
+theme: avnl
+region: cyber_section
+weight: -22
+provider: null
+plugin: 'block_content:e70c16ef-3691-44b8-947a-d5d7e3ec5914'
+settings:
+  id: 'block_content:e70c16ef-3691-44b8-947a-d5d7e3ec5914'
+  label: 'Cyber Section Links'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

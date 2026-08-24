@@ -1,0 +1,38 @@
+uuid: 3107a4d9-0fba-42fe-be38-74222ac889d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.holiday_list.body
+    - field.field.node.holiday_list.field_holiday_title
+    - node.type.holiday_list
+  module:
+    - text
+    - user
+id: node.holiday_list.teaser
+targetEntityType: node
+bundle: holiday_list
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_holiday_title: true
+  langcode: true

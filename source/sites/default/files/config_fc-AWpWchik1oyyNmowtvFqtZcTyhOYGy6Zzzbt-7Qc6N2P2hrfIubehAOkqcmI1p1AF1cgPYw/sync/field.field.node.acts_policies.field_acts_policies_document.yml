@@ -1,0 +1,27 @@
+uuid: b0aa0f10-298f-4aec-a895-2a8de6a89d74
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_acts_policies_document
+    - node.type.acts_policies
+  module:
+    - file
+id: node.acts_policies.field_acts_policies_document
+field_name: field_acts_policies_document
+entity_type: node
+bundle: acts_policies
+label: Document
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: acts-policies-documents
+  file_extensions: pdf
+  max_filesize: '10 MB'
+  description_field: true
+field_type: file

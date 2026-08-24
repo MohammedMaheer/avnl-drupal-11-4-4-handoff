@@ -1,0 +1,14 @@
+uuid: b81b93c7-94b6-4670-acbd-84b492f2ba70
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.video_gallery_creator
+  module:
+    - user
+id: user_remove_role_action.video_gallery_creator
+label: 'Remove the Video Gallery Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: video_gallery_creator

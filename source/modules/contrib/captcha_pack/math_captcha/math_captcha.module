@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Contains general functionality of the module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ *
+ * Provides additional information about the module.
+ */
+function math_captcha_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.math_captcha':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t("Provide math CAPTCHAs like 'two + three = ?' and '2 times ? = 6'.") . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function math_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return ['Math CAPTCHA'];
+
+    case 'generate':
+      if ($captcha_type == 'Math CAPTCHA') {
+        \Drupal::moduleHandler()->loadInclude('math_captcha', 'inc', 'math_captcha.challenge');
+        // Get the available challenges.
+        $enabled_challenges = _math_captcha_enabled_challenges();
+        $challenges = array_filter($enabled_challenges);
+        $challenge = $challenges[array_rand($challenges)];
+        $form_item = call_user_func("_math_captcha_{$challenge}_challenge");
+        \Drupal::service('page_cache_kill_switch')->trigger();
+        return $form_item;
+      }
+      break;
+  }
+}
+
+/**
+ * Get enabled math captcha challenges.
+ */
+function _math_captcha_enabled_challenges() {
+  return \Drupal::config('math_captcha.settings')->get('math_captcha_enabled_challenges');
+}

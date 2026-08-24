@@ -1,0 +1,80 @@
+_core:
+  default_config_hash: JyIkFj38h-aTLsrCfejAfP277qBJ61tlaLEBH44IHhg
+langcode: en
+enabled: true
+required_roles:
+  authenticated: authenticated
+  content_editor: content_editor
+  administrator: administrator
+  site_admin: site_admin
+  tender_admin: tender_admin
+  banner_creator: banner_creator
+  banner_publisher: banner_publisher
+  news_creator: news_creator
+  news_publisher: news_publisher
+  awards_achievements_creator: awards_achievements_creator
+  awards_achievements_publisher: awards_achievements_publisher
+  e_citizen_downloads_creator: e_citizen_downloads_creator
+  e_citizen_downloads_publisher: e_citizen_downloads_publisher
+  awards_achievements_efa_creator: awards_achievements_efa_creator
+  awards_achievements_efa_publisher: awards_achievements_efa_publisher
+  key_profiles_creator: key_profiles_creator
+  key_profiles_publisher: key_profiles_publisher
+  career_creator: career_creator
+  career_pulisher: career_pulisher
+  our_units_creator: our_units_creator
+  our_units_publisher: our_units_publisher
+  tenders_creator: tenders_creator
+  tenders_publisher: tenders_publisher
+  notices_creator: notices_creator
+  notices_publisher: notices_publisher
+  notifications_creator: notifications_creator
+  notifications_publisher: notifications_publisher
+  photo_gallery_creator: photo_gallery_creator
+  photo_gallery_publisher: photo_gallery_publisher
+  video_gallery_creator: video_gallery_creator
+  video_gallery_publisher: video_gallery_publisher
+  related_link_creator: related_link_creator
+  related_link_publisher: related_link_publisher
+  chatbot_creator: chatbot_creator
+  chatbot_publisher: chatbot_publisher
+  products_services_creator: products_services_creator
+  products_services_publisher: products_services_publisher
+send_plugins: {  }
+login_plugins: {  }
+login_plugin_settings:
+  tfa_trusted_browser:
+    cookie_allow_subdomains: true
+    cookie_expiration: 30
+    cookie_name: tfa-trusted-browser
+allowed_validation_plugins:
+  tfa_totp: tfa_totp
+default_validation_plugin: tfa_totp
+validation_plugin_settings:
+  tfa_hotp:
+    counter_window: 10
+    site_name_prefix: 1
+    name_prefix: TFA
+    issuer: Drupal
+  tfa_recovery_code:
+    recovery_codes_amount: 10
+  tfa_totp:
+    time_skew: 2
+    site_name_prefix: 1
+    name_prefix: TFA
+    issuer: Drupal
+validation_skip: 2
+users_without_tfa_redirect: true
+reset_pass_skip_enabled: true
+encryption: avnl_encryption_profile
+tfa_flood_uid_only: 1
+tfa_flood_window: 300
+tfa_flood_threshold: 6
+help_text: 'Contact support to reset your access'
+mail:
+  tfa_enabled_configuration:
+    subject: 'Your [site:name] account now has two-factor authentication'
+    body: "[user:display-name],\r\n\r\nThanks for configuring two-factor authentication on your [site:name] account!\r\n\r\nThis additional level of security will help to ensure that only you are able to log in to your account.\r\n\r\nIf you ever lose the device you configured, you should act quickly to delete its association with this account.\r\n\r\n--\r\n[site:name] team"
+  tfa_disabled_configuration:
+    subject: 'Your [site:name] account no longer has two-factor authentication'
+    body: "[user:display-name],\r\n\r\nTwo-factor authentication has been disabled on your [site:name] account.\r\n\r\nIf you did not take this action, please contact a site administrator immediately.\r\n\r\n--\r\n[site:name] team"

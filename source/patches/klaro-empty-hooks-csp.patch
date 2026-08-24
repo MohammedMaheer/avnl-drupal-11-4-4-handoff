@@ -1,0 +1,15 @@
+diff --git a/js/klaro.drupal.js b/js/klaro.drupal.js
+--- a/js/klaro.drupal.js
++++ b/js/klaro.drupal.js
+@@ -42,6 +42,12 @@
+                 }
+               };
+             }
++            else {
++              // Klaro compiles string hooks with Function(). Removing empty
++              // hooks avoids an unnecessary unsafe-eval CSP requirement.
++              delete settings.klaro.config.services[a_index][hook];
++            }
+           });
+           // Create regular expressions from config.
+           service.cookies.forEach(function (cookie, c_index) {

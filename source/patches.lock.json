@@ -1,0 +1,17 @@
+{
+    "_hash": "d0ee3ee9bc780603e43248067956231b87983d8011ad9a186ca1cc76e8d456b3",
+    "patches": {
+        "drupal/klaro": [
+            {
+                "package": "drupal/klaro",
+                "description": "Avoid unsafe-eval for empty consent hooks",
+                "url": "patches/klaro-empty-hooks-csp.patch",
+                "sha256": "8ef36ed04c352fb4056028966e3a5917b1ff290a28d64873a78c2b90bf9335ff",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}

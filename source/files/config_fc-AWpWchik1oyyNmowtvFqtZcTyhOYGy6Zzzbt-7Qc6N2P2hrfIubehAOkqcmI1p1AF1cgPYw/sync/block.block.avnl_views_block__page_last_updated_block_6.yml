@@ -1,0 +1,30 @@
+uuid: bab01c85-e132-4327-901a-11f3f024b385
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_6
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_6'
+settings:
+  id: 'views_block:page_last_updated-block_6'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/trade-test-result-fitter-machinist-conducted-05102024-06102024-hvf\r\n/archive/careers-vacancies\r\n/careers-vacancies\r\n/conduction-trade-test-fitter-hvf\r\n/engagement-professionals-fixed-term-contract-basis-efa-0\r\n/engagement-personnel-under-fixed-tenure-contract-hvf\r\n/engagement-personnel-under-fixed-tenure-contract-iolav\r\n/engagement-professionals-fixed-term-contract-basis-vfj\r\n/engagement-professionals-fixed-term-contract-basis-hvf\r\n/engagement-professionals-fixed-term-contract-basis-ofmka-unit-avnl\r\n/engagement-retired-army-officers-fixed-term-contract-basis\r\n/engagement-superannuated-employees-fixed-term-iolamb\r\n/engagement-professionals-fixed-term-contract-basis-efa\r\n/provisionally-selected-candidates-engagement-fixed-tenure-contract-basis-post-junior\r\n/recruitment-fraud-notice\r\n/select-list-post-diploma-technician-civil-under-fixed-tenure-contract\r\n/select-list-design-engineer-mechanical-under-ftc\r\n/selected-candidate-hostal-incharge-iolam\r\n/selection-list-interview-engagement-superannuated-under-ftc-iolam\r\n/selection-list-manager-professional-fixed-term-contract-basis-efa\r\n/selection-superannuated-employees-fixed-term-contract-basis-hvf\r\n/shortlisted-interview-and-document-verification-post-senior-design-engineer-design-engineer-hvf\r\n/trade-test-result-electrician-welder"

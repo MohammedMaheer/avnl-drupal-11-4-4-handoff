@@ -1,0 +1,24 @@
+uuid: 1ad69aa6-ac0b-4b81-b7dd-353b51ce2b36
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_key_profiles_order
+    - node.type.key_profiles
+  module:
+    - weight
+id: node.key_profiles.field_key_profiles_order
+field_name: field_key_profiles_order
+entity_type: node
+bundle: key_profiles
+label: Order
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings:
+  range: '20'
+field_type: weight

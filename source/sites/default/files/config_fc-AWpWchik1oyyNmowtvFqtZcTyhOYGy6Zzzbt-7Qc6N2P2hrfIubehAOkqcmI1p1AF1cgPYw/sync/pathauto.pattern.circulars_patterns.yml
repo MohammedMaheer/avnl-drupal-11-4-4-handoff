@@ -1,0 +1,22 @@
+uuid: 8399a720-f289-45d1-8a4c-0a1f2bd99b7f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: circulars_patterns
+label: 'Circulars Patterns'
+type: 'canonical_entities:node'
+pattern: 'circulars/[node:title]'
+selection_criteria:
+  9bd959ae-0a86-499a-9cc6-fdfd7a6e6fc4:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 9bd959ae-0a86-499a-9cc6-fdfd7a6e6fc4
+    context_mapping:
+      node: node
+    bundles:
+      circulars: circulars
+selection_logic: and
+weight: -5
+relationships: {  }

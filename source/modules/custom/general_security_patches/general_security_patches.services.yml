@@ -1,0 +1,5 @@
+services:
+  header_response_subscriber:
+    class: Drupal\general_security_patches\EventSubscriber\HeaderResponseSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,14 @@
+uuid: 6709bc6e-01fc-4254-b204-0d4e4e48f407
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.e_citizen_downloads_creator
+  module:
+    - user
+id: user_add_role_action.e_citizen_downloads_creator
+label: 'Add the E-Citizen/ Downloads Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: e_citizen_downloads_creator

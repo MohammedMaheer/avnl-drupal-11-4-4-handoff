@@ -1,0 +1,128 @@
+display:
+  page_1:
+    display_options:
+      title: 'वीडियो गैलरी'
+      fields:
+        view_node:
+          text: देखना
+        title:
+          separator: ', '
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      pager:
+        options:
+          tags:
+            first: '<< First'
+            last: 'Last >>'
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+    display_title: पृष्ठ
+  page_2:
+    display_options:
+      header:
+        area:
+          content:
+            format: full_html
+            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/video_gallery">Add Video Gallery</a></div>'
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      fields:
+        title:
+          label: Title
+          separator: ', '
+        field_youtube_video:
+          label: वीडियो
+          separator: ', '
+        status:
+          label: अवस्था
+          separator: ', '
+        edit_node:
+          text: 'संपादित करें'
+        delete_node:
+          label: 'Action Delete'
+          text: Delete
+        dropbutton:
+          label: कार्रवाई
+      filters:
+        title:
+          expose:
+            label: Title
+        status:
+          expose:
+            label: प्रकाशित
+      pager:
+        options:
+          tags:
+            first: '<< First'
+            last: 'Last >>'
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+  default:
+    display_options:
+      empty:
+        area:
+          content:
+            format: full_html
+            value: '<p class="noResultView">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं।</p>'
+      exposed_form:
+        options:
+          submit_button: खोजें
+          reset_button_label: रीसेट
+          exposed_sorts_label: 'क्रमबद्ध द्वारा'
+          sort_desc_label: अवरोही
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+      fields:
+        title:
+          separator: ', '
+      title: 'वीडियो गैलरी'
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  block_2:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  entity_view_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      arguments:
+        nid:
+          exception:
+            title: सभी
+      fields:
+        title:
+          separator: ', '
+        field_youtube_video:
+          alter:
+            text: '{{ field_youtube_video__video_id }}'
+label: 'वीडियो गैलरी'

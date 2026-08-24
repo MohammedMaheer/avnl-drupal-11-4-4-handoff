@@ -1,0 +1,19 @@
+uuid: a5278239-0212-4090-a88b-a03b87bb2d0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_avnl_directory_address
+field_name: field_avnl_directory_address
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

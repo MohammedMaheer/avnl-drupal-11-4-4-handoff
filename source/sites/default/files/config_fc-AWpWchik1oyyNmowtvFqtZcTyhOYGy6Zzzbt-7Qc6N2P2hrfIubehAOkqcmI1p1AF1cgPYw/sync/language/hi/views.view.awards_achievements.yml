@@ -1,0 +1,103 @@
+label: 'पुरस्कार / उपलब्धियां'
+display:
+  default:
+    display_options:
+      title: 'पुरस्कार / उपलब्धियां'
+      exposed_form:
+        options:
+          submit_button: खोज
+          reset_button_label: रीसेट
+  page_1:
+    display_options:
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/awards_achievements">Add Awards/ Achievements</a></div>'
+            format: full_html
+      fields:
+        field_awards_achievements_date:
+          label: तारीख
+  page_2:
+    display_options:
+      title: उपलब्धियां
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/archive/achievements">पुरालेख</a></div>'
+            format: full_html
+      fields:
+        view_node:
+          text: देखना
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+  page_3:
+    display_title: 'पुरालेख उपलब्धियां'
+    display_options:
+      title: 'पुरालेख उपलब्धियां'
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/achievements">उपलब्धियों को लौटें</a></div>'
+            format: full_html
+      fields:
+        view_node:
+          text: देखना
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+  page_4:
+    display_title: पुरस्कार
+    display_options:
+      title: पुरस्कार
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/archive/awards">पुरालेख</a></div>'
+            format: full_html
+  page_5:
+    display_title: 'पुरालेख पुरस्कार'
+    display_options:
+      title: 'पुरालेख पुरस्कार'
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+      filters:
+        title:
+          expose:
+            label: शीर्षक
+      header:
+        area:
+          content:
+            value: '<div class="text-align-right"><a class="button btn-common" href="[site:url]/awards">पुरस्कारों पर वापस जाएँ</a></div>'
+            format: full_html
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html

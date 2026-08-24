@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: video_gallery_images
+label: 'Video Gallery Images'
+effects:
+  e3ca3e72-8f1b-4f0c-90be-019db4e80e7b:
+    uuid: e3ca3e72-8f1b-4f0c-90be-019db4e80e7b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 325
+      anchor: center-center

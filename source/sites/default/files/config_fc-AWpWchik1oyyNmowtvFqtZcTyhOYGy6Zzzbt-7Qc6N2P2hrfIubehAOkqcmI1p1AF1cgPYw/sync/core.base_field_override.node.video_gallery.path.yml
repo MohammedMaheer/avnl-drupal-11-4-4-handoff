@@ -1,0 +1,20 @@
+uuid: 0e58df9c-ad59-4c85-8c8c-1963979fc221
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.video_gallery
+  module:
+    - path
+id: node.video_gallery.path
+field_name: path
+entity_type: node
+bundle: video_gallery
+label: 'URL alias'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

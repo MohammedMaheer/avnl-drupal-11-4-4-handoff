@@ -1,0 +1,24 @@
+math_captcha.settings:
+  type: config_object
+  label: 'Math CAPTCHA settings'
+  mapping:
+    math_captcha_enabled_challenges:
+      type: sequence
+      sequence:
+        type: string
+    math_captcha_textual_numbers:
+      type: boolean
+    math_captcha_textual_operators:
+      type: boolean
+    math_captcha_addition_argmax:
+      type: integer
+    math_captcha_addition_allow_negative:
+      type: boolean
+    math_captcha_subtraction_argmax:
+      type: integer
+    math_captcha_subtraction_allow_negative:
+      type: boolean
+    math_captcha_multiplication_argmax:
+      type: integer
+    math_captcha_multiplication_allow_negative:
+      type: boolean

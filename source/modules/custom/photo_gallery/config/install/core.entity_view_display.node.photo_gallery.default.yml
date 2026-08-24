@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.photo_gallery.body
+    - field.field.node.photo_gallery.field_photo_gallery_images
+    - node.type.photo_gallery
+  module:
+    - text
+    - user
+id: node.photo_gallery.default
+targetEntityType: node
+bundle: photo_gallery
+mode: default
+content:
+  body:
+    type: text_default
+    weight: 4
+    region: content
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+  eva_photo_gallery_entity_view_1:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_photo_gallery_images: true
+  langcode: true
+  links: true

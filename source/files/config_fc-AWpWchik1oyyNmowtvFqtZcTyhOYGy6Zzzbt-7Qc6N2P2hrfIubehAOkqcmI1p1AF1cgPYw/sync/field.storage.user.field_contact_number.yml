@@ -1,0 +1,21 @@
+uuid: 440bc2f9-874d-4aa1-bd26-a27270b43c3e
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_contact_number
+field_name: field_contact_number
+entity_type: user
+type: string
+settings:
+  max_length: 10
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,48 @@
+avnl.sm:
+  label: Small
+  mediaQuery: 'all and (min-width: 500px)'
+  weight: 0
+  multipliers:
+    - 1x
+avnl.md:
+  label: Medium
+  mediaQuery: 'all and (min-width: 700px)'
+  weight: 1
+  multipliers:
+    - 1x
+avnl.lg:
+  label: Large
+  mediaQuery: 'all and (min-width: 1000px)'
+  weight: 2
+  multipliers:
+    - 1x
+avnl.xl:
+  label: X-Large
+  mediaQuery: 'all and (min-width: 1300px)'
+  weight: 3
+  multipliers:
+    - 1x
+avnl.nav-md:
+  label: Nav Medium
+  mediaQuery: 'all and (min-width: 500px)'
+  weight: 4
+  multipliers:
+    - 1x
+avnl.nav:
+  label: Nav
+  mediaQuery: 'all and (min-width: 1200px)'
+  weight: 5
+  multipliers:
+    - 1x
+avnl.grid-md:
+  label: Grid Medium
+  mediaQuery: 'all and (min-width: 700px)'
+  weight: 6
+  multipliers:
+    - 1x
+avnl.grid-max:
+  label: Grid Max
+  mediaQuery: 'all and (min-width: 1440px)'
+  weight: 7
+  multipliers:
+    - 1x

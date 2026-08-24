@@ -1,0 +1,14 @@
+uuid: de2f5e38-6b8b-4242-aeb3-8a9e572719e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.banner_publisher
+  module:
+    - user
+id: user_add_role_action.banner_publisher
+label: 'Add the Banner Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: banner_publisher

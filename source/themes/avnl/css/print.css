@@ -1,0 +1,29 @@
+br { display: none; }
+.headermenu, .topStrip { display:none; }
+.welcome-wrap .row .col-md-8, .welcome-wrap .row .col-md-4 { flex: 0 0 auto; width: 100%; }
+.imgblok { width: 25%; margin: 0 auto; }
+.newimg { height: 285px; display: none; }
+.justify-content-end { justify-content: left; }
+.justify-content-md-end { justify-content: start; }
+.justify-content-center { justify-content: start; }
+.connectWrap { margin: 0 0 20px; }
+.footer { padding: 20px 0 20px; }
+.connectWrap .row .col-md-4 { flex: 0 0 auto; width: 100%; margin-bottom: 15px; }
+.all-detail { padding-left: 0; border-left: 0; }
+.footer-social { padding-left: 0; border-left: 0; margin-left: 0; height: 100%; }
+.footer .row .col-md-9 { flex: 0 0 auto; width:100%; }
+.footer .row .col-md-3 { flex: 0 0 auto; width: 100%; }
+.visitorLastUpdate p { text-align:left; }
+section.newsEvents, section.achievements, section.footer-wrap { page-break-before: always; }
+section.footer-wrap { margin-top: 0; }
+.cmdtext:after { display:none; }
+.cmdtext { background:#fff; }
+.welcome-wrap { background: #fff; }
+.eventtext { padding: 20px 40px; border: 1px solid #ccc; }
+.eventsslider .swiper-slide { box-shadow:none; }
+section.achievements { margin-bottom:15px; }
+.innerBannerWrap { height:85px; }
+.innerBannerWrap img { display:none; }
+.footeravnl ul li { margin-bottom:5px; }
+.add-logo { margin-bottom: 5px; }
+.avnLogo .swiper-slide a:focus { display: block; border: 1px dotted #000;}

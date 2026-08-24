@@ -1,0 +1,7 @@
+<svg id="Component_1_7" data-name="Component 1 – 7" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+  <path id="Ellipse_45" data-name="Ellipse 45" d="M17.5,1A16.5,16.5,0,0,0,5.833,29.167,16.5,16.5,0,1,0,29.167,5.833,16.392,16.392,0,0,0,17.5,1m0-1A17.5,17.5,0,1,1,0,17.5,17.5,17.5,0,0,1,17.5,0Z" fill="#a45d1d"/>
+  <g id="arrow-right" transform="translate(9.916 8.75)">
+    <path id="Line_374" data-name="Line 374" d="M10,.75H0A.75.75,0,0,1-.75,0,.75.75,0,0,1,0-.75H10a.75.75,0,0,1,.75.75A.75.75,0,0,1,10,.75Z" transform="translate(1.834 9.127)" fill="#a45d1d"/>
+    <path id="Path_37880" data-name="Path 37880" d="M12,14a.75.75,0,0,1-.53-1.28l3.6-3.6-3.6-3.6A.75.75,0,1,1,12.53,4.47L16.657,8.6a.75.75,0,0,1,0,1.061L12.53,13.784A.748.748,0,0,1,12,14Z" transform="translate(-3.458)" fill="#a45d1d"/>
+  </g>
+</svg>

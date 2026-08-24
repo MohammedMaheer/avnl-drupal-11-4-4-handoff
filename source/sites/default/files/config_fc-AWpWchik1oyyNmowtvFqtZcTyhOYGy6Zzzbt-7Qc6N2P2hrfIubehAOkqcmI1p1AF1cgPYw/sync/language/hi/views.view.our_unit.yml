@@ -1,0 +1,54 @@
+label: 'हमारी इकाई'
+display:
+  page_1:
+    display_options:
+      filters:
+        langcode:
+          expose:
+            label: 'अनुवाद भाषा'
+      fields:
+        field_our_unit_decription:
+          label: विवरण
+        field_our_unit_preamble_title:
+          label: 'प्रस्तावना शीर्षक'
+        field_unit_preamble_description:
+          label: 'प्रस्तावना विवरण'
+        field_our_unit_capabilities_name:
+          label: 'क्षमताओं का नाम'
+        field_our_unit_cap_description:
+          label: 'क्षमताओं का विवरण'
+        field_our_units_contact_details:
+          label: 'सम्पर्क करने का विवरण'
+        field_our_unit_rti_officers:
+          label: 'आरटीआई अधिकारी'
+        field_our_units_notification:
+          label: अधिसूचना
+        field_our_unit_location:
+          label: जगह
+        body:
+          label: शीर्षक
+  default:
+    display_options:
+      title: 'हमारी इकाई'
+  block_2:
+    display_title: उत्पाद
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html
+  page_2:
+    display_options:
+      fields:
+        title:
+          label: शीर्षक
+        field_our_unit_location:
+          label: जगह
+  block_1:
+    display_options:
+      empty:
+        area:
+          content:
+            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
+            format: full_html

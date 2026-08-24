@@ -1,0 +1,958 @@
+<?php 
+use \Drupal\Core\Form\FormStateInterface;
+use \Drupal\Core\Ajax\AjaxResponse;
+use \Drupal\Core\Ajax\HtmlCommand;
+use \Drupal\Core\Ajax\RedirectCommand;
+use \Drupal\Core\Mail\MailManagerInterface;
+use \Drupal\Component\Utility\SafeMarkup;
+use \Drupal\Component\Utility\Html;
+use \Drupal\Core\Url;
+use \Drupal\encrypt\Entity\EncryptionProfile;
+use \Drupal\user\UserInterface;
+use \Drupal\views\ViewExecutable;
+use \Drupal\views\Plugin\views\query\QueryPluginBase;
+use \Drupal\Core\File;
+use \Drupal\Core\File\MimeType;
+use \Drupal\Core\File\MimeType\ExtensionMimeTypeGuesser;
+use \Drupal\Core\File\MimeType\MimeTypeGuesser;
+use \Drupal\Core\Routing\TrustedRedirectResponse;
+use \Drupal\simple_multistep\MultistepController;
+use \Drupal\node\Entity\Node;
+use \Drupal\block_content\Entity;
+use \Drupal\Core\Messenger\MessengerInterface;
+
+function general_security_patches_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+  global $base_url;
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $default_languagecode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    if ($language != $default_languagecode) {
+        $base_urls = $base_url.'/'.$language;
+    }else{
+        $base_urls = $base_url;
+    }    
+    $user = \Drupal::currentUser(); // GET CURRENT USER DATA
+    $roles = $user->getRoles(); // GET CURRENT USER ROLE
+    
+    if($form_id == "search_block_form"){
+    //  $form['#attributes']['autocomplete'] = 'off';
+      //$form['keys']['#attributes']['autocomplete'] = 'off';
+  }
+  if ($form_id === 'user_register_form') {
+    $form['actions']['submit']['#value'] = t('Submit');
+    $form['#validate'][] = '_custom_password_validate';
+    $form['#submit'][] = 'general_security_patches_password_history_submit';
+  }
+
+  if ($form_id === 'user_form') {
+    $form['#validate'][] = '_custom_password_validate';
+    $form['#submit'][] = 'general_security_patches_password_history_submit';
+  }
+
+  if ($form_id === 'user_login_form') {
+    $form['name']['#attributes']['autocomplete'] = 'username';
+    $form['pass']['#attributes']['autocomplete'] = 'current-password';
+  }
+
+  if ($form_id === 'user_pass') {
+    $form['name']['#attributes']['placeholder'] = t('Username or email address*');
+    $form['name']['#description'] = t('Password reset instructions will be sent to your registered email address.');
+    $form['name']['#attributes']['autocomplete'] = 'username';
+  }
+
+  if ($form_id === 'node_feedback_form' || $form_id === 'node_online_enquiry_form') {
+    $form['#validate'][] = '_custom_rate_limit_validate';
+  }
+
+  if ($form_id === 'contact_message_feedback_form') {
+    $form['actions']['submit']['#value'] = t('Submit');
+  }
+  
+    if(strpos($form_id, 'ode_')){
+      $form['#attributes']['autocomplete'] = 'off';
+      $form['#validate'][] = '_custom_title_validate';
+      $form['actions']['submit']['#value'] = t('Submit');
+    }
+    
+    if($form_id == "views_exposed_form"){
+        //echo "==>".$form_id;
+    }
+    
+}
+/**
+ * @param array $form
+ * @param array $form_state
+ * @return array
+ * Ajax callback for validating the username
+ */
+function username_validation_ajax(&$form, &$form_state) {
+  
+  $username = $form_state->getvalues()['name'];
+  $label = $form['account']['name']['#title'];
+  $max_char = '10';
+  $min_char = '3';
+  
+  $ajax_response = new AjaxResponse();
+  $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', ''));
+  if($username == "" || empty($username)){
+  $value = '<span class ="error ">' . $label . ' field is required</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+  if (strlen($username) < $min_char) {
+    $value = '<span class ="error ">' . $label . ' should have minimum of ' . $min_char . ' characters</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+
+  if (strlen($username) > $max_char) {
+    $value = '<span class ="error ">' . $label . ' should have maximum of ' . $max_char . ' characters</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+
+  if (preg_match('/\s/',$username)) {
+    $value = '<span class ="error ">' . $label . ' contains spaces.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+  
+  if (!preg_match('/^[a-zA-Z0-9-_@#$. ]+$/i',$username)) {
+    $value = '<span class ="error ">Please enter valid ' . $label . '.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+  
+  if($username != ""){
+  $account = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
+  if(!empty($account)){
+    $value = '<span class ="error ">' . $label . ' is already exists.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#username-validation-ajax', $value));
+  }
+  }
+  
+
+  return $ajax_response;
+}
+function mail_validation_ajax(&$form, &$form_state) {
+  
+  $mail = $form_state->getvalues()['mail'];
+  $label = $form['account']['mail']['#title'];
+  
+  $ajax_response = new AjaxResponse();
+  $ajax_response->addCommand(new HtmlCommand('#mail-validation-ajax', ''));
+  if($mail == "" || empty($mail)){
+  $value = '<span class ="error ">' . $label . ' field is required</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mail-validation-ajax', $value));
+  }
+ 
+  if (preg_match('/\s/',$mail)) {
+    $value = '<span class ="error ">' . $label . ' contains spaces.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mail-validation-ajax', $value));
+  }
+  
+  if (!preg_match('/^[a-zA-Z0-9-_@#$. ]+$/i',$mail)) {
+    $value = '<span class ="error ">Please enter valid ' . $label . '.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mail-validation-ajax', $value));
+  }
+  
+  if($mail != ""){
+  $mailObject = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['mail' => $mail]);
+  if(!empty($mailObject)){
+    $value = '<span class ="error ">' . $label . ' is already exists.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mail-validation-ajax', $value));
+  }
+  }
+  
+
+  return $ajax_response;
+}
+function mobile_validation_ajax(&$form, &$form_state) {
+  
+  $mobile = $form_state->getvalues()['field_official_contact_number'][0]['value'];
+  $label = $form['field_official_contact_number']['widget'][0]['#title'];
+  
+  $ajax_response = new AjaxResponse();
+  $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', ''));
+  if($mobile == ""){
+  $value = '<span class ="error ">' . $label . ' field is required</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', $value));
+  }
+ 
+  if (preg_match('/\s/',$mobile)) {
+    $value = '<span class ="error ">' . $label . ' contains spaces.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', $value));
+  }
+  
+  if (!preg_match('/^[0-9]+$/i',$mobile)) {
+    $value = '<span class ="error ">Please enter valid ' . $label . '.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', $value));
+  }
+  
+  if($mobile != ""){
+  $mobileObject = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['field_official_contact_number' => $mobile]);
+  if(empty($mobileObject)){
+    $value = '<span class ="error ">' . $label . ' is already exists.</span>';
+    $ajax_response->addCommand(new HtmlCommand('#mobile-validation-ajax', $value));
+  }
+  }
+  
+
+  return $ajax_response;
+} 
+function general_security_patches_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+    global $base_url;
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $default_languagecode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    if ($language != $default_languagecode) {
+        $base_urls = $base_url.'/'.$language;
+    }else{
+        $base_urls = $base_url;
+    }
+    $view = $form_state->getStorage('view');
+    
+    $alterCodeFormId = array('sttl_official'); // ADD VIEW MACHINE NAME
+    
+    if($form['actions']['reset']!=""){
+        #$form['actions']['reset']['#attributes']['class'][] = 'resetLink';
+    }
+    if($form_id == "views_exposed_form" && in_array($view['view']->id(), $alterCodeFormId) ){
+        #$form['actions']['submit']['#suffix'] = '<a class="button resetLink" href="'.$base_urls.'/who-is-who">'.t('Reset').'</a>';
+    }
+
+    $form['#validate'][] = '_custom_XSS_views_validate';
+    // $form['#submit'][] = '_validation_for_submission';
+
+}
+/* function _validation_for_submission(array &$form, FormStateInterface $form_state){
+  global $base_url;
+  $values = $form_state->getUserInput();
+  var_dump($values);
+  exit;
+} */
+function _custom_XSS_views_validate(array &$form, FormStateInterface $form_state){
+  global $base_url;
+  $values = $form_state->getUserInput();
+  $current_path = \Drupal::service('path.current')->getPath();
+  $pageUrl = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+  $url = $base_url.$pageUrl; 
+//$url = $base_url.$pageUrl.'?test=test123'; 
+  //$error = array();
+  //var_dump($values['title']); //exit;
+  if((isset($values['title']) && $values['title'] != "") || (isset($values['combine']) && $values['combine'] != "")){
+      // $setArrayForXss = array("+","-","_","!","@","#","$","%","^","*","=","{","}","\\","/","'",",",":",";","`","~","<",">");
+      $setArrayForXss = array("+","_","@","#","$","%","^","*","=","{","}","\\","/","'",",",":",";","`","~","<",">");
+      //$title = str_replace($setArrayForXss,' ',$values['title']);
+      //echo "==>".($title)."<==";
+      if(!isset($values['title']) || $values['title'] == ""){
+          $getDataTitle = isset($values['combine']) ? $values['combine'] : '';
+      }else{
+          $getDataTitle = $values['title'];
+      }
+      $error = array();
+      foreach($setArrayForXss as $keyword){
+          //var_dump($keyword);
+          if (strpos($getDataTitle, $keyword) !== FALSE) {
+              //var_dump($keyword);
+              //echo "11"; //exit;
+              $error[] = true;
+              
+          }
+      }
+                 
+  }
+  if(!empty($error)){
+      // drupal_set_message(t('Please enter valid details for Searching Field.'), 'error');
+      $form_state->setErrorByName('title', t('Please enter valid details for Searching Field.'));
+      return $form;
+  }
+}
+
+function general_security_patches_user_register_form_process_pass(&$element, FormStateInterface $form_state, $complete_form)
+{
+    $element = \Drupal\Core\Render\Element\PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
+    //$element['pass1']['#placeholder'] = t('Password*');
+    //$element['pass2']['#placeholder'] = t('Confirm Password*');
+    return $element;
+}
+
+function _custom_rate_limit_validate(array &$form, FormStateInterface $form_state) {
+  $ipaddress = _gsp_get_client_ip(); // Get client IP
+  $form_id = $form['#id']; // Get form ID
+  $database = \Drupal::database();
+
+  $limit_access = 5; // Max allowed attempts
+  $expiry_window = 1800; // 1 hour (in seconds)
+
+  // Get the latest rate limit record
+  $queryRl = $database->select('rate_limit', "rl")
+    ->condition('rl.form_id', $form_id)
+    ->condition('rl.ip_address', $ipaddress)
+    ->fields('rl', ['form_id', 'ip_address', 'created', 'access_count'])
+    ->orderBy('rl.created', 'DESC')
+    ->range(0, 1);
+  $resultsRl = $queryRl->execute();
+  $rlresult = $resultsRl->fetchAll();
+
+  $current_time = \Drupal::time()->getRequestTime();
+
+  if (!empty($rlresult)) {
+    $record = $rlresult[0];
+    $rcount = $record->access_count;
+    $created_time = $record->created;
+
+    // If time since last record exceeds expiry, reset count
+    if (($current_time - $created_time) > $expiry_window) {
+      $ratecount = 1;
+      $database->update('rate_limit')
+        ->fields([
+          'access_count' => $ratecount,
+          'created' => $current_time,
+          'updated' => $current_time,
+        ])
+        ->condition('form_id', $form_id)
+        ->condition('ip_address', $ipaddress)
+        ->execute();
+    }
+    elseif ($rcount < $limit_access) {
+      $ratecount = $rcount + 1;
+      $database->update('rate_limit')
+        ->fields([
+          'access_count' => $ratecount,
+          'updated' => $current_time,
+        ])
+        ->condition('form_id', $form_id)
+        ->condition('ip_address', $ipaddress)
+        ->execute();
+    }
+    else {
+      \Drupal::service('session_manager')->destroy();
+      \Drupal::messenger()->addMessage(t('We have received multiple requests from your IP address. Please try again after some time.'), 'error');
+      $form_state->setErrorByName('name', t('Please wait and try again later.'));
+    }
+  }
+  else {
+    // No existing record, insert new
+    $database->insert('rate_limit')
+      ->fields([
+        'form_id' => $form_id,
+        'ip_address' => $ipaddress,
+        'access_count' => 1,
+        'created' => $current_time,
+      ])
+      ->execute();
+  }
+}
+
+
+function _custom_password_validate(array &$form, FormStateInterface $form_state){
+    $user = \Drupal::currentUser(); // GET CURRENT USER DATA
+    $roles = $user->getRoles(); // GET CURRENT USER ROLE	
+    $uid = $user->id();											 
+    //$query = \Drupal::request()->query->get('ajax_form');
+    //if($query == ""){
+        $values = $form_state->getUserInput();
+        $username = isset($values['name']) ? $values['name'] : '';
+        $new_password = $values['pass']['pass1'] ?? '';
+        $field_official_contact_number = '';
+        if (isset($values['field_official_contact_number']) && is_array($values['field_official_contact_number']) && 
+            isset($values['field_official_contact_number'][0]) && is_array($values['field_official_contact_number'][0]) &&
+            isset($values['field_official_contact_number'][0]['value'])) {
+            $field_official_contact_number = $values['field_official_contact_number'][0]['value'];
+        }
+        if ($new_password !== '' && $username === $new_password)
+        {
+          $form_state->setErrorByName('error', t('Please enter username and password does not same.'));
+        }
+    
+        if($username != ""){
+            if(strlen($username) < 3){
+                $form_state->setErrorByName('name', t('Please enter at least 3 character content for Username.'));
+            }
+        }
+        if ($new_password !== '') {
+            if(isset($values['pass']['pass2']) && $new_password === $values['pass']['pass2'] ){
+                if (!preg_match("/^.*(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/", $new_password)) {
+                    $form_state->setErrorByName('pass', t('Password must be at least 8 characters and must contain at least one lower case letter, one upper case letter and one digit.'));
+                }
+            }
+
+            if ($uid && \Drupal::database()->schema()->tableExists('login_attampt')) {
+                $hashes = \Drupal::database()->select('login_attampt', 'la')
+                    ->fields('la', ['pass'])
+                    ->condition('uid', $uid)
+                    ->orderBy('created', 'DESC')
+                    ->range(0, 5)
+                    ->execute()
+                    ->fetchCol();
+                $password_hasher = \Drupal::service('password');
+                foreach ($hashes as $hash) {
+                    if ($password_hasher->check($new_password, $hash)) {
+                        $form_state->setErrorByName('pass', t('This password was used recently. Please choose a different password.'));
+                        break;
+                    }
+                }
+            }
+        }
+        if($field_official_contact_number != ""){
+            $mobileObject = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['field_official_contact_number' => $field_official_contact_number]);
+            if(!in_array('administrator',$roles)){
+              //var_dump(key($mobileObject));
+              if($uid != key($mobileObject)){
+                if(!empty($mobileObject)){
+                    $form_state->setErrorByName('field_official_contact_number', t('Mobile Number is already exist..'));
+                }
+              }
+            }
+        }
+        
+        
+        
+    //}
+
+    
+}
+
+/**
+ * Stores a one-way password-history hash after a user form is submitted.
+ */
+function general_security_patches_password_history_submit(array &$form, FormStateInterface $form_state) {
+    $new_password = $form_state->getValue(['pass', 'pass1']);
+    if (!is_string($new_password) || $new_password === '') {
+        return;
+    }
+
+    $form_object = $form_state->getFormObject();
+    if (!method_exists($form_object, 'getEntity')) {
+        return;
+    }
+    $account = $form_object->getEntity();
+    if (!$account || !$account->id() || !\Drupal::database()->schema()->tableExists('login_attampt')) {
+        return;
+    }
+
+    $hash = \Drupal::service('password')->hash($new_password);
+    if ($hash === FALSE) {
+        return;
+    }
+    \Drupal::database()->insert('login_attampt')
+        ->fields([
+            'uid' => $account->id(),
+            'pass' => $hash,
+            'created' => \Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
+}
+
+function _custom_title_validate(array &$form, FormStateInterface $form_state){
+    $field_album_cover_image = $form_state->getValue('field_album_cover_image') ?? [];
+    $field_album_cover_image_alt = (string) ($form['field_album_cover_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_video_album_cover_image = $form_state->getValue('field_video_album_cover_image') ?? [];
+    $field_background_image = $form_state->getValue('field_background_image') ?? [];
+    $field_background_image_alt = (string) ($form['field_background_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_products_images = $form_state->getValue('field_products_images') ?? [];
+    $field_products_images_alt = (string) ($form['field_products_images']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_products_inner_image = $form_state->getValue('field_products_inner_image') ?? [];
+    $field_products_inner_image_alt = (string) ($form['field_products_inner_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_releted_link_image = $form_state->getValue('field_releted_link_image') ?? [];
+    $field_releted_link_image_alt = (string) ($form['field_releted_link_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_home_page_banner_image = $form_state->getValue('field_home_page_banner_image') ?? [];
+    $field_home_page_banner_image_alt = (string) ($form['field_home_page_banner_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_events_image = $form_state->getValue('field_events_image') ?? [];
+    $field_events_image_alt = (string) ($form['field_events_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_footer_logo = $form_state->getValue('field_footer_logo') ?? [];
+    $field_footer_logo_alt = (string) ($form['field_footer_logo']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_achievements_image = $form_state->getValue('field_achievements_image') ?? [];
+    $field_achievements_image_alt = (string) ($form['field_achievements_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_avnl_director_upload_photo = $form_state->getValue('field_avnl_director_upload_photo') ?? [];
+    $field_avnl_director_upload_photo_alt = (string) ($form['field_avnl_director_upload_photo']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_key_profiles_image = $form_state->getValue('field_key_profiles_image') ?? [];
+    $field_key_profiles_image_alt = (string) ($form['field_key_profiles_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_news_images = $form_state->getValue('field_news_images') ?? [];
+    $field_news_images_alt = (string) ($form['field_news_images']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_our_unit_cover_image = $form_state->getValue('field_our_unit_cover_image') ?? [];
+    $field_our_unit_cover_image_alt = (string) ($form['field_our_unit_cover_image']['widget'][0]['#title'] ?? 'image alternative text');
+    $field_circulars_images = $form_state->getValue('field_circulars_images') ?? [];
+    $field_circulars_images_alt = (string) ($form['field_circulars_images']['widget'][0]['#title'] ?? 'image alternative text');
+    $query = \Drupal::request()->query->get('ajax_form');
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    $previousUrl = \Drupal::request()->server->get('HTTP_REFERER'); //exit("--");
+    //var_dump($form_state->getRedirect()); 
+  //echo "</pre>"; exit;
+    if($previousUrl == ""){
+    $form_state->setErrorByName('title', t('It\'s an illegal triggered action.'));
+    }
+
+
+    $title_value = is_object($form['title']['widget'][0]['#title']) ? $form['title']['widget'][0]['#title']->__toString() : $form['title']['widget'][0]['#title'];
+
+    $body_value = is_object($form['body']['widget'][0]['#title']) ? $form['body']['widget'][0]['#title']->__toString() : $form['body']['widget'][0]['#title'];
+    $Subject_value = '';
+    if (isset($form['field_subject_feedback']['widget'][0]['#title'])) {
+        $Subject_value = is_object($form['field_subject_feedback']['widget'][0]['#title'])
+            ? $form['field_subject_feedback']['widget'][0]['#title']->__toString()
+            : $form['field_subject_feedback']['widget'][0]['#title'];
+    }
+
+    $titlevalue = $form_state->getValue('title');
+
+    $title = isset($titlevalue['0']['value']) && $titlevalue['0']['value'] !== null ? trim($titlevalue['0']['value']) : '';
+  //exit;
+    $bodyvalue = $form_state->getValue('body');
+    $subjectvalue = $form_state->getValue('field_subject_feedback');
+    $body = isset($bodyvalue['0']['value']) && $bodyvalue['0']['value'] !== null ? trim($bodyvalue['0']['value']) : '';
+    $subject = isset($subjectvalue['0']['value']) && $subjectvalue['0']['value'] !== null ? trim($subjectvalue['0']['value']) : '';
+
+    // $field_contact_details = $form_state->getValue('field_contact_details');
+    // $field_contact_details_name = is_object($form['field_contact_details']['widget'][0]['#title']) ? $form['field_contact_details']['widget'][0]['#title']->__toString() : $form['field_contact_details']['widget'][0]['#title'];
+    // $field_contact_details_value = trim($field_contact_details['0']['value']);
+
+    if($query == ""){
+        if($title != ""){
+      //exit('--');
+            if(strlen($title) != strlen(strip_tags($title)))
+            {
+                $form_state->setErrorByName('title', t('Please enter valid content for '.$title_value.'.'));
+            }
+            if(strlen($title) < 3){
+                    $form_state->setErrorByName('title', t('Please enter at least 3 character content for '.$title_value.'.'));
+            }
+            if(strpos($title,';') != ""){
+                    $form_state->setErrorByName('title', t('Please enter valid content for '.$title_value.'.'));
+            }
+            /* if (preg_match("/[')--@#$%^*+=`~;\/{}>]/", $title)) {
+        //exit('validation');	
+                $form_state->setErrorByName('title', t('Please enter valid content for '.$title_value.'.'));
+            } */
+            
+            
+        }
+        if (isset($field_album_cover_image) && $field_album_cover_image != "") {
+            $regex = '/<script[^>]*>.*?<\/script>/is';
+            if (isset($field_album_cover_image[0]['alt']) && preg_match($regex, $field_album_cover_image[0]['alt'])) {
+                $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_album_cover_image_alt) ? $field_album_cover_image_alt : '') . '.'));
+            }
+        }
+    
+        if (isset($field_video_album_cover_image) && $field_video_album_cover_image != "") {
+          // var_dump($field_video_album_cover_image); exit();
+          $regex = '/<script[^>]*>.*?<\/script>/is';
+          if (isset($field_video_album_cover_image[0]['alt']) && strlen($field_video_album_cover_image[0]['alt']) != strlen(strip_tags($field_video_album_cover_image[0]['alt']))) {
+              $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_video_album_cover_image[0]['alt'] . '.'));
+          }
+
+          if (isset($field_video_album_cover_image[0]['alt']) && preg_match($regex, $field_video_album_cover_image[0]['alt'])) {
+              $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_album_cover_image_alt) ? $field_album_cover_image_alt : '') . '.'));
+          }
+        }
+       
+    if (isset($field_background_image) && $field_background_image != "") {
+        // var_dump($field_background_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_background_image[0]['alt']) && strlen($field_background_image[0]['alt']) != strlen(strip_tags($field_background_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_background_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_background_image[0]['alt']) && preg_match($regex, $field_background_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_background_image_alt) ? $field_background_image_alt : '') . '.'));
+        }
+    }
+    
+    if (isset($field_products_images) && $field_products_images != "") {
+        // var_dump($field_products_images); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_products_images[0]['alt']) && strlen($field_products_images[0]['alt']) != strlen(strip_tags($field_products_images[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_products_images[0]['alt'] . '.'));
+        }
+
+        if (isset($field_products_images[0]['alt']) && preg_match($regex, $field_products_images[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_products_images_alt) ? $field_products_images_alt : '') . '.'));
+        }
+    }
+    
+    if (isset($field_products_inner_image) && $field_products_inner_image != "") {
+        // var_dump($field_products_inner_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_products_inner_image[0]['alt']) && strlen($field_products_inner_image[0]['alt']) != strlen(strip_tags($field_products_inner_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_products_inner_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_products_inner_image[0]['alt']) && preg_match($regex, $field_products_inner_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_products_inner_image_alt) ? $field_products_inner_image_alt : '') . '.'));
+        }
+    }
+    
+    if (isset($field_releted_link_image) && $field_releted_link_image != "") {
+        // var_dump($field_releted_link_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_releted_link_image[0]['alt']) && strlen($field_releted_link_image[0]['alt']) != strlen(strip_tags($field_releted_link_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_releted_link_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_releted_link_image[0]['alt']) && preg_match($regex, $field_releted_link_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_releted_link_image_alt) ? $field_releted_link_image_alt : '') . '.'));
+        }
+    }
+    
+    
+    if (isset($field_home_page_banner_image) && $field_home_page_banner_image != "") {
+        // var_dump($field_home_page_banner_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_home_page_banner_image[0]['alt']) && strlen($field_home_page_banner_image[0]['alt']) != strlen(strip_tags($field_home_page_banner_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_home_page_banner_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_home_page_banner_image[0]['alt']) && preg_match($regex, $field_home_page_banner_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_home_page_banner_image_alt) ? $field_home_page_banner_image_alt : '') . '.'));
+        }
+    }
+    
+    if (isset($field_events_image) && $field_events_image != "") {
+        // var_dump($field_events_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_events_image[0]['alt']) && strlen($field_events_image[0]['alt']) != strlen(strip_tags($field_events_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_events_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_events_image[0]['alt']) && preg_match($regex, $field_events_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_events_image_alt) ? $field_events_image_alt : '') . '.'));
+        }
+    }
+    
+    if (isset($field_footer_logo) && $field_footer_logo != "") {
+        // var_dump($field_footer_logo); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_footer_logo[0]['alt']) && strlen($field_footer_logo[0]['alt']) != strlen(strip_tags($field_footer_logo[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_footer_logo[0]['alt'] . '.'));
+        }
+
+        if (isset($field_footer_logo[0]['alt']) && preg_match($regex, $field_footer_logo[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_footer_logo_alt) ? $field_footer_logo_alt : '') . '.'));
+        }
+    }
+    
+      
+    if (isset($field_achievements_image) && $field_achievements_image != "") {
+        // var_dump($field_achievements_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_achievements_image[0]['alt']) && strlen($field_achievements_image[0]['alt']) != strlen(strip_tags($field_achievements_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_achievements_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_achievements_image[0]['alt']) && preg_match($regex, $field_achievements_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_achievements_image_alt) ? $field_achievements_image_alt : '') . '.'));
+        }
+    }
+    if (isset($field_avnl_director_upload_photo) && $field_avnl_director_upload_photo != "") {
+        // var_dump($field_avnl_director_upload_photo); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_avnl_director_upload_photo[0]['alt']) && strlen($field_avnl_director_upload_photo[0]['alt']) != strlen(strip_tags($field_avnl_director_upload_photo[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_avnl_director_upload_photo[0]['alt'] . '.'));
+        }
+
+        if (isset($field_avnl_director_upload_photo[0]['alt']) && preg_match($regex, $field_avnl_director_upload_photo[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_avnl_director_upload_photo_alt) ? $field_avnl_director_upload_photo_alt : '') . '.'));
+        }
+    }
+
+    if (isset($field_key_profiles_image) && $field_key_profiles_image != "") {
+        // var_dump($field_key_profiles_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_key_profiles_image[0]['alt']) && strlen($field_key_profiles_image[0]['alt']) != strlen(strip_tags($field_key_profiles_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_key_profiles_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_key_profiles_image[0]['alt']) && preg_match($regex, $field_key_profiles_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_key_profiles_image_alt) ? $field_key_profiles_image_alt : '') . '.'));
+        }
+    }
+
+    if (isset($field_news_images) && $field_news_images != "") {
+        // var_dump($field_news_images); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_news_images[0]['alt']) && strlen($field_news_images[0]['alt']) != strlen(strip_tags($field_news_images[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_news_images[0]['alt'] . '.'));
+        }
+
+        if (isset($field_news_images[0]['alt']) && preg_match($regex, $field_news_images[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_news_images_alt) ? $field_news_images_alt : '') . '.'));
+        }
+    }
+
+    if (isset($field_our_unit_cover_image) && $field_our_unit_cover_image != "") {
+        // var_dump($field_our_unit_cover_image); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_our_unit_cover_image[0]['alt']) && strlen($field_our_unit_cover_image[0]['alt']) != strlen(strip_tags($field_our_unit_cover_image[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_our_unit_cover_image[0]['alt'] . '.'));
+        }
+
+        if (isset($field_our_unit_cover_image[0]['alt']) && preg_match($regex, $field_our_unit_cover_image[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_our_unit_cover_image_alt) ? $field_our_unit_cover_image_alt : '') . '.'));
+        }
+    }
+
+    if (isset($field_circulars_images) && $field_circulars_images != "") {
+        // var_dump($field_circulars_images); exit();
+        $regex = '/<script[^>]*>.*?<\/script>/is';
+        if (isset($field_circulars_images[0]['alt']) && strlen($field_circulars_images[0]['alt']) != strlen(strip_tags($field_circulars_images[0]['alt']))) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . $field_circulars_images[0]['alt'] . '.'));
+        }
+
+        if (isset($field_circulars_images[0]['alt']) && preg_match($regex, $field_circulars_images[0]['alt'])) {
+            $form_state->setErrorByName('title', t('Please enter valid content for ' . (isset($field_circulars_images_alt) ? $field_circulars_images_alt : '') . '.'));
+        }
+    }
+
+    if($title != ""){
+            $regex ='/<script[^>]*>.*?<\/script>/is';
+            if(preg_match($regex, $title)){
+                $form_state->setErrorByName('title', t('Please enter valid content for '.$title_value.'.'));
+            }
+        }
+    
+        if($body != ""){  
+
+          /* if (preg_match("/[@#$%^*+=`~;{}]/", $body)) {
+            $form_state->setErrorByName('body', t('Please enter valid content for '.$body_value.'.'));
+          } */
+
+            $regex ='/<script[^>]*>.*?<\/script>/is';
+            //$body = str_replace('"alert', '"', $body);
+            //$form['body']['widget'][0]['value']['#value'] = $body;
+            if(preg_match($regex, $body)){
+                $form_state->setErrorByName('body', t('Please enter valid content for '.$body_value.'.'));
+            }
+            $regex ='/alert/is';
+            if(preg_match($regex, $body)){
+                $form_state->setErrorByName('body', t('Please enter valid content for '.$body_value.'.'));
+            }
+        }
+    
+        if($subject != ""){
+                $regex ='/<script[^>]*>.*?<\/script>/is';
+                //$body = str_replace('"alert', '"', $body);
+                //$form['body']['widget'][0]['value']['#value'] = $body;
+                if(preg_match($regex, $subject)){
+                    $form_state->setErrorByName('field_subject_feedback', t('Please enter valid content for '.$Subject_value.'.'));
+                }
+                $regex ='/alert/is';
+                if(preg_match($regex, $body)){
+                    $form_state->setErrorByName('field_subject_feedback', t('Please enter valid content for '.$Subject_value.'.'));
+                }
+            }
+        }
+
+        /* if($field_contact_details_value!=""){
+            if (!preg_match('/^[6-9]\d{9}+$/i',$field_contact_details_value)) { // NUMBER STAERT WITH 6,7,8 and 9 is allowed.
+            //if (!preg_match('/^[0-9]+$/i',$field_contact_details_value)) {  
+              $form_state->setErrorByName('field_contact_details', t('Please enter valid content for '.$field_contact_details_name.'.'));
+            }
+            $field_contact_details_value_Length = strlen($field_contact_details_value);
+            if($field_contact_details_value_Length > 15 || $field_contact_details_value_Length < 8){
+                $form_state->setErrorByName('field_contact_details', t('Please enter maximum 15 and minimum 8 digits for '.$field_contact_details_name.'.'));
+            }
+        } */
+    
+}
+
+/*function general_section_user_login(UserInterface $account){
+    //var_dump($account); 
+    //exit('--');
+}*/
+
+/**
+ * Implements hook_mail().
+ */
+function general_security_patches_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+  //echo $key .'-'.var_dump($message) .'-'. var_dump($params); exit('---');
+  switch ($key) {
+    case 'send_to_user':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      //$message['subject'] = t('Thank you for submitting form: @title', array('@title' => $params['node_title']), $options);
+      $message['subject'] = t('Thank you for submitting form');
+      $message['body'][] = Html::normalize($params['message']);
+      break;
+    case 'send_to_admin':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('New feedback form request has been submitted by : @title', array('@title' => $params['node_title']), $options);
+      $message['body'][] = Html::normalize($params['message']);
+      break;
+  }
+}
+/**
+ * Implements hook_mail_alter().
+ */
+function general_security_patches_mail_alter(&$message) {
+  switch ($message['key']) {
+    case 'send_to_user':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
+    case 'send_to_admin':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
+  }
+}
+/**
+ * Implements for send mail to user custom code
+ */
+function __gsp_druapl_send_custom_mail($module, $key, $to, $langcode, $params = array(), $reply = NULL, $send = TRUE){
+    
+    $message = "";
+    
+    $mailManager =  \Drupal::service('plugin.manager.mail');
+    $result = $mailManager->mail($module, $key, $to, $langcode, $params, $reply, $send);
+    //echo "<pre>"; print_r($result); exit;
+    if ($result['result'] == "") {
+      $error = true;
+    }
+    
+    if(isset($error)){
+        $message_error = t('There was a problem sending email to @email .', array('@email' => $to));
+        \Drupal::messenger()->addError($message_error);
+        $message = $message_error;
+    }else{
+    if($key != 'send_to_admin'){
+      $message_success = t('An email notification has been successfully sent to @email.', array('@email' => $to));
+      \Drupal::messenger()->addStatus($message_success);
+      $message = $message_success;
+    }
+    }
+    return $message;
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function general_security_patches_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+  //var_dump($entity->getEntityType()->id()); 
+  //$entity->getType()  
+  
+  $langcode = \Drupal::currentUser()->getPreferredLangcode();
+  $reply = NULL;
+  $send = true;
+  $module = "general_section";
+  $key = 'send_to_user';
+  $key_admin = 'send_to_admin';
+  $to_admin = \Drupal::config('system.site')->get('mail');
+  // FOR USER
+  #__gs_druapl_send_custom_mail($module, $key, $to, $langcode, $params, $reply, $send);
+  // FOR ADMIN
+  #__gs_druapl_send_custom_mail($module, $key_admin, $to_admin, $langcode, $params_admin, $reply, $send);
+}
+
+
+function general_security_patches_views_query_alter(ViewExecutable $view, QueryPluginBase $query){
+  // $view->id() - GET VIEW MACHINE NAME 
+  // $view->current_display - GET VIEW CURRENT PAGE 
+}
+
+function general_security_patches_file_validate(Drupal\file\FileInterface $file) {
+  //echo "----TEST----";
+  //exit($file->getFilename());
+  //$errors[] = t($file->source);
+  //$errors[] = t($file->getFileUri());
+  //$errors[] = t($file->getFilename());
+  //$errors[] = t($file->getMimeType());
+  // Call the validation functions specified by this function's caller.
+  $errors = array();
+  $query = \Drupal::request()->query->get('ajax_form');
+    if($query != ""){  
+        if (!$file->getFilename()) {
+          $errors[] = t("The file's name is empty. Please give a name to the file.");
+        }
+        if (strlen($file->getFilename()) > 255) {
+          $errors[] = t("The file's name exceeds the 255 characters limit. Please rename the file and try again.");
+        }
+    if($file->getFilename() != ""){
+      if(!preg_match("/^[a-zA-Z-0-9_-]+[.]{1}[a-zA-z0-9]{3,4}$/", $file->getFilename())){
+        $errors[] = t("The file name should not contains any Null Byte extensions or double dots (.)");
+      }
+      $removeChars = array('\0', '%00', '0x00');
+      $processed_filename = str_replace($removeChars, '', $file->getFilename());
+      if (strlen($file->getFilename()) != strlen($processed_filename)) {
+        $errors[] = t("Upload File with Proper file name.");
+      }
+
+      if($file->getFileUri()){
+        $fileData = file_get_contents($file->getFileUri());        
+        if($fileData != ""){          
+          $ext = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+          $extValid = array('png','gif','jpg','jpeg');
+          if(in_array($ext, $extValid)){     
+            if($ext == 'jpg' || $ext == 'jpeg'){
+              $image = imagecreatefromjpeg($file->getFileUri());
+            } else if ($ext == 'png'){
+              $image = imagecreatefrompng($file->getFileUri());
+            } else if ($ext == 'gif'){
+              $image = imagecreatefromgif($file->getFileUri());
+            }
+            if ($image == false) { 
+              $errors[] = t("Please upload valid file....");
+            }
+          }
+          
+        }
+      }
+
+    }
+
+        if($file->getFileUri() != ''){
+          $tempUrl = $file->getFileUri();
+          //Check the Real MIME TYPE of Uploaded file.
+
+          $finfo = finfo_open(FILEINFO_MIME);
+          //$errors[] = $finfo;
+          $uploaded_file_mimetype = finfo_file($finfo, $tempUrl); 
+          //$errors[] = $uploaded_file_mimetype;
+
+          //Compare the Extension with Allowed Extension. 
+          if($uploaded_file_mimetype != false){
+              //Get the Proper MIME TYPE
+              if(strpos($uploaded_file_mimetype, ';') != false){
+                  $mime_type = strtolower(substr($uploaded_file_mimetype, 0, strpos($uploaded_file_mimetype, ';')));
+              } else {    
+                  $mime_type = strtolower($uploaded_file_mimetype);
+              }
+      
+              //$errors[] = $file->getMimeType();
+              //$errors[] = $mime_type;
+              if($file->getMimeType() != $mime_type){
+                  $errors[] = t("Please upload valid file.");
+              }
+
+          } else {
+              $errors[] = t("Please Upload the file before Save the content.");
+          }
+        }
+
+        return $errors;
+    }
+}
+
+function _gsp_get_client_ip() {
+    //echo "<pre>"; print_r($_SERVER); echo "</pre>"; exit;
+    $ipaddress = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if (getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if (getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if (getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if (getenv('HTTP_FORWARDED'))
+        $ipaddress = getenv('HTTP_FORWARDED');
+    else if (getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
+}
+
+function _gsp_mail_format_change($emailid){
+    $email_at = str_replace("@", "[at]", $emailid);
+    $email = str_replace(".", "[dot]",$email_at);
+    return $email;
+}        
+
+
+
+?>

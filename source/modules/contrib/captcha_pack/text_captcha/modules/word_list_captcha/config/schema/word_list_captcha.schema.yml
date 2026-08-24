@@ -1,0 +1,10 @@
+word_list_captcha.settings:
+  type: config_object
+  label: 'Word List CAPTCHA settings'
+  mapping:
+    word_list_captcha_list_size:
+      type: integer
+    word_list_captcha_word_pool_1:
+      type: string
+    word_list_captcha_word_pool_2:
+      type: string

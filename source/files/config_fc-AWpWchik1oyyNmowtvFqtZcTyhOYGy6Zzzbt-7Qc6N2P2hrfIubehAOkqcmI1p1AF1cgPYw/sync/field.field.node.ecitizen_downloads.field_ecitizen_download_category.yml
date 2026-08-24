@@ -1,0 +1,29 @@
+uuid: 45647e74-7bb6-444a-ae0b-7f0357d6456b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ecitizen_download_category
+    - node.type.ecitizen_downloads
+    - taxonomy.vocabulary.ecitizen_downloads_category
+id: node.ecitizen_downloads.field_ecitizen_download_category
+field_name: field_ecitizen_download_category
+entity_type: node
+bundle: ecitizen_downloads
+label: Category
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      ecitizen_downloads_category: ecitizen_downloads_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

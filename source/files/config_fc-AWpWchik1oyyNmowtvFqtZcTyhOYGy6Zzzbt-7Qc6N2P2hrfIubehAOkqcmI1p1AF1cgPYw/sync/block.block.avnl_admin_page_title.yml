@@ -1,0 +1,20 @@
+uuid: 9ea280f8-4fee-4b86-a4fb-1f09ce632ec1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - avnl_admin
+_core:
+  default_config_hash: ohmk2up95gS-Xv4TW1zKxaCUWKXKUT9qqzRcfNNFxTo
+id: avnl_admin_page_title
+theme: avnl_admin
+region: header
+weight: -30
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

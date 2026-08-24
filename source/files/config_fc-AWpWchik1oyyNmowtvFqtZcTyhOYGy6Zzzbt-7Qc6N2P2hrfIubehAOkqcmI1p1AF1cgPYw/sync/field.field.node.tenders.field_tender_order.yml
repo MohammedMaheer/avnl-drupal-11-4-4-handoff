@@ -1,0 +1,24 @@
+uuid: 97a72195-df2e-436a-80d9-4fa20d36d383
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tender_order
+    - node.type.tenders
+  module:
+    - weight
+id: node.tenders.field_tender_order
+field_name: field_tender_order
+entity_type: node
+bundle: tenders
+label: Order
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings:
+  range: '20'
+field_type: weight

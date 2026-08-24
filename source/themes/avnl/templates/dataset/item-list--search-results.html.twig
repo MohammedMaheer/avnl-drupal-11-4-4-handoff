@@ -1,0 +1,54 @@
+{# {% extends "item-list.html.twig" %} #}
+{#
+/**
+ * @file
+ * Theme override for an item list of search results.
+ *
+ * Available variables:
+ * - items: A list of items. Each item contains:
+ *   - attributes: HTML attributes to be applied to each list item.
+ *   - value: The content of the list element.
+ * - title: The title of the list.
+ * - list_type: The tag for list element ("ul" or "ol").
+ * - attributes: HTML attributes to be applied to the list.
+ * - empty: A message to display when there are no items. Allowed value is a
+ *   string or render array.
+ * - context: An list of contextual data associated with the list. For search
+ *   results, the following data is set:
+ *   - plugin: The search plugin ID, for example "node_search".
+ *
+ * @see template_preprocess_item_list()
+ */
+#}
+{%
+  set classes = [
+  'search-results',
+  context.plugin ~ '-results',
+]
+%}
+{%
+  set listClasses = [
+  'search-results__item',
+]
+%}
+{% set attributes = attributes.addClass(classes) %}
+
+{% if context.list_style %}
+  {%- set attributes = attributes.addClass('item-list__' ~ context.list_style) %}
+{% endif %}
+{% if items or empty %}
+  {%- if title is not empty -%}
+    <h3 class="h3">{{ title }}</h3>
+  {%- endif -%}
+  {%- if items -%}
+  	<div class="srch_section">
+	    <ul {{ attributes }}>
+		    {%- for item in items -%}
+		      <li{{ item.attributes.addClass(listClasses) }}>{{ item.value }}</li>
+		    {%- endfor -%}
+	    </ul>
+    </div>
+  {%- else -%}
+    <div class="data-not-found">{{- empty -}}</div>
+  {%- endif -%}
+{%- endif %}

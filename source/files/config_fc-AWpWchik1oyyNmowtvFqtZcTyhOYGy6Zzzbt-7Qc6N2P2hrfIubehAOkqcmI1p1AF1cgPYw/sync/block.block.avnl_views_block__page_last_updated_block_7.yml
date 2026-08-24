@@ -1,0 +1,29 @@
+uuid: 422bb8aa-212e-4279-98a2-a1e9f42779c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_7
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_7'
+settings:
+  id: 'views_block:page_last_updated-block_7'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/circulars\r\n/circulars/message-cmd\r\n/circulars/avnl-iol-avadi-3\r\n/circulars/avnl-iol-avadi-2\r\n/circulars/avnl-iol-avadi-1\r\n/circulars/avnl-iol-avadi-0\r\n/circulars/avnl-iol-avadi"

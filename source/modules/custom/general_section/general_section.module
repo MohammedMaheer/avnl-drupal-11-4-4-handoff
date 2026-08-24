@@ -1,0 +1,1628 @@
+<?php 
+use \Drupal\Core\Form\FormStateInterface;
+use \Drupal\Core\Ajax\AjaxResponse;
+use \Drupal\Core\Ajax\HtmlCommand;
+use \Drupal\Core\Ajax\RedirectCommand;
+use \Drupal\Core\Mail\MailManagerInterface;
+use \Drupal\Component\Utility\SafeMarkup;
+use \Drupal\Component\Utility\Html;
+use \Drupal\Core\Url;
+use \Drupal\encrypt\Entity\EncryptionProfile;
+use Drupal\user\UserInterface;
+use \Drupal\views\ViewExecutable;
+use \Drupal\views\Plugin\views\query\QueryPluginBase;
+use \Drupal\Core\File;
+use \Drupal\Core\File\MimeType;
+use \Drupal\Core\File\MimeType\ExtensionMimeTypeGuesser;
+use \Drupal\Core\File\MimeType\MimeTypeGuesser;
+use \Drupal\Core\Database\Query\AlterableInterface;
+use \Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\Component\Datetime;
+use Drupal\Core\Access\AccessResult;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Session\AccountInterface;
+
+
+function general_section_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+    // echo $form_id;
+    $user = \Drupal::currentUser(); // GET CURRENT USER DATA
+    $roles = $user->getRoles(); // GET CURRENT USER ROLE
+    $uid = $user->id(); // GET CURRENT USER ID
+    $userObj = \Drupal\user\Entity\User::load($uid); 
+    //$form['#attributes']['autocomplete'] = "off";										
+   if($form_id == "search_block_form"){
+      $form['keys']['#prefix']='<div class="searchBoxWrap d-flex flex-wrap">';
+      $form['actions']['#suffix'] = '</div>';
+      $form['actions']['submit']['#value'] = t('Search');
+      $form['actions']['submit']['#attributes']['class'][] = 'ctaBtn ctaFill';
+      
+      $form['keys']['#attributes']['class'][] = 'form-control';
+       //$form['keys']['#attributes']['placeholder'] = t('Enter Keyword..');
+       //var_dump($form['keys']['#attributes']);
+   }
+
+   if($form_id == "node_awards_achievements_form" || $form_id == "node_awards_achievements_edit_form"){
+      if(!in_array('administrator',$roles)){
+        $userUnitType = $userObj->field_user_unit_type->target_id;
+        $defaultValue = $form['field_awards_achievements_units']['widget']['#default_value'][0];
+        if($form_id == "node_awards_achievements_form"){
+          foreach($form['field_awards_achievements_units']['widget']['#options'] as $key => $value) {
+            if($userUnitType != $key && $key != '_none'){
+                unset($form['field_awards_achievements_units']['widget']['#options'][$key]);
+            }
+          }
+        }
+        if($form_id == "node_awards_achievements_edit_form"){
+            // var_dump($form['field_awards_achievements_units']['widget']['#default_value'][0]);
+            if($userUnitType != $defaultValue){
+              throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+            } else {
+              foreach($form['field_awards_achievements_units']['widget']['#options'] as $key => $value) {
+                if($userUnitType != $key && $key != '_none'){
+                    unset($form['field_awards_achievements_units']['widget']['#options'][$key]);
+                }
+              }
+            }
+        }        
+      }
+   }
+
+   if($form_id == "node_our_units_form" || $form_id == "node_our_units_edit_form"){
+    if(!in_array('administrator',$roles)){
+      $userUnitType = $userObj->field_user_unit_type->target_id;
+      $defaultValue = $form['field_our_units_category']['widget']['#default_value'][0];
+      
+      if($form_id == "node_our_units_form"){
+        foreach($form['field_our_units_category']['widget']['#options'] as $key => $value) {
+          if($userUnitType != $key && $key != '_none'){
+              unset($form['field_our_units_category']['widget']['#options'][$key]);
+          }
+        }
+      }
+      if($form_id == "node_our_units_edit_form"){
+          // var_dump($form['field_our_units_category']['widget']['#default_value'][0]);
+          if($userUnitType != $defaultValue){
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+          } else {
+            foreach($form['field_our_units_category']['widget']['#options'] as $key => $value) {
+              if($userUnitType != $key && $key != '_none'){
+                  unset($form['field_our_units_category']['widget']['#options'][$key]);
+              }
+            }
+          }
+      }        
+    }
+ }
+
+ if($form_id == "node_tenders_form" || $form_id == "node_tenders_edit_form"){
+  if(!in_array('administrator',$roles)){
+    $userUnitType = $userObj->field_tender_category->target_id;
+    $defaultValue = $form['field_tenders_category']['widget']['#default_value'][0];
+    
+    if($form_id == "node_tenders_form"){
+      foreach($form['field_tenders_category']['widget']['#options'] as $key => $value) {
+        if($userUnitType != $key && $key != '_none'){
+            unset($form['field_tenders_category']['widget']['#options'][$key]);
+        }
+      }
+    }
+    if($form_id == "node_tenders_edit_form"){
+        // var_dump($form['field_tenders_category']['widget']['#default_value'][0]);
+        if($userUnitType != $defaultValue){
+          throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+        } else {
+          foreach($form['field_tenders_category']['widget']['#options'] as $key => $value) {
+            if($userUnitType != $key && $key != '_none'){
+                unset($form['field_tenders_category']['widget']['#options'][$key]);
+            }
+          }
+        }
+    }        
+  }
+}
+
+   if($form_id == "user_form"){
+      if(!in_array('administrator',$roles) && !in_array('site_admin',$roles)){
+        $userUnitType = $userObj->field_user_unit_type->target_id;
+        foreach($form['field_user_unit_type']['widget']['#options'] as $key => $value) {
+          if($userUnitType != $key && $key != '_none'){
+              unset($form['field_user_unit_type']['widget']['#options'][$key]);
+          }
+        }
+      }
+   }
+  
+   
+   if($form_id == "user_login_form"){
+        global $base_url;
+        $form['#prefix'] ='<div class="loginForm">';
+        $form['name']['#attributes']['class'][] = 'form-control';
+        //echo "<pre />"; var_dump($form['name']); exit;
+        unset($form['name']['description']);
+        $form['pass']['#attributes']['class'][] = 'form-control';
+        unset($form['pass']['description']);
+        $form['actions']['suffix'] = array(
+            '#prefix' => '<div class="backendLoginWrap"><a class="buttonLink" href="'.$base_url.'/user/password">Forgot Password?</a></div>',
+            '#suffix' => '',
+        );
+        $form['captcha']['#prefix']="<div class='btnCaptchaRow cf'>";
+        $form['actions']['#suffix']="</div>";
+        $form['#suffix'] ='</div>';
+    }
+
+    if($form_id == "user_pass"){
+      global $base_url;
+      $form['#prefix'] ='<div class="loginForm">';
+      $form['name']['#attributes']['class'][] = 'form-control';
+      $form['pass']['#attributes']['class'][] = 'form-control';
+      $form['captcha']['#prefix']="<div class='btnCaptchaRow cf'>";
+      $form['actions']['#suffix']="</div>";
+      $form['#suffix'] ='</div>';
+  }
+  
+   if($form_id == "search_block_form"){
+    $form['actions']['#id'] = 'custom-search-actions'; // Set a unique ID for the actions wrapper
+     $form['#prefix']="<div class='searchListing'>";
+     $form['#suffix']="</div>";
+   }
+ 
+   
+  if($form_id == "search_form"){
+    $form['#prefix']="<div class='searchListing searchDetalispage'>";
+    $form['#suffix']="</div>";
+  }
+  
+  if ($form_id == "node_feedback_form") {
+    $user = \Drupal::currentUser(); // GET CURRENT USER DATA
+    $uid = $user->id(); // GET CURRENT USER ID
+    $roles = $user->getRoles(); // GET CURRENT USER ROLE
+
+    if (in_array('administrator', $roles)) {
+        throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+    }
+
+    $form['#attributes']['novalidate'] = 'novalidate';
+    $form['#attributes']['autocomplete'] = 'off';
+    $form['#title'] = t('Feedback');
+   // $form['#prefix'] = "<div class='loginForm feedback-form'>";
+  $form['#prefix'] = '<div class="loginForm feedback-form"><div class="mandatoryfeedback"><span>* ' . t('All fields are Mandatory') . '</span></div>';
+    $form['#suffix'] = "</div>";
+
+    if (isset($form['advanced'])) {
+      unset($form['advanced']); // Removes the entire vertical tabs
+    }
+    // Remove vertical_tabs element and its label
+    if (isset($form['vertical_tabs']['#type']) && $form['vertical_tabs']['#type'] === 'vertical_tabs') {
+      // Remove the visually-hidden class and unset the 'for' attribute
+      $form['vertical_tabs']['#attributes']['class'] = array_diff(
+          $form['vertical_tabs']['#attributes']['class'] ?? [],
+          ['form-item__label', 'visually-hidden']
+      );
+  
+      // Unset the 'for' attribute if it exists
+      if (isset($form['vertical_tabs']['#attributes']['for']) && $form['vertical_tabs']['#attributes']['for'] === 'edit-advanced') { 
+          unset($form['vertical_tabs']['#attributes']['for']);
+      }
+  }
+  
+
+    $form['#validate'][] = '_custom_feedback_validate';
+    $form['actions']['#id'] = 'custom-feedback-actions'; // Set a unique ID for the actions wrapper
+    $form['actions']['submit']['#value'] = t('Submit');
+    $form['actions']['submit']['#id'] = 'custom-feedback-submit'; // Set a unique ID for the submit button
+    $form['actions']['submit']['#submit'][] = '_feedback_custom_redirect';
+
+    $form['captcha']['#prefix'] = "<div class='btnCaptchaRow cf'>";
+  //  $form['actions']['#suffix'] = "</div><div class='mandatoryfeedback'><span>*" . t('All fields are Mandatory') . "</span></div>";
+  $form['actions']['#suffix'] = "</div>";
+
+    if (isset($form['form_build_id']['#type']) && $form['form_build_id']['#type'] == 'hidden') {
+        // WCAG forbids hidden input elements with an autocomplete on/off.
+        unset($form['form_build_id']['#attributes']['autocomplete']);
+    }
+}
+
+/* // Correct label definition
+if (!empty($form['advanced'])) {
+    $form['advanced']['#title'] = t('Advanced Settings');
+    $form['advanced']['#attributes']['aria-labelledby'] = 'edit-advanced'; // WCAG-compliant labeling
+} */
+
+
+
+
+
+  if($form_id == "node_photo_gallery_form"){
+    
+       $form['#validate'][] = '_custom_photo_validate'; 
+ }
+ if($form_id == "node_photo_gallery_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+ if($form_id == "node_video_gallery_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_video_gallery_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_news_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_news_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+if($form_id == "node_footer_logo_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_footer_logo_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_events_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_events_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_ecitizen_downloads_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_ecitizen_downloads_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_home_page_banner_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_home_page_banner_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+if($form_id == "node_inner_banner_management_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_inner_banner_management_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_awards_achievements_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+if($form_id == "node_awards_achievements_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_key_profiles_form" || $form_id == "node_key_profiles_edit_form"){
+    
+  $form['#validate'][] = '_custom_key_profiles_validate'; 
+}
+if($form_id == "node_key_profiles_form" || $form_id == "node_key_profiles_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_avnl_directory_form" || $form_id == "node_avnl_directory_edit_form"){  
+  $form['#validate'][] = '_custom_avnl_directory_validate'; 
+}
+
+if($form_id == "node_our_units_form" || $form_id == "node_our_units_edit_form"){  
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_products_form" || $form_id == "node_products_edit_form"){  
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_releted_link_form" || $form_id == "node_releted_link_edit_form"){  
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_avnl_directory_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_avnl_directory_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+if($form_id == "node_circulars_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+
+if($form_id == "node_circulars_edit_form"){
+    
+  $form['#validate'][] = '_custom_photo_validate'; 
+}
+   
+if ($form_id == "node_online_enquiry_form") {
+  $user = \Drupal::currentUser(); // Get current user data
+  $uid = $user->id(); // Get current user ID
+  $roles = $user->getRoles(); // Get current user roles
+
+  $form['#attributes']['novalidate'] = 'novalidate';
+  $form['#attributes']['autocomplete'] = 'off';
+
+  $form['#title'] = t('Enquiry Now');
+  //$form['#prefix'] = "<div class='loginForm feedback-form'>";
+  $form['#prefix'] = '<div class="loginForm feedback-form"><div class="mandatoryfeedback"><span>* ' . t('All fields are Mandatory') . '</span></div>';
+  $form['#suffix'] = "</div>";
+
+  // Remove vertical_tabs element and associated label
+  if (isset($form['vertical_tabs'])) {
+    unset($form['vertical_tabs']); // Remove the vertical tabs form control
+    unset($form['vertical_tabs']['#title']); // Remove the associated label
+  }
+
+  if (isset($form['advanced'])) {
+    unset($form['advanced']); // Removes the entire vertical tabs
+  }
+ 
+  // Validate the form
+  $form['#validate'][] = '_custom_enquiry_validate';
+
+  // Add a unique ID to the actions wrapper
+  $form['actions']['#attributes']['id'] = 'custom-actions-id'; // Unique ID for actions wrapper
+
+  // Add unique ID to the submit button
+  $form['actions']['submit']['#value'] = t('Submit');
+  $form['actions']['submit']['#attributes']['id'] = 'custom-submit-id'; // Unique ID for submit button
+  $form['actions']['submit']['#submit'][] = '_online_enquiry_custom_redirect';
+
+  $form['captcha']['#prefix'] = "<div class='btnCaptchaRow cf'>";
+  $form['actions']['#suffix'] = "</div>";
+ //$form['actions']['#suffix'] = "</div><div class='mandatoryfeedback'><span>*" . t('All fields are Mandatory') . "</span></div>";
+}
+
+
+
+
+  
+  
+  
+   
+}
+
+function _custom_feedback_validate(array &$form, FormStateInterface $form_state){
+  $titlevalue = $form_state->getValue('title');
+  $title = trim($titlevalue['0']['value']);
+  $field_comment_value = $form_state->getValue('body');
+  $field_feedback_query_description = trim($field_comment_value['0']['value']);
+  $field_contact_no_feedback_value = $form_state->getValue('field_contact_number');
+  $field_feedback_contact_number = trim($field_contact_no_feedback_value['0']['value']);  
+  $titleLength = strlen($title);
+  //$field_subjecte_value = $form_state->getValue('field_subject_feedback');
+  //$field_subjecte_type = trim($field_subjecte_value['0']['value']);
+  //$field_email = $form_state->getValue('field_email_id');
+  //$f_email = trim($field_email['0']['value']);
+  $current_ip_address = Drupal::request()->getClientIp();
+  $connection = \Drupal::database();
+  $date = REQUEST_TIME; //strtotime(date("Y-m-d")); // CURRENT TIME STAMP
+  $sDate = 86400; // 60*60*24 //timestamp("+1 day"); // day after original date
+  $eDate = 86400; // 60*60*24 strtotime("-1 day"); // day after original date
+  $startDate = ($date + $sDate);
+  $endtDate = ($date - $eDate);
+  $connection = \Drupal::database();
+  //echo "<br/>==>".($date + 600);
+  //echo "<br/>==>".($date - 600);
+
+  $query = $connection->query("SELECT node_field_data.created AS node_field_data_created, node_field_data.nid AS nid
+    FROM
+    {node_field_data} node_field_data
+    WHERE (node_field_data.type IN ('feedback')) AND ((node_field_data.created <= $date+600)) AND ((node_field_data.created >= $date-600))
+    ORDER BY node_field_data_created DESC
+    LIMIT 1 OFFSET 0");
+  $result = $query->fetchAll();
+  if(!empty($result)){
+      $form_state->setErrorByName('title', t('We have received your feedback recently, please wait and submit after sometime.'));
+  }
+  /* if($f_email != ""){
+      if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/", $f_email)) {
+          $form_state->setErrorByName('field_email_id', t('Please enter valid email address.'));
+      }
+  } */
+  if($title != ""){
+      if (!preg_match("/^[a-zA-Z ]+$/", $title)) {
+          $form_state->setErrorByName('title', t('Please enter valid content for Name.'));
+      }
+      if($titleLength < 3){
+          $form_state->setErrorByName('title', t('Please enter minimum 3 character for Name.'));
+      }
+  }
+  if ($field_feedback_contact_number != '') {
+      if (!preg_match("/^[0-9 ]+$/", $field_feedback_contact_number)) {
+          $form_state->setErrorByName('field_contact_number', t('Please enter only digit for Contact No.'));
+      }
+      $mopbLength = strlen($field_feedback_contact_number);
+      if($mopbLength > 11 || $mopbLength < 10){
+          $form_state->setErrorByName('field_contact_number', t('Please enter maximum 11 and minimum 10 digits for Contact No.'));
+      }
+  }
+ 
+  if ($field_feedback_query_description != '') {
+      if (!preg_match("/^[a-zA-Z0-9 ]+$/", $field_feedback_query_description)) {
+          $form_state->setErrorByName('body', t('Please enter valid content for Feedback/Query Description.'));
+      }
+  }
+  
+}
+function _custom_enquiry_validate(array &$form, FormStateInterface $form_state){
+  $titlevalue = $form_state->getValue('title');
+  $title = trim($titlevalue['0']['value']);
+  $field_comment_value = $form_state->getValue('body');
+  $field_feedback_query_description = trim($field_comment_value['0']['value']);
+  $field_contact_no_feedback_value = $form_state->getValue('field_online_contact_number');
+  $field_feedback_contact_number = trim($field_contact_no_feedback_value['0']['value']);  
+  $titleLength = strlen($title);
+  //$field_subjecte_value = $form_state->getValue('field_subject_feedback');
+  //$field_subjecte_type = trim($field_subjecte_value['0']['value']);
+  //$field_email = $form_state->getValue('field_email_id');
+  //$f_email = trim($field_email['0']['value']);
+  $current_ip_address = Drupal::request()->getClientIp();
+  $connection = \Drupal::database();
+  $date = REQUEST_TIME; //strtotime(date("Y-m-d")); // CURRENT TIME STAMP
+  $sDate = 86400; // 60*60*24 //timestamp("+1 day"); // day after original date
+  $eDate = 86400; // 60*60*24 strtotime("-1 day"); // day after original date
+  $startDate = ($date + $sDate);
+  $endtDate = ($date - $eDate);
+  $connection = \Drupal::database();
+  //echo "<br/>==>".($date + 600);
+  //echo "<br/>==>".($date - 600);
+  
+  $query = $connection->query("SELECT node_field_data.created AS node_field_data_created, node_field_data.nid AS nid
+    FROM
+    {node_field_data} node_field_data
+    WHERE (node_field_data.type IN ('online_enquiry')) AND ((node_field_data.created <= $date+600)) AND ((node_field_data.created >= $date-600))
+    ORDER BY node_field_data_created DESC
+    LIMIT 1 OFFSET 0");
+  $result = $query->fetchAll();
+  if(!empty($result)){
+      $form_state->setErrorByName('title', t('We have received your online enquiry recently, please wait and submit after sometime.'));
+  }
+  /* if($f_email != ""){
+      if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/", $f_email)) {
+          $form_state->setErrorByName('field_email_id', t('Please enter valid email address.'));
+      }
+  } */
+  if($title != ""){
+      if (!preg_match("/^[a-zA-Z ]+$/", $title)) {
+          $form_state->setErrorByName('title', t('Please enter valid content for Name.'));
+      }
+      if($titleLength < 3){
+          $form_state->setErrorByName('title', t('Please enter minimum 3 character for Name.'));
+      }
+  }
+  if ($field_feedback_contact_number != '') {
+      if (!preg_match("/^[0-9 ]+$/", $field_feedback_contact_number)) {
+          $form_state->setErrorByName('field_contact_number', t('Please enter only digit for Contact No.'));
+      }
+      $mopbLength = strlen($field_feedback_contact_number);
+      if($mopbLength > 11 || $mopbLength < 10){
+          $form_state->setErrorByName('field_contact_number', t('Please enter maximum 11 and minimum 10 digits for Contact No.'));
+      }
+  }
+ 
+  if ($field_feedback_query_description != '') {
+      if (!preg_match("/^[a-zA-Z0-9 ]+$/", $field_feedback_query_description)) {
+          $form_state->setErrorByName('body', t('Please enter valid content for Enquiry.'));
+      }
+  }
+  
+}
+function _custom_key_profiles_validate(array &$form, FormStateInterface $form_state){
+    //echo "<pre>"; print_r($form_state); echo "</pre>"; die();
+   
+    $field_key_profile_contact_detail_value = $form_state->getValue('field_key_profile_contact_detail');
+    $field_key_profile_contact_detail = trim($field_key_profile_contact_detail_value['0']['value']);
+    if ($field_key_profile_contact_detail != '') {
+        if (!preg_match("/^[0-9 ]+$/", $field_key_profile_contact_detail)) {
+            $form_state->setErrorByName('field_contact_no', t('Please enter only digit for Contact Details.'));
+        }
+        $mopbLength = strlen($field_key_profile_contact_detail);
+        if($mopbLength > 11 || $mopbLength < 10){
+            $form_state->setErrorByName('field_contact_no', t('Please enter maximum 11 and minimum 10 digits for Contact Details.'));
+        }
+    }
+    
+}
+
+function _custom_avnl_directory_validate(array &$form, FormStateInterface $form_state){
+  //echo "<pre>"; print_r($form_state); echo "</pre>"; die();
+ 
+  $field_avnl_contact_details_value = $form_state->getValue('field_avnl_contact_details');
+  $field_avnl_contact_details = trim($field_avnl_contact_details_value['0']['value']);
+  
+  if ($field_avnl_contact_details != '') {
+      if (!preg_match("/^[0-9 ]+$/", $field_avnl_contact_details)) {
+          $form_state->setErrorByName('field_contact_no', t('Please enter only digit for Contact Details.'));
+      }
+      $mopbLength = strlen($field_avnl_contact_details);
+      if($mopbLength > 10 || $mopbLength < 10){
+          $form_state->setErrorByName('field_avnl_contact_details', t('Please enter maximum 11 and minimum 10 digits for Contact Details.'));
+      }
+  }
+}
+
+function _custom_photo_validate(array &$form, FormStateInterface $form_state){
+  $query = \Drupal::request()->query->get('ajax_form');
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $previousUrl = \Drupal::request()->server->get('HTTP_REFERER'); //exit("--");
+  //var_dump($form_state->getRedirect()); echo "</pre>"; exit;
+  /* if($previousUrl == ""){
+  $form_state->setErrorByName('field_album_cover_image', t('It\'s an illegal triggered action.'));
+  } */
+  /* if($previousUrl == ""){
+    $form_state->setErrorByName('field_photo_gallery_images', t('It\'s an illegal triggered action.'));
+    } */
+
+  $field_album_cover_image_value = '';
+  if (isset($form['field_album_cover_image']['widget'][0]['#field_album_cover_image'])) {
+    $album_cover_label = $form['field_album_cover_image']['widget'][0]['#field_album_cover_image'];
+    $field_album_cover_image_value = is_object($album_cover_label)
+      ? $album_cover_label->__toString()
+      : (string) $album_cover_label;
+  }
+  $field_album_cover_imagevalue = $form_state->getValue('field_album_cover_image');
+  $field_album_cover_image = is_array($field_album_cover_imagevalue)
+    && isset($field_album_cover_imagevalue[0]['alt'])
+      ? trim((string) $field_album_cover_imagevalue[0]['alt'])
+      : '';
+  
+  $field_products_images_value = '';
+  $field_products_imagesvalue = [];
+  $field_products_images = '';
+  if (isset($form['field_products_images']['widget'][0]['#field_products_images'])) {
+    $field_products_images_value = is_object($form['field_products_images']['widget'][0]['#field_products_images']) ? $form['field_products_images']['widget'][0]['#field_products_images']->__toString() : $form['field_products_images']['widget'][0]['#field_products_images'];
+  }
+  $field_products_imagesvalue = $form_state->getValue('field_products_images');
+  if (
+    is_array($field_products_imagesvalue) &&
+    isset($field_products_imagesvalue[0]) &&
+    is_array($field_products_imagesvalue[0]) &&
+    isset($field_products_imagesvalue[0]['alt'])
+  ) {
+    $field_products_images = trim($field_products_imagesvalue[0]['alt']);
+  }
+
+  $field_photo_gallery_images_value = '';
+  if (isset($form['field_photo_gallery_images']['widget'][0]['#field_photo_gallery_images'])) {
+    $field_photo_gallery_images_value = is_object($form['field_photo_gallery_images']['widget'][0]['#field_photo_gallery_images']) ? $form['field_photo_gallery_images']['widget'][0]['#field_photo_gallery_images']->__toString() : $form['field_photo_gallery_images']['widget'][0]['#field_photo_gallery_images'];
+  }
+
+  $field_photo_gallery_imagesvalue = $form_state->getValue('field_photo_gallery_images');
+  $field_photo_gallery_images = '';
+  if (
+    is_array($field_photo_gallery_imagesvalue) &&
+    isset($field_photo_gallery_imagesvalue[0]) &&
+    is_array($field_photo_gallery_imagesvalue[0]) &&
+    isset($field_photo_gallery_imagesvalue[0]['alt'])
+  ) {
+    $field_photo_gallery_images = trim($field_photo_gallery_imagesvalue[0]['alt']);
+  }
+
+  
+  $field_video_album_cover_image_value = '';
+  if (isset($form['field_video_album_cover_image']['widget'][0]['#field_video_album_cover_image'])) {
+    $field_video_album_cover_image_value = is_object($form['field_video_album_cover_image']['widget'][0]['#field_video_album_cover_image']) ? $form['field_video_album_cover_image']['widget'][0]['#field_video_album_cover_image']->__toString() : $form['field_video_album_cover_image']['widget'][0]['#field_video_album_cover_image'];
+  }
+
+  $field_video_album_cover_imagevalue = $form_state->getValue('field_video_album_cover_image');
+
+  $field_video_album_cover_image = trim($field_video_album_cover_imagevalue['0']['alt']);
+  
+  $field_news_images_value = '';
+  if (isset($form['field_news_images']['widget'][0]['#field_news_images'])) {
+    $field_news_images_value = is_object($form['field_news_images']['widget'][0]['#field_news_images']) ? $form['field_news_images']['widget'][0]['#field_news_images']->__toString() : $form['field_news_images']['widget'][0]['#field_news_images'];
+  }
+
+  $field_news_imagesvalue = $form_state->getValue('field_news_images');
+
+  $field_news_images = trim($field_news_imagesvalue['0']['alt']);
+  
+  $field_our_unit_cover_image_value = '';
+  if (isset($form['field_our_unit_cover_image']['widget'][0]['#field_our_unit_cover_image'])) {
+    $field_our_unit_cover_image_value = is_object($form['field_our_unit_cover_image']['widget'][0]['#field_our_unit_cover_image']) ? $form['field_our_unit_cover_image']['widget'][0]['#field_our_unit_cover_image']->__toString() : $form['field_our_unit_cover_image']['widget'][0]['#field_our_unit_cover_image'];
+  }
+
+  $field_our_unit_cover_imagevalue = $form_state->getValue('field_our_unit_cover_image');
+
+  $field_our_unit_cover_image = trim($field_our_unit_cover_imagevalue['0']['alt']);
+
+
+  $field_news_source_value = '';
+  if (isset($form['field_news_source']['widget'][0]['#field_news_source'])) {
+    $field_news_source_value = is_object($form['field_news_source']['widget'][0]['#field_news_source']) ? $form['field_news_source']['widget'][0]['#field_news_source']->__toString() : $form['field_news_source']['widget'][0]['#field_news_source'];
+  }
+
+  $field_news_sourcevalue = $form_state->getValue('field_news_source');
+
+  $field_news_source = trim($field_news_sourcevalue['0']['value']);
+
+
+  $field_events_venue_value = '';
+  if (isset($form['field_events_venue']['widget'][0]['#field_events_venue'])) {
+    $field_events_venue_value = is_object($form['field_events_venue']['widget'][0]['#field_events_venue']) ? $form['field_events_venue']['widget'][0]['#field_events_venue']->__toString() : $form['field_events_venue']['widget'][0]['#field_events_venue'];
+  }
+
+  $field_events_venuevalue = $form_state->getValue('field_events_venue');
+
+  $field_events_venue = trim($field_events_venuevalue['0']['value']);
+
+  $field_ecitizen_downloads_image_value = '';
+  if (isset($form['field_ecitizen_downloads_image']['widget'][0]['#field_ecitizen_downloads_image'])) {
+    $field_ecitizen_downloads_image_value = is_object($form['field_ecitizen_downloads_image']['widget'][0]['#field_ecitizen_downloads_image']) ? $form['field_ecitizen_downloads_image']['widget'][0]['#field_ecitizen_downloads_image']->__toString() : $form['field_ecitizen_downloads_image']['widget'][0]['#field_ecitizen_downloads_image'];
+  }
+
+  $field_ecitizen_downloads_imagevalue = $form_state->getValue('field_ecitizen_downloads_image');
+
+  $field_ecitizen_downloads_image = trim($field_ecitizen_downloads_imagevalue['0']['alt']);
+
+
+  $field_events_image_value = '';
+  if (isset($form['field_events_image']['widget'][0]['#field_events_image'])) {
+    $field_events_image_value = is_object($form['field_events_image']['widget'][0]['#field_events_image']) ? $form['field_events_image']['widget'][0]['#field_events_image']->__toString() : $form['field_events_image']['widget'][0]['#field_events_image'];
+  }
+
+  $field_events_imagevalue = $form_state->getValue('field_events_image');
+
+  $field_events_image = trim($field_events_imagevalue['0']['alt']);
+
+
+  $field_background_image_value = '';
+  if (isset($form['field_background_image']['widget'][0]['#field_background_image'])) {
+    $field_background_image_value = is_object($form['field_background_image']['widget'][0]['#field_background_image']) ? $form['field_background_image']['widget'][0]['#field_background_image']->__toString() : $form['field_background_image']['widget'][0]['#field_background_image'];
+  }
+
+  $field_background_imagevalue = $form_state->getValue('field_background_image');
+
+  $field_background_image = trim($field_background_imagevalue['0']['alt']);
+  
+  $field_inner_banner_image_value = '';
+  if (isset($form['field_inner_banner_image']['widget'][0]['#field_inner_banner_image'])) {
+    $field_inner_banner_image_value = is_object($form['field_inner_banner_image']['widget'][0]['#field_inner_banner_image']) ? $form['field_inner_banner_image']['widget'][0]['#field_inner_banner_image']->__toString() : $form['field_inner_banner_image']['widget'][0]['#field_inner_banner_image'];
+  }
+
+  $field_inner_banner_imagevalue = $form_state->getValue('field_inner_banner_image');
+
+  $field_inner_banner_image = trim($field_inner_banner_imagevalue['0']['alt']);
+
+
+  $field_home_page_banner_image_value = '';
+  if (isset($form['field_home_page_banner_image']['widget'][0]['#field_home_page_banner_image'])) {
+    $field_home_page_banner_image_value = is_object($form['field_home_page_banner_image']['widget'][0]['#field_home_page_banner_image']) ? $form['field_home_page_banner_image']['widget'][0]['#field_home_page_banner_image']->__toString() : $form['field_home_page_banner_image']['widget'][0]['#field_home_page_banner_image'];
+  }
+
+  $field_home_page_banner_imagevalue = $form_state->getValue('field_home_page_banner_image');
+
+  $field_home_page_banner_image = trim($field_home_page_banner_imagevalue['0']['alt']);
+
+
+  $field_achievements_image_value = '';
+  if (isset($form['field_achievements_image']['widget'][0]['#field_achievements_image'])) {
+    $field_achievements_image_value = is_object($form['field_achievements_image']['widget'][0]['#field_achievements_image']) ? $form['field_achievements_image']['widget'][0]['#field_achievements_image']->__toString() : $form['field_achievements_image']['widget'][0]['#field_achievements_image'];
+  }
+
+  $field_achievements_imagevalue = $form_state->getValue('field_achievements_image');
+
+  $field_achievements_image = trim($field_achievements_imagevalue['0']['alt']);
+  
+  $field_releted_link_image_value = '';
+  if (isset($form['field_releted_link_image']['widget'][0]['#field_releted_link_image'])) {
+    $field_releted_link_image_value = is_object($form['field_releted_link_image']['widget'][0]['#field_releted_link_image']) ? $form['field_releted_link_image']['widget'][0]['#field_releted_link_image']->__toString() : $form['field_releted_link_image']['widget'][0]['#field_releted_link_image'];
+  }
+
+  $field_releted_link_imagevalue = $form_state->getValue('field_releted_link_image');
+
+  $field_releted_link_image = trim($field_releted_link_imagevalue['0']['alt']);
+  
+  $field_products_inner_image_value = '';
+  if (isset($form['field_products_inner_image']['widget'][0]['#field_products_inner_image'])) {
+    $field_products_inner_image_value = is_object($form['field_products_inner_image']['widget'][0]['#field_products_inner_image']) ? $form['field_products_inner_image']['widget'][0]['#field_products_inner_image']->__toString() : $form['field_products_inner_image']['widget'][0]['#field_products_inner_image'];
+  }
+
+  $field_products_inner_imagevalue = $form_state->getValue('field_products_inner_image');
+
+  $field_products_inner_image = trim($field_products_inner_imagevalue['0']['alt']);
+  
+  $field_footer_logo_value = '';
+  if (isset($form['field_footer_logo']['widget'][0]['#field_footer_logo'])) {
+    $field_footer_logo_value = is_object($form['field_footer_logo']['widget'][0]['#field_footer_logo']) ? $form['field_footer_logo']['widget'][0]['#field_footer_logo']->__toString() : $form['field_footer_logo']['widget'][0]['#field_footer_logo'];
+  }
+
+  $field_footer_logovalue = $form_state->getValue('field_footer_logo');
+
+  $field_footer_logo = trim($field_footer_logovalue['0']['alt']);
+  
+  $field_key_profiles_image_value = '';
+  if (isset($form['field_key_profiles_image']['widget'][0]['#field_key_profiles_image'])) {
+    $field_key_profiles_image_value = is_object($form['field_key_profiles_image']['widget'][0]['#field_key_profiles_image']) ? $form['field_key_profiles_image']['widget'][0]['#field_key_profiles_image']->__toString() : $form['field_key_profiles_image']['widget'][0]['#field_key_profiles_image'];
+  }
+
+  $field_key_profiles_imagevalue = $form_state->getValue('field_key_profiles_image');
+
+  $field_key_profiles_image = trim($field_key_profiles_imagevalue['0']['alt']);
+  
+  $field_avnl_director_upload_photo_value = '';
+  if (isset($form['field_avnl_director_upload_photo']['widget'][0]['#field_avnl_director_upload_photo'])) {
+    $field_avnl_director_upload_photo_value = is_object($form['field_avnl_director_upload_photo']['widget'][0]['#field_avnl_director_upload_photo']) ? $form['field_avnl_director_upload_photo']['widget'][0]['#field_avnl_director_upload_photo']->__toString() : $form['field_avnl_director_upload_photo']['widget'][0]['#field_avnl_director_upload_photo'];
+  }
+
+  $field_avnl_director_upload_photovalue = $form_state->getValue('field_avnl_director_upload_photo');
+
+  $field_avnl_director_upload_photo = trim($field_avnl_director_upload_photovalue['0']['alt']);
+  
+  $field_circulars_images_value = '';
+  if (isset($form['field_circulars_images']['widget'][0]['#field_circulars_images'])) {
+    $field_circulars_images_value = is_object($form['field_circulars_images']['widget'][0]['#field_circulars_images']) ? $form['field_circulars_images']['widget'][0]['#field_circulars_images']->__toString() : $form['field_circulars_images']['widget'][0]['#field_circulars_images'];
+  }
+
+  $field_circulars_imagesvalue = $form_state->getValue('field_circulars_images');
+
+  $field_circulars_images = trim($field_circulars_imagesvalue['0']['alt']);
+
+
+
+  if($query == ""){
+      if($field_album_cover_image != ""){
+    //exit('--');
+          if(strlen($field_album_cover_image) != strlen(strip_tags($field_album_cover_image)))
+          {
+              $form_state->setErrorByName('field_album_cover_image', t('Please enter valid content for Album Cover Image Alternative '.$field_album_cover_image_value.'.'));
+          }
+          if(strlen($field_album_cover_image) < 3){
+                  $form_state->setErrorByName('field_album_cover_image', t('Please enter at least 3 character content for '.$field_album_cover_image_value.'.'));
+          }
+          if(strpos($field_album_cover_image,';') != ""){
+                  $form_state->setErrorByName('field_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'.$field_album_cover_image_value.'.'));
+          }
+          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_album_cover_image)) {
+      //exit('validation');	
+              $form_state->setErrorByName('field_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'.$field_album_cover_image_value.'.'));
+          }
+      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_avnl_director_upload_photo)) {
+                                      //exit('validation');	
+              $form_state->setErrorByName('field_avnl_director_upload_photo');
+          }
+          
+          
+      }
+
+      if($field_photo_gallery_images != ""){
+        //exit('--');
+              if(strlen($field_photo_gallery_images) != strlen(strip_tags($field_photo_gallery_images)))
+              {
+                  $form_state->setErrorByName('field_photo_gallery_images', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+              if(strlen($field_photo_gallery_images) < 3){
+                      $form_state->setErrorByName('field_photo_gallery_images', t('Please enter at least 3 character content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+              }
+              if(strpos($field_photo_gallery_images,';') != ""){
+                      $form_state->setErrorByName('field_photo_gallery_images', t('Please enter valid content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+              }
+              if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_photo_gallery_images)) {
+          //exit('validation');	
+                  $form_state->setErrorByName('field_photo_gallery_images', t('Please enter valid content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+              }
+        if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_photo_gallery_images)) {
+                                      //exit('validation');	
+                  $form_state->setErrorByName('field_photo_gallery_images');
+              }
+              
+              
+          }
+      
+      if($field_products_images != ""){
+        //exit('--');
+              if(strlen($field_products_images) != strlen(strip_tags($field_products_images)))
+              {
+                  $form_state->setErrorByName('field_products_images', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+              if(strlen($field_products_images) < 3){
+                      $form_state->setErrorByName('field_products_images', t('Please enter at least 3 character content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+              }
+              if(strpos($field_products_images,';') != ""){
+                      $form_state->setErrorByName('field_products_images', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+              if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_products_images)) {
+          //exit('validation');	
+                  $form_state->setErrorByName('field_products_images', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+        if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_products_images)) {
+                                      //exit('validation');	
+                  $form_state->setErrorByName('field_products_images');
+              }
+              
+              
+          }
+      
+      if($field_products_inner_image != ""){
+        //exit('--');
+              if(strlen($field_products_inner_image) != strlen(strip_tags($field_products_inner_image)))
+              {
+                  $form_state->setErrorByName('field_products_inner_image', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+              if(strlen($field_products_inner_image) < 3){
+                      $form_state->setErrorByName('field_products_inner_image', t('Please enter at least 3 character content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+              }
+              if(strpos($field_products_inner_image,';') != ""){
+                      $form_state->setErrorByName('field_products_inner_image', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+              if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_products_inner_image)) {
+          //exit('validation');	
+                  $form_state->setErrorByName('field_products_inner_image', t('Please enter valid content for Photo Gallery Images Alternative'));
+              }
+        if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_products_inner_image)) {
+                                      //exit('validation');	
+                  $form_state->setErrorByName('field_products_inner_image');
+              }
+              
+              
+          }
+      
+
+          if($field_video_album_cover_image != ""){
+            //exit('--');
+                  if(strlen($field_video_album_cover_image) != strlen(strip_tags($field_video_album_cover_image)))
+                  {
+                      $form_state->setErrorByName('field_video_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if(strlen($field_video_album_cover_image) < 3){
+                          $form_state->setErrorByName('field_video_album_cover_image', t('Please enter at least 3 character content for Album Cover Image Alternative'));
+                  }
+                  if(strpos($field_video_album_cover_image,';') != ""){
+                          $form_state->setErrorByName('field_video_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_video_album_cover_image)) {
+              //exit('validation');	
+                      $form_state->setErrorByName('field_video_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+          if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_video_album_cover_image)) {
+                                      //exit('validation');	
+                       $form_state->setErrorByName('field_video_album_cover_image');
+                  }
+                  
+                  
+              }
+        
+        if($field_news_images != ""){
+            //exit('--');
+                  if(strlen($field_news_images) != strlen(strip_tags($field_news_images)))
+                  {
+                      $form_state->setErrorByName('field_news_images', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if(strlen($field_news_images) < 3){
+                          $form_state->setErrorByName('field_news_images', t('Please enter at least 3 character content for Album Cover Image Alternative'));
+                  }
+                  if(strpos($field_news_images,';') != ""){
+                          $form_state->setErrorByName('field_news_images', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_news_images)) {
+              //exit('validation');	
+                      $form_state->setErrorByName('field_news_images', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+          if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_news_images)) {
+                                      //exit('validation');	
+                       $form_state->setErrorByName('field_news_images');
+                  }
+                  
+                  
+              }
+        
+        if($field_our_unit_cover_image != ""){
+            //exit('--');
+                  if(strlen($field_our_unit_cover_image) != strlen(strip_tags($field_our_unit_cover_image)))
+                  {
+                      $form_state->setErrorByName('field_our_unit_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if(strlen($field_our_unit_cover_image) < 3){
+                          $form_state->setErrorByName('field_our_unit_cover_image', t('Please enter at least 3 character content for Album Cover Image Alternative'));
+                  }
+                  if(strpos($field_our_unit_cover_image,';') != ""){
+                          $form_state->setErrorByName('field_our_unit_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+                  if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_our_unit_cover_image)) {
+              //exit('validation');	
+                      $form_state->setErrorByName('field_our_unit_cover_image', t('Please enter valid content for Album Cover Image Alternative'));
+                  }
+          if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_our_unit_cover_image)) {
+                                      //exit('validation');	
+                       $form_state->setErrorByName('field_our_unit_cover_image');
+                  }
+                  
+                  
+              }
+        
+
+              if($field_news_source != ""){
+                //exit('--');
+                      if(strlen($field_news_source) != strlen(strip_tags($field_news_source)))
+                      {
+                          $form_state->setErrorByName('field_news_source', t('Please enter valid content for Source'.$field_news_source.'.'));
+                      }
+                      if(strlen($field_news_source) < 3){
+                              $form_state->setErrorByName('field_news_source', t('Please enter at least 3 character content for Source'.$field_news_source.'.'));
+                      }
+                      if(strpos($field_news_source,';') != ""){
+                              $form_state->setErrorByName('field_news_source', t('Please enter valid content for Source'.$field_news_source.'.'));
+                      }
+                      if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_news_source)) {
+                  //exit('validation');	
+                          $form_state->setErrorByName('field_news_source', t('Please enter valid content for Source'.$field_news_source.'.'));
+                      }
+                      
+                      
+                  }
+
+                  if($field_events_venue != ""){
+                    //exit('--');
+                          if(strlen($field_events_venue) != strlen(strip_tags($field_events_venue)))
+                          {
+                              $form_state->setErrorByName('field_events_venue', t('Please enter valid content for Venue'.$field_news_source.'.'));
+                          }
+                          if(strlen($field_events_venue) < 3){
+                                  $form_state->setErrorByName('field_events_venue', t('Please enter at least 3 character content for Venue'.$field_news_source.'.'));
+                          }
+                          if(strpos($field_events_venue,';') != ""){
+                                  $form_state->setErrorByName('field_events_venue', t('Please enter valid content for Venue'.$field_news_source.'.'));
+                          }
+                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_events_venue)) {
+                      //exit('validation');	
+                              $form_state->setErrorByName('field_events_venue', t('Please enter valid content for Venue'.$field_news_source.'.'));
+                          }
+                          
+                          
+                      }
+            
+            
+
+                      if($field_ecitizen_downloads_image != ""){
+                        //exit('--');
+                              if(strlen($field_ecitizen_downloads_image) != strlen(strip_tags($field_ecitizen_downloads_image)))
+                              {
+                                  $form_state->setErrorByName('field_ecitizen_downloads_image', t('Please enter valid content for Image Alternative'));
+                              }
+                              if(strlen($field_ecitizen_downloads_image) < 3){
+                                      $form_state->setErrorByName('field_ecitizen_downloads_image', t('Please enter at least 3 character content for Image Alternative'));
+                              }
+                              if(strpos($field_ecitizen_downloads_image,';') != ""){
+                                      $form_state->setErrorByName('field_ecitizen_downloads_image', t('Please enter valid content for Image Alternative'));
+                              }
+                              if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_ecitizen_downloads_image)) {
+                          //exit('validation');	
+                                  $form_state->setErrorByName('field_ecitizen_downloads_image', t('Please enter valid content for Image Alternative'));
+                              }
+                if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_ecitizen_downloads_image)) {
+                                      //exit('validation');	
+                   $form_state->setErrorByName('field_ecitizen_downloads_image');
+                }
+                              
+                              
+                          }
+
+
+                          if($field_events_image != ""){
+                            //exit('--');
+                                  if(strlen($field_events_image) != strlen(strip_tags($field_events_image)))
+                                  {
+                                      $form_state->setErrorByName('field_events_image', t('Please enter valid content for Image Alternative'));
+                                  }
+                                  if(strlen($field_events_image) < 3){
+                                          $form_state->setErrorByName('field_events_image', t('Please enter at least 3 character content for Image Alternative'));
+                                  }
+                                  if(strpos($field_events_image,';') != ""){
+                                          $form_state->setErrorByName('field_events_image', t('Please enter valid content for Image Alternative'));
+                                  }
+                                  if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_events_image)) {
+                              //exit('validation');	
+                                      $form_state->setErrorByName('field_events_image', t('Please enter valid content for Image Alternative'));
+                                  }
+                  if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_events_image)) {
+                                      //exit('validation');	
+                   $form_state->setErrorByName('field_events_image');
+                  }
+                                  
+                                  
+                              }
+                              if($field_background_image != ""){
+                                //exit('--');
+                                      if(strlen($field_background_image) != strlen(strip_tags($field_background_image)))
+                                      {
+                                          $form_state->setErrorByName('field_background_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                                      if(strlen($field_background_image) < 3){
+                                              $form_state->setErrorByName('field_background_image', t('Please enter at least 3 character content for Image Alternative'));
+                                      }
+                                      if(strpos($field_background_image,';') != ""){
+                                              $form_state->setErrorByName('field_background_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                                      if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_background_image)) {
+                                  //exit('validation');	
+                                          $form_state->setErrorByName('field_background_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                    if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_background_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_background_image');
+                    }
+                                      
+                                      
+                                  }
+                  
+                if($field_inner_banner_image != ""){
+                                //exit('--');
+                                      if(strlen($field_inner_banner_image) != strlen(strip_tags($field_inner_banner_image)))
+                                      {
+                                          $form_state->setErrorByName('field_inner_banner_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                                      if(strlen($field_inner_banner_image) < 3){
+                                              $form_state->setErrorByName('field_inner_banner_image', t('Please enter at least 3 character content for Image Alternative'));
+                                      }
+                                      if(strpos($field_inner_banner_image,';') != ""){
+                                              $form_state->setErrorByName('field_inner_banner_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                                      if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_inner_banner_image)) {
+                                  //exit('validation');	
+                                          $form_state->setErrorByName('field_inner_banner_image', t('Please enter valid content for Image Alternative'));
+                                      }
+                    if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_inner_banner_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_inner_banner_image');
+                    }
+                                      
+                                      
+                                  }
+
+                                  if($field_home_page_banner_image != ""){
+                                    //exit('--');
+                                          if(strlen($field_home_page_banner_image) != strlen(strip_tags($field_home_page_banner_image)))
+                                          {
+                                              $form_state->setErrorByName('field_home_page_banner_image', ('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_home_page_banner_image) < 3){
+                                                  $form_state->setErrorByName('field_home_page_banner_image', ('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_home_page_banner_image,';') != ""){
+                                                  $form_state->setErrorByName('field_home_page_banner_image', ('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_home_page_banner_image)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_home_page_banner_image', ('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_home_page_banner_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_home_page_banner_image');
+                    }
+                                          
+                                          
+                                      }
+
+                                      
+                                  if($field_achievements_image != ""){
+                                    //exit('--');
+                                          if(strlen($field_achievements_image) != strlen(strip_tags($field_achievements_image)))
+                                          {
+                                              $form_state->setErrorByName('field_achievements_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_achievements_image) < 3){
+                                                  $form_state->setErrorByName('field_achievements_image', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_achievements_image,';') != ""){
+                                                  $form_state->setErrorByName('field_achievements_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_achievements_image)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_achievements_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_achievements_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_achievements_image');
+                    }
+                                          
+                                          
+                                      }
+                    
+                    if($field_footer_logo != ""){
+                                    //exit('--');
+                                          if(strlen($field_footer_logo) != strlen(strip_tags($field_footer_logo)))
+                                          {
+                                              $form_state->setErrorByName('field_footer_logo', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_footer_logo) < 3){
+                                                  $form_state->setErrorByName('field_footer_logo', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_footer_logo,';') != ""){
+                                                  $form_state->setErrorByName('field_footer_logo', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_footer_logo)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_footer_logo', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_footer_logo)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_footer_logo');
+                      }
+                                          
+                                          
+                                      }
+                    
+                     if($field_releted_link_image != ""){
+                                    //exit('--');
+                                          if(strlen($field_releted_link_image) != strlen(strip_tags($field_releted_link_image)))
+                                          {
+                                              $form_state->setErrorByName('field_releted_link_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_releted_link_image) < 3){
+                                                  $form_state->setErrorByName('field_releted_link_image', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_releted_link_image,';') != ""){
+                                                  $form_state->setErrorByName('field_releted_link_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_releted_link_image)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_releted_link_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_releted_link_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_releted_link_image');
+                      }
+                                          
+                                          
+                                      }
+                    
+                    
+                    if($field_key_profiles_image != ""){
+                                    //exit('--');
+                                          if(strlen($field_key_profiles_image) != strlen(strip_tags($field_key_profiles_image)))
+                                          {
+                                              $form_state->setErrorByName('field_key_profiles_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_key_profiles_image) < 3){
+                                                  $form_state->setErrorByName('field_key_profiles_image', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_key_profiles_image,';') != ""){
+                                                  $form_state->setErrorByName('field_key_profiles_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_key_profiles_image)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_key_profiles_image', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_key_profiles_image)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_key_profiles_image');
+                      }
+                                          
+                                          
+                                      }
+                    
+                    if($field_circulars_images != ""){
+                                    //exit('--');
+                                          if(strlen($field_circulars_images) != strlen(strip_tags($field_circulars_images)))
+                                          {
+                                              $form_state->setErrorByName('field_circulars_images', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_circulars_images) < 3){
+                                                  $form_state->setErrorByName('field_circulars_images', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_circulars_images,';') != ""){
+                                                  $form_state->setErrorByName('field_circulars_images', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_circulars_images)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_circulars_images', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_circulars_images)) {
+                                      //exit('validation');	
+                      $form_state->setErrorByName('field_circulars_images');
+                      }
+                                          
+                                          
+                                      }
+                    
+                    if($field_avnl_director_upload_photo != ""){
+                                    //exit('--');
+                                          if(strlen($field_avnl_director_upload_photo) != strlen(strip_tags($field_avnl_director_upload_photo)))
+                                          {
+                                              $form_state->setErrorByName('field_avnl_director_upload_photo', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if(strlen($field_avnl_director_upload_photo) < 3){
+                                                  $form_state->setErrorByName('field_avnl_director_upload_photo', t('Please enter at least 3 character content for Image Alternative'));
+                                          }
+                                          if(strpos($field_avnl_director_upload_photo,';') != ""){
+                                                  $form_state->setErrorByName('field_avnl_director_upload_photo', t('Please enter valid content for Image Alternative'));
+                                          }
+                                          if (preg_match("/[@#$%^*+=`~;\/{}]+$/", $field_avnl_director_upload_photo)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_avnl_director_upload_photo', t('Please enter valid content for Image Alternative'));
+                                          }
+                      if (!preg_match("/^[a-zA-Z0-9_ -]/", $field_avnl_director_upload_photo)) {
+                                      //exit('validation');	
+                                              $form_state->setErrorByName('field_avnl_director_upload_photo');
+                                          }
+                      
+                                          
+                                          
+                                      }
+
+                  
+     
+  
+  if($field_album_cover_image != ""){
+          $regex ='/<script[^>]*>.*?<\/script>/is';
+          if(preg_match($regex, $field_album_cover_image)){
+              $form_state->setErrorByName('field_album_cover_image', t('Please enter valid content for Photo Gallery Images Alternative'.$field_album_cover_image_value.'.'));
+          }
+      }
+
+      if($field_photo_gallery_images != ""){
+        $regex ='/<script[^>]*>.*?<\/script>/is';
+        if(preg_match($regex, $field_photo_gallery_images)){
+            $form_state->setErrorByName('field_photo_gallery_images', t('Please enter valid content for Photo Gallery Images Alternative'.$field_photo_gallery_images_value.'.'));
+        }
+    }
+
+    if($field_video_album_cover_image != ""){
+      $regex ='/<script[^>]*>.*?<\/script>/is';
+      if(preg_match($regex, $field_video_album_cover_image)){
+          $form_state->setErrorByName('field_video_album_cover_image', t('Please enter valid content for Album Cover Image Alternative'.$field_video_album_cover_image_value.'.'));
+      }
+  }
+  
+  if($field_our_unit_cover_image != ""){
+      $regex ='/<script[^>]*>.*?<\/script>/is';
+      if(preg_match($regex, $field_our_unit_cover_image)){
+          $form_state->setErrorByName('field_our_unit_cover_image', t('Please enter valid content for Album Cover Image Alternative'.$field_video_album_cover_image_value.'.'));
+      }
+  }
+
+  if($field_news_source != ""){
+    $regex ='/<script[^>]*>.*?<\/script>/is';
+    if(preg_match($regex, $field_news_source)){
+        $form_state->setErrorByName('field_news_source', t('Please enter valid content for Source'.$field_news_source_value.'.'));
+    }
+}
+
+if($field_events_venue != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_events_venue)){
+      $form_state->setErrorByName('field_events_venue', t('Please enter valid content for Source'.$field_events_venue_value.'.'));
+  }
+}
+
+if($field_ecitizen_downloads_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_ecitizen_downloads_image)){
+      $form_state->setErrorByName('field_ecitizen_downloads_image', t('Please enter valid content for Image Alternative'.$field_ecitizen_downloads_image_value.'.'));
+  }
+}
+
+if($field_events_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_events_image)){
+      $form_state->setErrorByName('field_events_image', t('Please enter valid content for Image Alternative'.$field_events_image_value.'.'));
+  }
+}
+
+if($field_background_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_background_image)){
+      $form_state->setErrorByName('field_background_image', t('Please enter valid content for Image Alternative'.$field_background_image.'.'));
+  }
+}
+
+if($field_inner_banner_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_inner_banner_image)){
+      $form_state->setErrorByName('field_inner_banner_image', t('Please enter valid content for Image Alternative'.$field_inner_banner_image.'.'));
+  }
+}
+  
+
+if($field_home_page_banner_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_home_page_banner_image)){
+      $form_state->setErrorByName('field_home_page_banner_image', t('Please enter valid content for Image Alternative'.$field_home_page_banner_image.'.'));
+  }
+}
+
+if($field_achievements_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_achievements_image)){
+      $form_state->setErrorByName('field_achievements_image', t('Please enter valid content for Image Alternative'.$field_achievements_image.'.'));
+  }
+}
+
+if($field_footer_logo != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_footer_logo)){
+      $form_state->setErrorByName('field_footer_logo', t('Please enter valid content for Image Alternative'.$field_footer_logo.'.'));
+  }
+}
+
+if($field_releted_link_image != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_releted_link_image)){
+      $form_state->setErrorByName('field_releted_link_image', t('Please enter valid content for Image Alternative'.$field_releted_link_image.'.'));
+  }
+}
+
+if($field_circulars_images != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_circulars_images)){
+      $form_state->setErrorByName('field_circulars_images', t('Please enter valid content for Image Alternative'.$field_circulars_images.'.'));
+  }
+}
+
+if($field_avnl_director_upload_photo != ""){
+  $regex ='/<script[^>]*>.*?<\/script>/is';
+  if(preg_match($regex, $field_avnl_director_upload_photo)){
+      $form_state->setErrorByName('field_avnl_director_upload_photo', t('Please enter valid content for Image Alternative'.$field_avnl_director_upload_photo.'.'));
+  }
+}
+     
+  
+     
+      }
+
+      /* if($field_contact_details_value!=""){
+          if (!preg_match('/^[6-9]\d{9}+$/i',$field_contact_details_value)) { // NUMBER STAERT WITH 6,7,8 and 9 is allowed.
+          //if (!preg_match('/^[0-9]+$/i',$field_contact_details_value)) {  
+            $form_state->setErrorByName('field_contact_details', t('Please enter valid content for '.$field_contact_details_name.'.'));
+          }
+          $field_contact_details_value_Length = strlen($field_contact_details_value);
+          if($field_contact_details_value_Length > 15 || $field_contact_details_value_Length < 8){
+              $form_state->setErrorByName('field_contact_details', t('Please enter maximum 15 and minimum 8 digits for '.$field_contact_details_name.'.'));
+          }
+      } */
+  
+}
+
+
+function _feedback_custom_redirect(array &$form, FormStateInterface $form_state){
+  global $base_url; 
+  //drupal_set_message(t("Your feedback has been submitted successfully."),'status');
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $default_languagecode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    if ($language != $default_languagecode) {
+    $base_urls = $base_url.'/'.$language;
+  }else{
+    $base_urls = $base_url;
+  }
+  
+  $message =  \Drupal::messenger()->addStatus(t("Your feedback has been submitted successfully."),false);
+  $url = $base_urls.'/thank-you';
+  $response = new Symfony\Component\HttpFoundation\RedirectResponse($url);
+  $response->send(); // don't send the response yourself inside controller and form.
+}
+
+function _online_enquiry_custom_redirect(array &$form, FormStateInterface $form_state){
+  global $base_url; 
+  //drupal_set_message(t("Your feedback has been submitted successfully."),'status');
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $default_languagecode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    if ($language != $default_languagecode) {
+    $base_urls = $base_url.'/'.$language;
+  }else{
+    $base_urls = $base_url;
+  }
+  
+  $message =  \Drupal::messenger()->addStatus(t("Your Online enquiry has been submitted successfully."),false);
+  $url = $base_urls.'/thank-you';
+  $response = new Symfony\Component\HttpFoundation\RedirectResponse($url);
+  $response->send(); // don't send the response yourself inside controller and form.
+}
+
+
+
+
+
+
+
+function general_section_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+  switch ($key) {
+    case 'send_to_user':
+        $message['from'] = \Drupal::config('system.site')->get('mail');
+        if($params['msg_type'] == "feedback_query"){
+          $message['subject'] = t('Thank you for submitting form');
+        }else if($params['msg_type'] == "submit_query"){
+          $message['subject'] = t('Thank you for submitting form');
+        }
+        else{
+            $message['subject'] = t('Thank you for submitting form: @title', array('@title' => $params['node_title']), $options);
+          } 
+      //$message['from'] = \Drupal::config('system.site')->get('mail');
+     // $message['subject'] = t('Thank you for submitting form: @title', array('@title' => $params['node_title']), $options);
+      $message['body'][] = Html::normalize($params['message']);
+      break;
+    case 'send_to_admin':
+        $message['from'] = \Drupal::config('system.site')->get('mail');
+      if($params['msg_type'] == "feedback_query"){
+        $message['subject'] = t('Thank you for submitting form');
+        }else if($params['msg_type'] == "submit_query"){
+            $message['subject'] = t('Thank you for submitting form');
+        }else{
+        $message['subject'] = t('New form request has been submit by : @title', array('@title' => $params['node_title']), $options);
+      }
+      //$message['from'] = \Drupal::config('system.site')->get('mail');
+      //$message['subject'] = t('New form request has been submit by : @title', array('@title' => $params['node_title']), $options);
+      $message['body'][] = Html::normalize($params['message']);
+      break;
+  }
+}
+
+
+
+
+
+
+
+/**
+ * Implements hook_mail_alter().
+ */
+function general_section_mail_alter(&$message) {
+  switch ($message['key']) {
+    case 'send_to_user':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
+    case 'send_to_admin':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
+  }
+}
+/**
+ * Implements for send mail to user custom code
+ */
+function _druapl_send_custom_mail($module, $key, $to, $langcode, $params = array(), $reply = NULL, $send = TRUE){
+    
+    $message = "";
+    
+    $mailManager =  \Drupal::service('plugin.manager.mail');
+    $result = $mailManager->mail($module, $key, $to, $langcode, $params, $reply, $send);
+    //echo "<pre>"; print_r($result); exit;
+    if ($result['result'] == "") {
+      $error = true;
+    }
+    
+    if(isset($error)){
+        $message_error = t('There was a problem sending email to @email .', array('@email' => $to));
+        \Drupal::messenger()->addError($message_error);
+        $message = $message_error;
+    }else{
+    if($key != 'send_to_admin'){
+      $message_success = t('An email notification has been successfully sent to @email.', array('@email' => $to));
+      \Drupal::messenger()->addStatus($message_success);
+      $message = $message_success;
+    }
+    }
+    return $message;
+}
+/**
+ * Implements hook_node_presave().
+ */
+function general_section_views_query_alter(ViewExecutable $view, QueryPluginBase $query){
+  global $base_url;
+
+  $user = \Drupal::currentUser(); // GET CURRENT USER DATA
+  $roles = $user->getRoles(); // GET CURRENT USER ROLE
+  $uid = $user->id(); // GET CURRENT USER ID
+  $userObj = \Drupal\user\Entity\User::load($uid); 
+
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // echo "=>".$view->id();
+  // echo "=>".$view->current_display; 
+
+  if($view->id() == "inner_banner" && $view->current_display == "block_1")
+  {
+    $current_path = \Drupal::service('path.current')->getPath();
+    //var_dump($current_path);
+    //$system_uri = 'entity:' . trim($current_path, '/');
+    $system_uri = trim($current_path, '/');
+     //var_dump($system_uri);
+    $queryMenu = \Drupal::entityQuery('menu_link_content')
+    ->condition('menu_name','administrator-menu','!=')
+    ->condition('link.uri', '%'.$system_uri.'%', 'LIKE');
+   // $result = $queryMenu->execute();
+    $result = $queryMenu->accessCheck(FALSE)->execute();
+    // var_dump($result); 
+    $menu_link_id = (!empty($result)) ? reset($result) : '';
+   // var_dump($menu_link_id);
+    //exit;
+    //echo "<pre>"; print_r($query->where); echo "</pre>"; //exit('--');
+     if($menu_link_id){
+       //$query->where['1']['conditions'][3]['value'] = $menu_link_id;
+       $query->where['1']['conditions'][2]['value'] = $menu_link_id;
+     }
+    
+    //var_dump($query->where['1']['conditions'][2]);
+    
+  }
+
+  if($view->id() == "moderated_content" && $view->current_display == "moderated_content"){
+    if(!in_array('administrator',$roles)){      
+      // if($_GET['type'] == 'awards_achievements'){
+        $userUnitType = $userObj->field_user_unit_type->target_id;
+        if(in_array('awards_achievements_publisher',$roles) || in_array('our_units_publisher',$roles) || in_array('tender_admin', $roles)){
+            // echo "<pre>"; var_dump($query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id']); echo "</pre>"; //exit('--');
+            $query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id'] = $userUnitType;
+            // echo "<pre>"; var_dump($query->where[0]['conditions']['0']['value'][':node__field_awards_achievements_units_field_awards_achievements_units_target_id']); echo "</pre>"; //exit('--');
+        } else {
+            unset($query->where[0]['conditions']['0']);
+        }
+      // } else {
+      //     unset($query->where[0]['conditions']['0']);
+      // }
+    } else {
+        unset($query->where[0]['conditions']['0']);
+    }
+  }
+
+}
+
+function general_section_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  
+}
+function general_section_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+    
+}
+function general_section_query_group_by_node_id_alter(AlterableInterface $query) {
+    $query->groupBy('nid');
+}
+
+
+
+
+
+/**
+ * Implements hook_entity_view().
+ */
+function general_section_entity_view(&$build, $entity, $display, $view_mode) {
+  
+
+    
+}
+
+
+
+
+
+function __mail_format_change($emailid){
+    $email_at = str_replace("@", "[at]", $emailid);
+    $email = str_replace(".", "[dot]",$email_at);
+    return $email;
+} 
+
+function general_section_preprocess_form_element_label(&$variables) {
+  // Ensure input_id is set.
+  if (!isset($variables['input_id'])) {
+    $variables['input_id'] =  $variables['element']['#id'];
+  }
+}
+?>

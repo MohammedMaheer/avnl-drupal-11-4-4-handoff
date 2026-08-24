@@ -1,0 +1,4 @@
+administer archive settings:
+  title: 'Administer archive settings'
+  description: 'Configure content types and retention periods shown in archives.'
+  restrict access: true

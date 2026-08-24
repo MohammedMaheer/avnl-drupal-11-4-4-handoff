@@ -1,0 +1,14 @@
+uuid: b05f8b4b-6999-4482-90a5-af3f911d753e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.products_services_publisher
+  module:
+    - user
+id: user_remove_role_action.products_services_publisher
+label: 'Remove the Products &amp; Services Publisher role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: products_services_publisher

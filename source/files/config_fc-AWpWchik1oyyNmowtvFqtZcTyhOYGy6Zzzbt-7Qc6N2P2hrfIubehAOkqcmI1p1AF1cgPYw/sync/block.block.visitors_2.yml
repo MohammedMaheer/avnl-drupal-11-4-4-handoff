@@ -1,0 +1,23 @@
+uuid: f7b815a9-95d2-419a-9506-c2f170fecd0c
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:706134b7-fa87-4a56-9c90-1c4c506b0efc'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: visitors_2
+theme: avnl
+region: visitors
+weight: -19
+provider: null
+plugin: 'block_content:706134b7-fa87-4a56-9c90-1c4c506b0efc'
+settings:
+  id: 'block_content:706134b7-fa87-4a56-9c90-1c4c506b0efc'
+  label: Visitors
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,14 @@
+uuid: 8a499eab-f021-4bb7-8421-eb2e5a176934
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.video_gallery_publisher
+  module:
+    - user
+id: user_add_role_action.video_gallery_publisher
+label: 'Add the Video Gallery Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: video_gallery_publisher

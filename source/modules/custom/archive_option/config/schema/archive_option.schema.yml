@@ -1,0 +1,12 @@
+archive_option.adminsettings:
+  type: config_object
+  label: 'Archive option settings'
+  mapping:
+    archive_option:
+      type: sequence
+      label: 'Archived content types'
+      sequence:
+        type: string
+    '*_archive_days':
+      type: integer
+      label: 'Archive age in days'

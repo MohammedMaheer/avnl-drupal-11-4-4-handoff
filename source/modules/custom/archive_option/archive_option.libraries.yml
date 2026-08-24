@@ -1,0 +1,6 @@
+admin_lib:
+  version: 1.x
+  css:
+    theme:
+      css/archive-option.css: {}
+  

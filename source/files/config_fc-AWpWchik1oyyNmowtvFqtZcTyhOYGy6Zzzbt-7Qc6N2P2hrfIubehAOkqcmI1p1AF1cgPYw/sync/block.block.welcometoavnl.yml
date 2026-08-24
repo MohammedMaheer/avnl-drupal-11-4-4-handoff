@@ -1,0 +1,23 @@
+uuid: ce4938c4-0bca-43bf-ab0b-04a9dc62d55c
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:daac064e-fcd4-4763-bfad-28c1cad43614'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: welcometoavnl
+theme: avnl
+region: welcome_to_avnl
+weight: -11
+provider: null
+plugin: 'block_content:daac064e-fcd4-4763-bfad-28c1cad43614'
+settings:
+  id: 'block_content:daac064e-fcd4-4763-bfad-28c1cad43614'
+  label: 'Welcome to AVNL'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

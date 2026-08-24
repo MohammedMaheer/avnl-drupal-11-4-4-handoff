@@ -1,0 +1,13 @@
+uuid: 0c1470a3-fe75-4d5a-8ba5-6e8253c5cdf5
+langcode: en
+status: true
+dependencies:
+  config:
+    - key.key.avnl_encryption_key
+  module:
+    - real_aes
+id: avnl_encryption_profile
+label: avnl-encryption-profile
+encryption_method: real_aes
+encryption_method_configuration: {  }
+encryption_key: avnl_encryption_key

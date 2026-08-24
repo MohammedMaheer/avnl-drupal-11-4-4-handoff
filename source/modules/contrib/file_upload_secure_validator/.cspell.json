@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "FUSV",
+    "Stefanos",
+    "Petrakis",
+    "stefanos",
+    "petrakis",
+    "dcre"
+  ],
+  "ignorePaths": [
+    "vendor/**",
+    "node_modules/**",
+    "*.min.js",
+    "*.min.css"
+  ]
+}

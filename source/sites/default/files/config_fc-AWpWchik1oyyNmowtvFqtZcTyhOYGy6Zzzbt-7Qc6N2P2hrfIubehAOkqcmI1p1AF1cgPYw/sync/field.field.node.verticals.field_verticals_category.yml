@@ -1,0 +1,29 @@
+uuid: c3a292b0-a32b-47cf-95bf-d4e428724462
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_verticals_category
+    - node.type.verticals
+    - taxonomy.vocabulary.verticals
+id: node.verticals.field_verticals_category
+field_name: field_verticals_category
+entity_type: node
+bundle: verticals
+label: 'Verticals Category'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      verticals: verticals
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

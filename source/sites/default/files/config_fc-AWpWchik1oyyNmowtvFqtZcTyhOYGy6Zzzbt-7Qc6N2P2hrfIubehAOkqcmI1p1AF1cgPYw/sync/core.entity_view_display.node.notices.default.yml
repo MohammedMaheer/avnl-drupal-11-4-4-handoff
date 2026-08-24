@@ -1,0 +1,66 @@
+uuid: 95671633-2d57-425b-9fd2-116b1cfc9328
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.notices.body
+    - field.field.node.notices.field_document
+    - field.field.node.notices.field_notices_archive_date
+    - field.field.node.notices.field_notices_date
+    - node.type.notices
+  module:
+    - datetime
+    - file
+    - text
+    - user
+id: node.notices.default
+targetEntityType: node
+bundle: notices
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_document:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_notices_archive_date:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_notices_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

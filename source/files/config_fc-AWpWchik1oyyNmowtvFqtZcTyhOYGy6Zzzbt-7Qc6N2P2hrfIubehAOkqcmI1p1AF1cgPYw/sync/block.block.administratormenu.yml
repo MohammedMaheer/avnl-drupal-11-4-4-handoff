@@ -1,0 +1,38 @@
+uuid: a25fde68-e6c0-4962-a123-164ac54a57e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.administrator-menu
+  module:
+    - system
+    - user
+  theme:
+    - avnl_admin
+id: administratormenu
+theme: avnl_admin
+region: content
+weight: -2
+provider: null
+plugin: 'system_menu_block:administrator-menu'
+settings:
+  id: 'system_menu_block:administrator-menu'
+  label: 'Administrator Menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/dashboard
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator
+      site_admin: site_admin

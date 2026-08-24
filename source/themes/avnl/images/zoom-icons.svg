@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="138" height="138" viewBox="0 0 138 138">
+  <g id="Group_1104" data-name="Group 1104" transform="translate(-220 -2643)">
+    <circle id="Ellipse_33" data-name="Ellipse 33" cx="36" cy="36" r="36" transform="translate(253 2676)" opacity="0.56"/>
+    <g id="Icon_feather-zoom-in" data-name="Icon feather-zoom-in" transform="translate(259.5 2682.5)">
+      <path id="Path_81" data-name="Path 81" d="M54.152,29.326A24.826,24.826,0,1,1,29.326,4.5,24.826,24.826,0,0,1,54.152,29.326Z" transform="translate(0 0)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <path id="Path_82" data-name="Path 82" d="M38.474,38.474l-13.5-13.5" transform="translate(21.884 21.884)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <path id="Path_83" data-name="Path 83" d="M16.5,12V30.619" transform="translate(12.826 8.016)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      <path id="Path_84" data-name="Path 84" d="M12,16.5H30.619" transform="translate(8.016 12.826)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

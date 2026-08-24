@@ -1,0 +1,18 @@
+archive_option.archive_list:  
+  title: 'Archives'  
+  route_name: archive_option.archive_list  
+  description: 'Archives List'
+  weight: 10
+  
+#archive_option.node_archive_list:  
+#  title: 'Node Archives List'  
+#  route_name: archive_option.node_archive_list  
+#  description: 'Node Archives List'
+#  weight: 11
+  
+archive_option.admin_settings_form:  
+  title: 'Archive Option Configuration'  
+  route_name: archive_option.admin_settings_form  
+  description: 'Archive Option Configuration'  
+  parent: system.admin_config_system  
+  weight: 99  

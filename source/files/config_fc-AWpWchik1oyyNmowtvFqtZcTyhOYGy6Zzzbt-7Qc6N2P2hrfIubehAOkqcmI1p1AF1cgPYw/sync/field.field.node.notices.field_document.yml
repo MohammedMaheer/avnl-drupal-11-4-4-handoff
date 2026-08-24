@@ -1,0 +1,27 @@
+uuid: a903e2c0-a7bb-4cf1-b8d2-8b4ee142c8a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_document
+    - node.type.notices
+  module:
+    - file
+id: node.notices.field_document
+field_name: field_document
+entity_type: node
+bundle: notices
+label: Document
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: notices-documents
+  file_extensions: pdf
+  max_filesize: '10 MB'
+  description_field: true
+field_type: file

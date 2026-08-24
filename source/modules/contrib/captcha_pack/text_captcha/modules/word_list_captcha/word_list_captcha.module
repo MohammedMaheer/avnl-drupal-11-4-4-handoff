@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Contains general functionality for the module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ *
+ * Provides additional information about the module.
+ */
+function word_list_captcha_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.word_list_captcha':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The unrelated word CAPTCHA consists of a list of closely related words with one non-related word, which the user has to select. To generate this list, two word pools are needed: one for the related words and one for the non-related word.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Helper function for generating a word list CAPTCHA.
+ */
+function _word_list_captcha_get_word_list_captcha($list_size) {
+  if (mt_rand(0, 1)) {
+    $default = 'green red blue yellow black white magenta cyan orange violet purple gold brown pink';
+    $normal_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_1', NULL, $default, TRUE);
+    $default = 'bird elephant dog cat crocodile lion fish cow horse sheep frog beetle worm spider bat giraffe lizard goat monkey rabbit chimpanzee';
+    $other_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_2', NULL, $default, TRUE);
+  }
+  else {
+    $default = 'bird elephant dog cat crocodile lion fish cow horse sheep frog beetle worm spider bat giraffe lizard goat monkey rabbit chimpanzee';
+    $normal_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_2', NULL, $default, TRUE);
+    $default = 'green red blue yellow black white magenta cyan orange violet purple gold brown pink';
+    $other_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_1', NULL, $default, TRUE);
+  }
+  shuffle($normal_words);
+  $word_list = array_slice($normal_words, 0, $list_size - 1);
+  $wrong_word = $other_words[array_rand($other_words)];
+  $word_list[] = $wrong_word;
+  shuffle($word_list);
+  return [$word_list, $wrong_word];
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function word_list_captcha_captcha($op, $captcha_type = '') {
+  $config = \Drupal::config('word_list_captcha.settings');
+  switch ($op) {
+    case 'list':
+      return ['Pick the unrelated word'];
+
+    case 'generate':
+      if ($captcha_type == 'Pick the unrelated word') {
+        $list_size = $config->get('word_list_captcha_list_size');
+        [$word_list, $wrong_word] = _word_list_captcha_get_word_list_captcha($list_size);
+        // Build options list.
+        $options = [];
+        foreach ($word_list as $word) {
+          $options[$word] = $word;
+        }
+        $captcha = [];
+        $captcha['solution'] = $wrong_word;
+        $captcha['form']['captcha_response'] = [
+          '#type' => 'radios',
+          '#title' => t('Which word does not belong to the list?'),
+          '#options' => $options,
+          // Extra class needed for additional CSS'ing of the options.
+          '#attributes' => ['class' => ['text-captcha-word-list-radios']],
+          '#validated' => TRUE,
+          '#required' => TRUE,
+          '#cache' => ['max-age' => 0],
+        ];
+        \Drupal::service('page_cache_kill_switch')->trigger();
+        // Add css to form.
+        $captcha['form']['captcha_response']['#attached']['library'][] = 'text_captcha/base';
+
+        return $captcha;
+      }
+  }
+}

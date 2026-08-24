@@ -1,0 +1,35 @@
+uuid: eddaca3c-d632-4df7-a2c3-d580ba45d6d2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.verticals.body
+    - field.field.node.verticals.field_verticals_category
+    - field.field.node.verticals.field_verticals_image
+    - node.type.verticals
+  module:
+    - text
+    - user
+id: node.verticals.teaser
+targetEntityType: node
+bundle: verticals
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_verticals_category: true
+  field_verticals_image: true
+  langcode: true

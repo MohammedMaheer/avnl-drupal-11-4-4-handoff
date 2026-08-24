@@ -1,0 +1,29 @@
+uuid: 3409e10e-9a55-48e3-9dd7-5bb5cbb67bf1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_10
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_10'
+settings:
+  id: 'views_block:page_last_updated-block_10'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/events\r\n/events/avnl-foundation-day-celebration\r\n/events/avnl-signs-its-first-major-contract-indian-army-upgrading-fleet-693-icv-bmp-ii-sarath\r\n/events/2nd-foundation-day-celebration-avnl-co-01102023\r\n/events/world-environment-day-2023\r\n/events/2nd-foundation-day-celebration\r\n/events/swachhta-special-campaign-20\r\n/events/azadi-ka-amrit-mahotsava-and-atmanirbharta-defence-public-live-demo-state-art-battle-tanks\r\n/events/foundation-day-rally-inauguration-1\r\n/archive/events"

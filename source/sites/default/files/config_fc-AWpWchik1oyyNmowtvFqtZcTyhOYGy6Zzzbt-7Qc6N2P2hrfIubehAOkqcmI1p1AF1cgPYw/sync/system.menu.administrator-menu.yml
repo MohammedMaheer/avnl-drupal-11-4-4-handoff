@@ -1,0 +1,8 @@
+uuid: b06f4e62-b040-44fe-ae89-0db588d0dac7
+langcode: en
+status: true
+dependencies: {  }
+id: administrator-menu
+label: 'Administrator Menu'
+description: 'Add Administrator Menu'
+locked: false

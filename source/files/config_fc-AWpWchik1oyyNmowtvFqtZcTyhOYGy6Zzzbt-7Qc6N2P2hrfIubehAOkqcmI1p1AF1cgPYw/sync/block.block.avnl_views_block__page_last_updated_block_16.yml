@@ -1,0 +1,29 @@
+uuid: 0fd1ae0c-b831-4121-ae10-8c0e78a7183b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_16
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_16'
+settings:
+  id: 'views_block:page_last_updated-block_16'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/photo-gallery\r\n/photo-gallery/2nd-foundation-day-celebration\r\n/photo-gallery/second-foundation-day-rally\r\n/photo-gallery/public-exhibition-showcasing-towards-azadi-ka-amrit-mahotsava-and-atmanirbharta\r\n/photo-gallery/77th-independence-day-celebrations-avnl\r\n/photo-gallery/avnl-chairmans-cup-2023\r\n/photo-gallery/2nd-annual-general-meeting\r\n/photo-gallery/2nd-felicitation-program-07th-july-2023\r\n/photo-gallery/new-cmd\r\n/photo-gallery/secretary-defence-production-visit-ofmk\r\n/photo-gallery/kargil-vijay-diwas\r\n/photo-gallery/vehicles-image\r\n/photo-gallery/sarang-flaggin-ceremony\r\n/photo-gallery/har-ghar-tiranga\r\n/photo-gallery/amrit-mahotsav\r\n/photo-gallery/back-side-calendar\r\n/photo-gallery/front-side-calendar\r\n/photo-gallery/photos"

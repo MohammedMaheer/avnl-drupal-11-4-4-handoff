@@ -1,0 +1,12 @@
+name: "Admin Audit Trail User Roles"
+description: "Logs user role assignment and removal events."
+type: module
+core_version_requirement: ^10 || ^11
+package: Administration
+dependencies:
+  - admin_audit_trail:admin_audit_trail
+
+# Information added by Drupal.org packaging script on 2026-06-05
+version: '1.0.10'
+project: 'admin_audit_trail'
+datestamp: 1780682441

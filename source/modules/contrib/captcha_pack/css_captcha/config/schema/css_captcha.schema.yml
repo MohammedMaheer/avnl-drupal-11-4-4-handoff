@@ -1,0 +1,8 @@
+css_captcha.settings:
+  type: config_object
+  label: 'CSS CAPTCHA settings'
+  mapping:
+    css_captcha_allowed_characters:
+      type: string
+    css_captcha_code_length:
+      type: integer

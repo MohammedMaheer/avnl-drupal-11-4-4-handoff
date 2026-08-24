@@ -1,0 +1,38 @@
+uuid: efd39933-a1fc-4219-b26b-574704c370aa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_verticalss_image
+    - taxonomy.vocabulary.verticals
+  module:
+    - image
+id: taxonomy_term.verticals.field_verticalss_image
+field_name: field_verticalss_image
+entity_type: taxonomy_term
+bundle: verticals
+label: Image
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: verticals-imagess
+  file_extensions: 'png gif jpg jpeg'
+  max_filesize: '10 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: 043168c0-ddd0-431e-ba95-0bcc5f9eb711
+    alt: ''
+    title: ''
+    width: 400
+    height: 400
+field_type: image

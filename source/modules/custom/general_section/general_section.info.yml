@@ -1,0 +1,7 @@
+name: General Section
+type: module
+description: 'This is General Queries Solution by STTL for drupal 8 and 9'
+package: custom
+#core: 8.x
+core_version_requirement: ^11
+

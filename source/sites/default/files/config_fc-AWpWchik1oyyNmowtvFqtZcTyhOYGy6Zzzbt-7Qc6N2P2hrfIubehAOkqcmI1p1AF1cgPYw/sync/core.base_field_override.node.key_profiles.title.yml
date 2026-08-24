@@ -1,0 +1,18 @@
+uuid: 57e3a4e3-c19c-4701-b8e8-4e5c641a2b5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.key_profiles
+id: node.key_profiles.title
+field_name: title
+entity_type: node
+bundle: key_profiles
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

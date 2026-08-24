@@ -1,0 +1,48 @@
+/**
+ * @file
+ * Visual styles for menu.
+ */
+
+ul.menu {
+  margin-left: 1em; /* LTR */
+  padding: 0;
+  list-style: none outside;
+  text-align: left; /* LTR */
+}
+[dir="rtl"] ul.menu {
+  margin-right: 1em;
+  margin-left: 0;
+  text-align: right;
+}
+.menu-item--expanded {
+  list-style-type: circle;
+  list-style-image: url(../../../../../misc/menu-expanded.png);
+}
+.menu-item--collapsed {
+  list-style-type: disc;
+  list-style-image: url(../../../../../misc/menu-collapsed.png); /* LTR */
+}
+[dir="rtl"] .menu-item--collapsed {
+  list-style-image: url(../../../../../misc/menu-collapsed-rtl.png);
+}
+.menu-item {
+  margin: 0;
+  padding-top: 0.2em;
+}
+ul.menu a.is-active {
+  color: #000;
+}
+
+
+/**** MENU CSS START *****/
+nav#block-administratormenu .menu { margin: 0 -15px; list-style: none; }
+nav#block-administratormenu .menu li { list-style: none; float: left; width: 100%; padding: 15px; box-sizing: border-box; }
+nav#block-administratormenu ul > li.menu-item--expanded > a { font-weight: 800; text-align: left !important; text-decoration: none; }
+nav#block-administratormenu .menu li ul li { width: 25%; padding: 5px 15px 0; }
+nav#block-administratormenu .menu li ul li a { background-color: #e9f8fd; min-height: inherit; padding: 10px 10px; }
+nav#block-administratormenu .menu li a { background-color: #f1f1f1; display: inline-block; width: 100%; min-height: auto; text-align: center; font-size: 14px; color: #333; border: 1px solid #d5d5d5; padding: 15px 15px 15px; box-sizing: border-box; position: relative; transition: all 0.3s; -webit-transition: all 0.3s; margin-bottom: 20px; }
+nav#block-administratormenu .menu li a:hover { background-color: #e0e0d8; text-decoration: none; }
+nav#block-administratormenu .menu li ul li a { background-color: #e9f8fd; min-height: inherit; padding: 10px 10px; text-decoration: none;}
+
+
+/**** MENU CSS END *****/

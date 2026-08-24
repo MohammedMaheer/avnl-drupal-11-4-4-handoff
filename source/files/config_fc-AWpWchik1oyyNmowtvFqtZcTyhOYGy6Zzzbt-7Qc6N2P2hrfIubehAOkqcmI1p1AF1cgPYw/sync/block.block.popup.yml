@@ -1,0 +1,25 @@
+uuid: 6f638cf4-f089-4b30-a1b3-6e3b75d6ff84
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.pop-menu
+  module:
+    - system
+  theme:
+    - avnl
+id: popup
+theme: avnl
+region: popup_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:pop-menu'
+settings:
+  id: 'system_menu_block:pop-menu'
+  label: Popup
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

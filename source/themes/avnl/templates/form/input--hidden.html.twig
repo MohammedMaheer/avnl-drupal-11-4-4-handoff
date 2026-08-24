@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override for a details element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_details()
+ * @see avnl_preprocess_details()
+ */
+#}
+
+{# Set a dynamic ID #}
+{% set input_id = 'input-' ~ element['#name'] %}
+
+{# Add the dynamic ID to both label and input #}
+{# <label for="{{ input_id }}" class="form-item__label">{{ title }}</label> #}
+<input{{ attributes.setAttribute('id', input_id) }} />
+{{ children }}

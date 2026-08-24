@@ -1,0 +1,18 @@
+uuid: 21345a36-0915-44d8-9d1d-dd3b99fed9a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.avnl_directory
+id: node.avnl_directory.title
+field_name: title
+entity_type: node
+bundle: avnl_directory
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

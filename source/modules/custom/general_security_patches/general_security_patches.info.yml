@@ -1,0 +1,7 @@
+name: General Security Patches
+type: module
+description: General Security Patches Solution by STTL
+package: custom
+#core: 8.x
+core_version_requirement: ^11
+

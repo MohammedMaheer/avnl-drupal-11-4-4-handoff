@@ -1,0 +1,43 @@
+uuid: 47b39bcb-8e73-491b-9834-ac08f8fe3a52
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - node.type.ecitizen_downloads
+    - workflows.workflow.editorial
+  module:
+    - admin_audit_trail
+    - content_moderation
+    - content_translation
+    - file
+    - filter
+    - menu_link_attributes
+    - node
+    - system
+    - toolbar
+id: e_citizen_downloads_creator
+label: 'E-Citizen/ Downloads Creator'
+weight: -6
+is_admin: null
+permissions:
+  - 'access admin audit trail'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer menu'
+  - 'create content translations'
+  - 'create ecitizen_downloads content'
+  - 'delete any ecitizen_downloads content'
+  - 'delete own files'
+  - 'edit own ecitizen_downloads content'
+  - 'translate ecitizen_downloads node'
+  - 'update content translations'
+  - 'use editorial transition create_new_draft'
+  - 'use menu link attributes'
+  - 'use text format basic_html'
+  - 'use text format full_html'
+  - 'use text format restricted_html'
+  - 'view latest version'
+  - 'view the administration theme'

@@ -1,0 +1,45 @@
+uuid: 69809a21-a3f3-46c4-a1c7-835e22192ce9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_album_cover_image
+    - node.type.photo_gallery
+  module:
+    - content_translation
+    - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
+id: node.photo_gallery.field_album_cover_image
+field_name: field_album_cover_image
+entity_type: node
+bundle: photo_gallery
+label: 'Album Cover Image'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: album-cover-image
+  file_extensions: 'png gif jpg jpeg'
+  max_filesize: '10 MB'
+  max_resolution: ''
+  min_resolution: 480x325
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: 432ef2d3-858e-4786-a8e0-f93bb3dd745b
+    alt: ''
+    title: ''
+    width: 400
+    height: 255
+field_type: image

@@ -1,0 +1,37 @@
+uuid: c367fd5d-192e-467b-87c7-6021b71f2be0
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - user
+  theme:
+    - avnl
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: avnl_primary_local_tasks
+theme: avnl
+region: highlighted
+weight: -4
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+      administrator: administrator
+  request_path:
+    id: request_path
+    negate: true
+    pages: /enquiry-now

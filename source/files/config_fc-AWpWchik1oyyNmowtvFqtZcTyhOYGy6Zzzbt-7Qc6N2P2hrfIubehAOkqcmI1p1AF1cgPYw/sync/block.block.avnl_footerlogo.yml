@@ -1,0 +1,23 @@
+uuid: 385b4af6-bba9-4e6b-8b44-d412a469a21f
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:e4e82ac2-053a-402f-8953-711808992018'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: avnl_footerlogo
+theme: avnl
+region: footer_logo1
+weight: 0
+provider: null
+plugin: 'block_content:e4e82ac2-053a-402f-8953-711808992018'
+settings:
+  id: 'block_content:e4e82ac2-053a-402f-8953-711808992018'
+  label: 'Footer logo'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

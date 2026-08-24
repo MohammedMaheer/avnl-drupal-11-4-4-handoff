@@ -1,0 +1,52 @@
+uuid: 9a38b81d-cdd1-4766-a26b-a8641e18835f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.awards_achievements.body
+    - field.field.node.awards_achievements.field_achievements_document
+    - field.field.node.awards_achievements.field_achievements_hyperlink
+    - field.field.node.awards_achievements.field_achievements_image
+    - field.field.node.awards_achievements.field_award_category
+    - field.field.node.awards_achievements.field_awards_achievements_date
+    - field.field.node.awards_achievements.field_awards_achievements_units
+    - field.field.node.awards_achievements.field_awards_achievemet_category
+    - field.field.node.awards_achievements.field_awards_archive_date
+    - node.type.awards_achievements
+  module:
+    - text
+    - user
+id: node.awards_achievements.teaser
+targetEntityType: node
+bundle: awards_achievements
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_achievements_document: true
+  field_achievements_hyperlink: true
+  field_achievements_image: true
+  field_award_category: true
+  field_awards_achievements_date: true
+  field_awards_achievements_units: true
+  field_awards_achievemet_category: true
+  field_awards_archive_date: true
+  langcode: true

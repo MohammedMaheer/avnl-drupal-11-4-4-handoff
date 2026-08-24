@@ -1,0 +1,18 @@
+uuid: 25fb41a4-a8f9-4fa6-b1ca-7cfc4bb221db
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.photo_gallery_category
+id: taxonomy_term.photo_gallery_category.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: photo_gallery_category
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

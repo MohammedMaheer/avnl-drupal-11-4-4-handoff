@@ -1,0 +1,17 @@
+uuid: c987abb4-19a1-46a9-a743-3c8ff8a60f36
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'E-Citizen / Downloads'
+type: ecitizen_downloads
+description: 'Add E-Citizen/ Downloads'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

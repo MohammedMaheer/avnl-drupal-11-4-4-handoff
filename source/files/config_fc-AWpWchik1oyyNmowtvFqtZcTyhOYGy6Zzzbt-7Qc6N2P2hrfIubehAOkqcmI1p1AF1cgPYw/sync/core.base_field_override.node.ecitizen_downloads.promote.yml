@@ -1,0 +1,22 @@
+uuid: e89d5b18-7f5d-4839-a988-3180990bd101
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.ecitizen_downloads
+id: node.ecitizen_downloads.promote
+field_name: promote
+entity_type: node
+bundle: ecitizen_downloads
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

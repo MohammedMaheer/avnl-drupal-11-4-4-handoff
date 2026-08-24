@@ -1,0 +1,10 @@
+lost_character_captcha.settings:
+  type: config_object
+  label: 'Lost Character CAPTCHA settings'
+  mapping:
+    lost_character_captcha_quantity:
+      type: integer
+    lost_character_captcha_enable_hint:
+      type: boolean
+    lost_character_captcha_word_pool:
+      type: string

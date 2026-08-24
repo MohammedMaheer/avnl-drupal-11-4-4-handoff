@@ -1,0 +1,17 @@
+uuid: 2a4cd778-8906-4121-8620-2f824306e50c
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Related Link'
+type: releted_link
+description: 'Add Releted Link'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

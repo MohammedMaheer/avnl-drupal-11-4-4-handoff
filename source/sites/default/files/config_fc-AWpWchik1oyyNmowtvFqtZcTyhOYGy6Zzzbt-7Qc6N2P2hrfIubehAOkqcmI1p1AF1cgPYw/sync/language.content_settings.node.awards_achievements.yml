@@ -1,0 +1,18 @@
+uuid: b5bd45da-f64e-45dc-ad3a-fb537345f2d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.awards_achievements
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '1'
+id: node.awards_achievements
+target_entity_type_id: node
+target_bundle: awards_achievements
+default_langcode: site_default
+language_alterable: true

@@ -1,0 +1,158 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+{%
+  set body_classes = [
+    'noJS',
+    logged_in ? 'user-logged-in',
+    not root_path ? 'page-frontpage' : 'page-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+	language ? 'lang-' ~ language|clean_class, 
+    db_offline ? 'db-offline',
+  ]
+%}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token|raw }}">
+    <title>{{ head_title|safe_join(', ') }}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" crossorigin="anonymous">
+	  {# OLD <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" integrity="sha384-K/hulgjjiM6Yn3/HS5mSJPdQ7ufWW6te9yfogmvlulnaLxxiIKoDTkJNO7Mlb7Vs" crossorigin="anonymous"> #}
+    <css-placeholder token="{{ placeholder_token|raw }}">
+    <link rel="stylesheet" media="print" href="/themes/avnl/css/print.css" />
+    <js-placeholder token="{{ placeholder_token|raw }}">
+		{#  {% include '@avnl/includes/preload.twig' with { avnl_path: avnl_path } only %}
+		{{ noscript_styles }} #}
+  </head>
+  <body{{ attributes.addClass(body_classes) }}>
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      {{ 'Skip to main content'|t }} 
+    </a>
+    <input class="d-none" type="hidden" id="base_url" name="base_url" value="{{ base_url }}" />
+    <input class="d-none" type="hidden" id="base_urls" name="base_urls" value="{{ base_urls }}" />
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    
+	<a href="#wrapper" title="{% trans %} Back to top {% endtrans %}" id="backtotop" aria-label="{% trans %} Back to top {% endtrans %}"></a>
+	{# <a href="#wrapper" title="{% trans %} Back to top {% endtrans %}" id="backtotop"><span class="backtopBtn"><em> Back to top </em></span></a> #}
+    <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+	{# <script nonce="{{ csp_nonce_placeholder }}" type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","scriptPath":null,"pathPrefix":"","currentPath":"node\/1","currentPathIsAdmin":false,"isFront":true,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ajaxTrustedUrl":{"\/search\/node":true},"user":{"uid":0,"permissionsHash":"393ae6c0af7b77b6ae0a004f4edff2f3826de41ab0b1dcce901f05f8cf135fa0"}}</script> #}
+		 <noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		  {# <script nonce="{{ csp_nonce_placeholder }}" src="/core/assets/vendor/once/once.min.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/core/misc/drupalSettingsLoader.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/core/misc/drupal.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/core/misc/drupal.init.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/core/assets/vendor/tabbable/index.umd.min.js?s9wwpe"></script><noscript class="displayNone"></noscript> #}
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/themes/avnl/js/checkbox.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+	      <script nonce="{{ csp_nonce_placeholder }}" src="/themes/avnl/js/navigation-utils.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/themes/avnl/js/navigation.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/themes/avnl/js/second-level-navigation.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+		  <script nonce="{{ csp_nonce_placeholder }}" src="/themes/avnl/js/nav-resize.js?s9wwpe"></script><noscript class="displayNone"></noscript>
+	    <script nonce="{{ csp_nonce_placeholder }}" crossorigin='anonymous' src="https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js"></script>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/jquery.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/jquery-migrate.min.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/bootstrap.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/bootstrap-datepicker.min.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/functions.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/general.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+     <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/scripts.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+		 <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript" src="/{{ directory }}/js/bruteforce.js"></script><noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+     <noscript><div class="displayNone">Your browser does not support Javascript</div></noscript> 
+     <script nonce="{{ csp_nonce_placeholder }}" type="text/javascript">    
+      $(document).ready(function(){ 
+           //console.log("get location");
+            if (navigator.geolocation) {
+                //console.log("123");
+                navigator.geolocation.getCurrentPosition(showLocation,showError);
+            }         
+      });
+      function showLocation(position) {
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+          console.log(latitude);
+          console.log(longitude);
+          $('#getOpLocation').html(latitude+" - "+longitude);
+      }
+      function showError(error) {
+          switch(error.code) {
+                  case error.PERMISSION_DENIED:
+                        console.log("User denied the request for Geolocation.");
+                        $('#getOpLocation').html("User denied the request for Geolocation.");
+                        break;
+                  case error.POSITION_UNAVAILABLE:
+                        console.log("Location information is unavailable.");
+                        $('#getOpLocation').html("Location information is unavailable.");
+                        break;
+                  case error.TIMEOUT:
+                        console.log("The request to get user location timed out.");
+                        $('#getOpLocation').html("The request to get user location timed out.");
+                        break;
+                  case error.UNKNOWN_ERROR:
+                        console.log("An unknown error occurred.");
+                        $('#getOpLocation').html("An unknown error occurred.");
+                        break;
+          }
+      }
+    </script>
+    <script nonce="{{ csp_nonce_placeholder }}">
+    document.addEventListener('DOMContentLoaded', function () {
+  const menuBtn = document.getElementById('menuToggleBtn');
+  const popupMenu = document.getElementById('popupMenu');
+
+  let isOpen = false;
+
+  menuBtn.addEventListener('click', function () {
+    isOpen = !isOpen;
+    if (isOpen) {
+      popupMenu.classList.remove('hidden');
+      popupMenu.style.display = 'block';
+      menuBtn.setAttribute('aria-expanded', 'true');
+      popupMenu.setAttribute('aria-hidden', 'false');
+    } else {
+      popupMenu.classList.add('hidden');
+      setTimeout(() => popupMenu.style.display = 'none', 300);
+      menuBtn.setAttribute('aria-expanded', 'false');
+      popupMenu.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  document.addEventListener('click', function (event) {
+    if (!popupMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+      popupMenu.classList.add('hidden');
+      popupMenu.style.display = 'none';
+      menuBtn.setAttribute('aria-expanded', 'false');
+      popupMenu.setAttribute('aria-hidden', 'true');
+      isOpen = false;
+    }
+  });
+});
+
+
+    </script>
+	  <noscript><div class="displayNone">Your browser does not support Javascript</div></noscript>
+      <div class="d-none" id="getOpLocation"></div>
+  </body>
+</html>

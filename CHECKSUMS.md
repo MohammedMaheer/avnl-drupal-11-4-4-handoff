@@ -1,0 +1,21 @@
+# AVNL Handoff Checksums
+
+SHA-256 checksums verified after final staging remediation on 24 August 2026:
+
+```text
+d04d4dc914ac6409617bb1af130544c693c69a4a21663335ceb373367c409d6e  database/avnl_drupal11_4_4_final_2026-08-24.sql.gz
+e0665debc0c1207b6170ad39d9b8fe33043bd52aaf93a78aa5018f8b5f304e3d  source/composer.lock
+455b5debcdb0a753018142a0d8a60529eaa9a685839d91c2be12357a55c3fffe  source/files/2023-07/AVNL-User-Manual-for-Creator-Publisher.pdf
+eed2523ff374999047632c4aa51143f5f5d03590868ac13d986870c85115f9f0  source/files/home-page-banner-background/avnlco_office_0.jpg
+16e4fe2db85434f50a534a197d1871ca5ef43877569ed97d5a07f6d4cc65a38e  source/files/home-page-banner-background/banner-bg_3.png
+1baeaca40197650fb0d7cdd79f58188e29d8699da00ad12b6997b878bba5e76d  source/files/home-page-banner-background/republic_1.jpeg
+b50b8faed23dc283f5093fc6a5e871f28f4c4072a4301d4a25be76252b3c7149  source/files/config_fc-AWpWchik1oyyNmowtvFqtZcTyhOYGy6Zzzbt-7Qc6N2P2hrfIubehAOkqcmI1p1AF1cgPYw/sync/language.negotiation.yml
+36da736ef87be908c98e093b0edc7e24ce35c822e4d22b2f63969fdeecfbf247  source/files/config_fc-AWpWchik1oyyNmowtvFqtZcTyhOYGy6Zzzbt-7Qc6N2P2hrfIubehAOkqcmI1p1AF1cgPYw/sync/image_captcha.settings.yml
+454fbc9208efc4e345a0272aeaf01144b830a496225c638961910466c75a62ff  documentation/HOSTINGER_STAGING_QA_2026-08-24.md
+ffa2ca281f28852436ab66558e338cf488e239e3d08aee16bf3f89e90ee624f9  documentation/QA_CRAWL_RESULTS_2026-08-24.json
+6046a2402a6fcc4d756256b4800ee0577e1a8c0f06c21a74aef5f925efe8e2aa  REPOSITORY_GUIDE.md
+6504c5754e7397e6bf4b61bdb7092bdfeedfa2258a574523772a306d665b9612  SECURITY.md
+557fe0a5eecf3c457bf9f21e4380219622d5fb5b2eb9f6e5dc6387ed3b2a3feb  README.md
+```
+
+The package ZIP has a separate adjacent `.sha256` file because its checksum can only be calculated after packaging.

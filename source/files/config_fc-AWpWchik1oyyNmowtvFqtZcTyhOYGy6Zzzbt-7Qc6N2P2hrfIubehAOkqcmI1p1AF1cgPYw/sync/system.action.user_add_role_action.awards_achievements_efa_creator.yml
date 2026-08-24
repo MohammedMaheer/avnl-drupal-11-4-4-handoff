@@ -1,0 +1,14 @@
+uuid: c825ce4a-c65c-4176-ba19-f3d644447c56
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.awards_achievements_efa_creator
+  module:
+    - user
+id: user_add_role_action.awards_achievements_efa_creator
+label: 'Add the Awards / Achievements EFA Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: awards_achievements_efa_creator

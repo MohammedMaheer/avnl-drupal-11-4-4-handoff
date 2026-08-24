@@ -1,0 +1,23 @@
+uuid: 657ebcf1-1f3c-4520-a2a2-37e0e91182f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ecitizen_achieve_date
+    - node.type.ecitizen_downloads
+id: node.ecitizen_downloads.field_ecitizen_achieve_date
+field_name: field_ecitizen_achieve_date
+entity_type: node
+bundle: ecitizen_downloads
+label: Archive
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

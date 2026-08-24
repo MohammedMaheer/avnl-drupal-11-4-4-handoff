@@ -1,0 +1,14 @@
+uuid: 4e1d6341-a208-4b3a-907a-1ca27a06bace
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.key_profiles_creator
+  module:
+    - user
+id: user_remove_role_action.key_profiles_creator
+label: 'Remove the Key Profiles Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: key_profiles_creator

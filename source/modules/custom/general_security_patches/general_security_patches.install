@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for General Security Patches.
+ */
+
+/**
+ * Replaces legacy plaintext password-history values with one-way hashes.
+ */
+function general_security_patches_update_11001(&$sandbox) {
+  $database = \Drupal::database();
+  if (!$database->schema()->tableExists('login_attampt')) {
+    return;
+  }
+
+  $password_hasher = \Drupal::service('password');
+  $result = $database->select('login_attampt', 'la')
+    ->fields('la', ['id', 'pass'])
+    ->execute();
+
+  foreach ($result as $record) {
+    if (!is_string($record->pass) || $record->pass === '') {
+      continue;
+    }
+    $info = password_get_info($record->pass);
+    if (($info['algoName'] ?? 'unknown') !== 'unknown') {
+      continue;
+    }
+    $hash = $password_hasher->hash($record->pass);
+    if ($hash === FALSE) {
+      continue;
+    }
+    $database->update('login_attampt')
+      ->fields(['pass' => $hash])
+      ->condition('id', $record->id)
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function general_security_patches_schema(): array {
+  $schema['login_attampt'] = [
+    'description' => 'Stores one-way password-history hashes for local users.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'pass' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'attempt_log' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'uid_created' => ['uid', 'created'],
+    ],
+  ];
+
+  return $schema;
+}

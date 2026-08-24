@@ -1,0 +1,14 @@
+uuid: 1e3039cc-0588-447b-8b68-7f70b153918b
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.awards_achievements_publisher
+  module:
+    - user
+id: user_add_role_action.awards_achievements_publisher
+label: 'Add the Awards / Achievements Publisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: awards_achievements_publisher

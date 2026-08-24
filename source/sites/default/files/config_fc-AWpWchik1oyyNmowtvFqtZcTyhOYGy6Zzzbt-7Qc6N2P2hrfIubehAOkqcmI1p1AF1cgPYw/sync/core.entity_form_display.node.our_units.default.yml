@@ -1,0 +1,272 @@
+uuid: 9e079fed-cebb-425d-98c6-70dd82b5edb5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.our_units.field_our_unit_cap_description
+    - field.field.node.our_units.field_our_unit_capabilities_name
+    - field.field.node.our_units.field_our_unit_catalogue
+    - field.field.node.our_units.field_our_unit_certifications
+    - field.field.node.our_units.field_our_unit_cover_image
+    - field.field.node.our_units.field_our_unit_decription
+    - field.field.node.our_units.field_our_unit_facebook_link
+    - field.field.node.our_units.field_our_unit_gst_details
+    - field.field.node.our_units.field_our_unit_location
+    - field.field.node.our_units.field_our_unit_map_links
+    - field.field.node.our_units.field_our_unit_preamble_title
+    - field.field.node.our_units.field_our_unit_quality_standards
+    - field.field.node.our_units.field_our_unit_rti_officers
+    - field.field.node.our_units.field_our_unit_twitter_link
+    - field.field.node.our_units.field_our_units_category
+    - field.field.node.our_units.field_our_units_contact_details
+    - field.field.node.our_units.field_our_units_notification
+    - field.field.node.our_units.field_our_units_order
+    - field.field.node.our_units.field_our_units_product
+    - field.field.node.our_units.field_unit_preamble_description
+    - image.style.thumbnail
+    - node.type.our_units
+    - workflows.workflow.editorial
+  module:
+    - content_moderation
+    - image
+    - link
+    - path
+    - text
+    - weight
+id: node.our_units.default
+targetEntityType: node
+bundle: our_units
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_our_unit_cap_description:
+    type: text_textarea_with_summary
+    weight: 5
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_catalogue:
+    type: text_textarea_with_summary
+    weight: 23
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_certifications:
+    type: text_textarea_with_summary
+    weight: 12
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_cover_image:
+    type: image_image
+    weight: 22
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_our_unit_decription:
+    type: text_textarea_with_summary
+    weight: 3
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_facebook_link:
+    type: link_default
+    weight: 25
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_our_unit_gst_details:
+    type: text_textarea_with_summary
+    weight: 13
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_location:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_our_unit_map_links:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_our_unit_quality_standards:
+    type: text_textarea_with_summary
+    weight: 14
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_rti_officers:
+    type: text_textarea_with_summary
+    weight: 9
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_unit_twitter_link:
+    type: link_default
+    weight: 26
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_our_units_category:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_our_units_contact_details:
+    type: text_textarea_with_summary
+    weight: 8
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_our_units_notification:
+    type: string_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_our_units_order:
+    type: weight_selector
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_our_units_product:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_unit_preamble_description:
+    type: text_textarea_with_summary
+    weight: 4
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 1
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 24
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 21
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    weight: 19
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 15
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    weight: 20
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  translation:
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 16
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_our_unit_capabilities_name: true
+  field_our_unit_preamble_title: true

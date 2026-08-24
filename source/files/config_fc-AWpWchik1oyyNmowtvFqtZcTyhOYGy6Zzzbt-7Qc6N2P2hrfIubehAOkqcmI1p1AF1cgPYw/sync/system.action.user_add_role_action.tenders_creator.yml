@@ -1,0 +1,14 @@
+uuid: 48f3d57c-4383-4583-b63e-1dfffa12c7c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.tenders_creator
+  module:
+    - user
+id: user_add_role_action.tenders_creator
+label: 'Add the Tenders Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: tenders_creator

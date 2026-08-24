@@ -1,0 +1,20 @@
+uuid: 18b37787-62d6-4ebd-9cc5-9a47fa877d60
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - weight
+id: node.field_our_units_order
+field_name: field_our_units_order
+entity_type: node
+type: weight
+settings:
+  unsigned: false
+module: weight
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,19 @@
+uuid: d3207e52-7e55-44d4-873b-af583d5dc529
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_home_page_banner_hyperlink
+field_name: field_home_page_banner_hyperlink
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

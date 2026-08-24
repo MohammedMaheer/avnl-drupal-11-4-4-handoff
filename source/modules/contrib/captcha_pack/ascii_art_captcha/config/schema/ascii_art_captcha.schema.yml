@@ -1,0 +1,14 @@
+ascii_art_captcha.settings:
+  type: config_object
+  label: 'ASCII Art Captcha settings'
+  mapping:
+    ascii_art_captcha_code_length:
+      type: integer
+    ascii_art_captcha_font:
+      type: string
+    ascii_art_captcha_font_size:
+      type: integer
+    ascii_art_captcha_allowed_characters:
+      type: sequence
+      sequence:
+        type: string

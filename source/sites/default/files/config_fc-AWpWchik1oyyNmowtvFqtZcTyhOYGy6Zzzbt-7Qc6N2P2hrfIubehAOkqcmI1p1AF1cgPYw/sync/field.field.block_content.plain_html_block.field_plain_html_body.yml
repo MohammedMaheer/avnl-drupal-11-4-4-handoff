@@ -1,0 +1,19 @@
+uuid: 93ea837a-b685-4e00-b03e-6468eac0190c
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.plain_html_block
+    - field.storage.block_content.field_plain_html_body
+id: block_content.plain_html_block.field_plain_html_body
+field_name: field_plain_html_body
+entity_type: block_content
+bundle: plain_html_block
+label: 'Plain HTML Block Content'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

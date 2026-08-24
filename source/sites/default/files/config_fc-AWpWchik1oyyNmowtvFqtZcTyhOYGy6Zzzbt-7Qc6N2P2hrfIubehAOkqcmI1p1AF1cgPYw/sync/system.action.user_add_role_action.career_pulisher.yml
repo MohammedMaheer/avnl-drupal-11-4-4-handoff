@@ -1,0 +1,14 @@
+uuid: dd4f2b03-a41c-4d17-97fc-3aa54c9b6ee2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.career_pulisher
+  module:
+    - user
+id: user_add_role_action.career_pulisher
+label: 'Add the Career Pulisher role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: career_pulisher

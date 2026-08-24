@@ -1,0 +1,31 @@
+uuid: 6cf7b077-ad39-4b23-a8a7-13f5854da73a
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+  module:
+    - comment
+    - file
+    - filter
+    - media
+    - shortcut
+    - system
+    - tfa
+_core:
+  default_config_hash: I44QAB4es39lNzMQWiJLq2dfjX7VRSOzT_5KzAcUq_M
+id: authenticated
+label: 'Authenticated user'
+weight: -17
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access shortcuts'
+  - 'delete own files'
+  - 'disable own tfa'
+  - 'post comments'
+  - 'setup own tfa'
+  - 'skip comment approval'
+  - 'use text format basic_html'
+  - 'view media'

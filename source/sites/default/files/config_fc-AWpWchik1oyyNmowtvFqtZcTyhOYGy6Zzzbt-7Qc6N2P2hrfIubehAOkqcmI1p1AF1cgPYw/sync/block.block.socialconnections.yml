@@ -1,0 +1,25 @@
+uuid: d6f14e77-bb1f-4832-869c-7b247dd94f07
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:e722149f-81b8-498c-8b91-d43fa6371690'
+  module:
+    - block_content
+  theme:
+    - avnl
+id: socialconnections
+theme: avnl
+region: social_connections
+weight: 0
+provider: null
+plugin: 'block_content:e722149f-81b8-498c-8b91-d43fa6371690'
+settings:
+  id: 'block_content:e722149f-81b8-498c-8b91-d43fa6371690'
+  label: 'Social Connections'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

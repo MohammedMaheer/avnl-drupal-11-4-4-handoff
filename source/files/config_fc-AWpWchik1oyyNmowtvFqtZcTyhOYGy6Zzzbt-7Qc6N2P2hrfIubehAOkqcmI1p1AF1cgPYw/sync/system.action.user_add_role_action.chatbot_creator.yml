@@ -1,0 +1,14 @@
+uuid: bc9f1768-773d-4090-b3a4-ba8fe336d907
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chatbot_creator
+  module:
+    - user
+id: user_add_role_action.chatbot_creator
+label: 'Add the Chatbot Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chatbot_creator

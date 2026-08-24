@@ -1,0 +1,14 @@
+uuid: fb362285-4f73-44db-b941-bc164918e913
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.awards_achievements_creator
+  module:
+    - user
+id: user_add_role_action.awards_achievements_creator
+label: 'Add the Awards / Achievements Creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: awards_achievements_creator

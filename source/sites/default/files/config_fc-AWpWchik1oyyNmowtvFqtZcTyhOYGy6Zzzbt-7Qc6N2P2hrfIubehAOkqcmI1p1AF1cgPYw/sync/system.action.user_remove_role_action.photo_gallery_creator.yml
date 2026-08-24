@@ -1,0 +1,14 @@
+uuid: 1eaeca95-2b79-4154-982d-a50365938966
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.photo_gallery_creator
+  module:
+    - user
+id: user_remove_role_action.photo_gallery_creator
+label: 'Remove the Photo Gallery Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: photo_gallery_creator

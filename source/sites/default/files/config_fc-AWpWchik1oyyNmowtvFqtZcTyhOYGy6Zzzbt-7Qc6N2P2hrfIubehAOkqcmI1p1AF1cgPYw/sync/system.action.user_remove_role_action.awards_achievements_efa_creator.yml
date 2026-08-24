@@ -1,0 +1,14 @@
+uuid: b950bbe0-c16c-4d98-bc2b-2f6635bafd98
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.awards_achievements_efa_creator
+  module:
+    - user
+id: user_remove_role_action.awards_achievements_efa_creator
+label: 'Remove the Awards / Achievements EFA Creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: awards_achievements_efa_creator

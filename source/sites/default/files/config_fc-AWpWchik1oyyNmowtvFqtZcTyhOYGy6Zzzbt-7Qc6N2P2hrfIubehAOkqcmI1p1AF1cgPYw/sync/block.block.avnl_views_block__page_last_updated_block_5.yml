@@ -1,0 +1,29 @@
+uuid: 3c100d3c-4a50-401a-9879-f18aa520e605
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.page_last_updated
+  module:
+    - system
+    - views
+  theme:
+    - avnl
+id: avnl_views_block__page_last_updated_block_5
+theme: avnl
+region: last_updated2
+weight: 0
+provider: null
+plugin: 'views_block:page_last_updated-block_5'
+settings:
+  id: 'views_block:page_last_updated-block_5'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/achievements\r\n/archive/achievements\r\n/archive/awards\r\n/awards\r\n/vfj-hindi-award-2020-0\r\n/vfj-2019-20\r\n/vehicle-factory-jabalpurhindi\r\n/vehicle-factory-jabalpurhindi-award\r\n/vehicle-factory-jabalpur-award-2018-2019\r\n/rm-award-hindi-2015-16\r\n/rm-award-hindi-2014-15\r\n/rm-award-2015-16\r\n/rm-award-2014-15\r\n/golden-peacock-award-2\r\n/golden-peacock-innovative-product-certificate\r\n/golden-peacock-hr-excellence-certificate\r\n/golden-peacock-innovative\r\n/golden-peacock-award\r\n/energy-conservation-award\r\n/ayudh-nirmani-award\r\n/vehicle-factory-jabalpur-award-2020-21\r\n/ordnance-factory-medak-awards\r\n/shri-chockalingam\r\n/smt-uma-maheshwari-k\r\n/shri-virgin-shaji-s\r\n/shri-rameshwar-meena\r\n/engine-factory-avadi-awards"

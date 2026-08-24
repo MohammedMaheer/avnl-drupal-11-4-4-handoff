@@ -1,0 +1,3 @@
+form.archive-option-form .alignLeft { width: 50%; float: left; }
+form.archive-option-form .alignRight { width: 49%; float: left; margin-left: 10px; }
+form.archive-option-form #edit-actions { clear: both; }

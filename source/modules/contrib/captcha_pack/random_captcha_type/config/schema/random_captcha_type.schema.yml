@@ -1,0 +1,8 @@
+random_captcha_type.settings:
+  type: config_object
+  label: 'Random Captcha Type settings'
+  mapping:
+    random_captcha_type_enabled_types:
+      type: sequence
+      sequence:
+        type: string
