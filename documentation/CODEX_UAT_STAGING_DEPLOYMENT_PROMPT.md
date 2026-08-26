@@ -35,10 +35,11 @@ git rev-parse --verify HEAD
 git fsck --full
 ```
 
-Confirm that all three protected payload paths are absent from this deployment tag:
+Confirm that all four protected payload paths are absent from this deployment tag:
 
 ```bash
 test ! -e database
+test ! -e files
 test ! -e source/files
 test ! -e source/sites/default/files
 ```
