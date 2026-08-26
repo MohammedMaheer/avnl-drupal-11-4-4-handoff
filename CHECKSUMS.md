@@ -2,6 +2,8 @@
 
 `CHECKSUMS.sha256` contains a SHA-256 digest for every file in this handoff except the checksum manifest itself. Paths are relative to the handoff folder.
 
+The consolidated delivery also includes `00_READ_ME_FIRST.md` and the command-by-command Word manual `START_HERE_AVNL_ZIP_STAGING_DEPLOYMENT_GUIDE_2026-08-25.docx`; both are covered by the regenerated checksum manifest.
+
 Verify from the extracted handoff directory:
 
 ```bash
