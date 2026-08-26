@@ -1,0 +1,79 @@
+name: Build UAT handoff release archive
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to package
+        required: true
+        default: avnl-drupal-11.4.5-handoff-2026-08-26
+      archive_name:
+        description: ZIP filename without the .zip suffix
+        required: true
+        default: AVNL_Drupal_11.4.5_UAT_Handoff_2026-08-26
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      HANDOFF_TAG: ${{ inputs.tag }}
+      ARCHIVE_NAME: ${{ inputs.archive_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Validate inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$HANDOFF_TAG" =~ ^[A-Za-z0-9._-]+$ ]]
+          [[ "$ARCHIVE_NAME" =~ ^[A-Za-z0-9._-]+$ ]]
+
+      - name: Check out the pinned handoff tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 1
+
+      - name: Verify release target
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse --verify HEAD
+          test -d source
+          test -f database/avnl_drupal11_4_5_final_2026-08-24.sql.gz
+          test -f CHECKSUMS.sha256
+
+      - name: Build and validate ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive \
+            --format=zip \
+            -6 \
+            --prefix="${ARCHIVE_NAME}/" \
+            --output="${RUNNER_TEMP}/${ARCHIVE_NAME}.zip" \
+            HEAD
+          unzip -tqq "${RUNNER_TEMP}/${ARCHIVE_NAME}.zip"
+          cd "$RUNNER_TEMP"
+          sha256sum "${ARCHIVE_NAME}.zip" > "${ARCHIVE_NAME}.zip.sha256"
+
+      - name: Upload immutable release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release upload "$HANDOFF_TAG" \
+            "${RUNNER_TEMP}/${ARCHIVE_NAME}.zip" \
+            "${RUNNER_TEMP}/${ARCHIVE_NAME}.zip.sha256" \
+            --clobber \
+            --repo "$GITHUB_REPOSITORY"
+
+      - name: Report uploaded assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release view "$HANDOFF_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json url,tagName,assets
