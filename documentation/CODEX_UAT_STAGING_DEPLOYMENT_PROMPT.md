@@ -77,22 +77,26 @@ Read completely before changing UAT:
 - `README.md`;
 - `SECURITY.md`;
 - `documentation/DEPLOYMENT.md`;
+- `documentation/UAT_DEPLOYMENT_PACKAGE.md`;
 - `documentation/CREDENTIAL_PRESERVATION.md`;
 - `documentation/ROLLBACK.md`;
 - `documentation/TEST_REPORT.md`;
 - `documentation/SOW_TRACEABILITY_MATRIX.md`.
 
-Verify the extracted package:
+Verify the Git deployment package:
 
 ```bash
 cd "$PACKAGE_ROOT"
-sha256sum -c CHECKSUMS.sha256
-gzip -t database/avnl_drupal11_4_5_final_2026-08-24.sql.gz
+git fsck --full
+test ! -e database
+test ! -e files
+test ! -e source/files
+test ! -e source/sites/default/files
 composer --working-dir=source validate --no-check-publish
 composer --working-dir=source audit --no-interaction
 ```
 
-Stop on any checksum failure or security advisory.
+Stop on any Git-integrity failure, unexpected protected payload, or security advisory. Do not run the complete handoff's root checksum manifest against the reduced deployment tag.
 
 ### 2. Discover and record UAT
 
@@ -225,7 +229,7 @@ If a critical check fails, restore the previous release and, when database/confi
 Report:
 
 - old/new release and Drupal versions;
-- verified package SHA-256;
+- verified Git tag and commit;
 - backup identifiers and verification;
 - runtime-preservation result without values;
 - database/configuration/cache/permissions results;
