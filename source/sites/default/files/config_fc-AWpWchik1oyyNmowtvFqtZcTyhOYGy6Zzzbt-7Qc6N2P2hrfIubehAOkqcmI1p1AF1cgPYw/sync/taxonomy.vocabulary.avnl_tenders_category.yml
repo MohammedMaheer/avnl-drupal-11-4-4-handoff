@@ -1,9 +1,0 @@
-uuid: e63b4616-2f74-42b1-ad3c-c06c3103007d
-langcode: en
-status: true
-dependencies: {  }
-name: 'Tenders Category'
-vid: avnl_tenders_category
-description: 'Add Tenders Category'
-weight: 0
-new_revision: false

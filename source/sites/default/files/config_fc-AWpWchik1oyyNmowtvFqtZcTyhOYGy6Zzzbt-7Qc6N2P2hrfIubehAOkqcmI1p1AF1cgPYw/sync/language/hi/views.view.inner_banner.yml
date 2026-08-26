@@ -1,8 +1,0 @@
-display:
-  page_1:
-    display_options:
-      header:
-        area:
-          content:
-            value: '<div class="text-align-right"><a class="button" href="[site:url]node/add/inner_banner_management">Add Inner Banner Management</a></div>'
-            format: full_html

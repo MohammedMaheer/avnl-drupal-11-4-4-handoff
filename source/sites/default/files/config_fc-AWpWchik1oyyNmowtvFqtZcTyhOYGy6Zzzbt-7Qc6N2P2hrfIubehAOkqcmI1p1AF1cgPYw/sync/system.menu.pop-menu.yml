@@ -1,8 +1,0 @@
-uuid: 965ef1d1-c337-4a2f-936b-32ca1ba86345
-langcode: en
-status: true
-dependencies: {  }
-id: pop-menu
-label: 'Popup Menu'
-description: 'Popup Menu'
-locked: false

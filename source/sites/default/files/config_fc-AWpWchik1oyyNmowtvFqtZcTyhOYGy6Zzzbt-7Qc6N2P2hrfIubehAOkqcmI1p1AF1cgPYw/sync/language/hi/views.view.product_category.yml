@@ -1,8 +1,0 @@
-display:
-  default:
-    display_options:
-      empty:
-        area:
-          content:
-            value: '<p class="noResultView" role="status">इस अनुभाग के लिए कोई सक्रिय रिकॉर्ड नहीं है।</p>'
-            format: full_html

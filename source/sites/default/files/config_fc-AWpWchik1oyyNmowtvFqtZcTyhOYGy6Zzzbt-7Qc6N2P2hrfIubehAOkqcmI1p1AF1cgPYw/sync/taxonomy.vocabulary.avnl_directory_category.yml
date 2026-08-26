@@ -1,9 +1,0 @@
-uuid: 2c4a77ab-727a-4568-a537-6bd711bd55ac
-langcode: en
-status: true
-dependencies: {  }
-name: 'AVNL Directory Category'
-vid: avnl_directory_category
-description: 'Add AVNL Directory Category'
-weight: 0
-new_revision: false

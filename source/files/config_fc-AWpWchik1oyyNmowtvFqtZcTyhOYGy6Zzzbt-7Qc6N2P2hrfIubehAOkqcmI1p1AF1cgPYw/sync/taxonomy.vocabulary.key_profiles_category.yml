@@ -1,9 +1,0 @@
-uuid: c9fecb90-a34c-4644-b814-26811849807e
-langcode: en
-status: true
-dependencies: {  }
-name: 'Key Profiles Category'
-vid: key_profiles_category
-description: 'Add Key Profiles Category'
-weight: 0
-new_revision: false

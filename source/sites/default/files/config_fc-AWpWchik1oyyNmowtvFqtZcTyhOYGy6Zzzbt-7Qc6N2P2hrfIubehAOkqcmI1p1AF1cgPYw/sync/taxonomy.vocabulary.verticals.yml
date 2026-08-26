@@ -1,9 +1,0 @@
-uuid: 9010295b-db34-41e8-a010-04f8261e1958
-langcode: en
-status: true
-dependencies: {  }
-name: Verticals
-vid: verticals
-description: 'Add Verticals'
-weight: 0
-new_revision: false

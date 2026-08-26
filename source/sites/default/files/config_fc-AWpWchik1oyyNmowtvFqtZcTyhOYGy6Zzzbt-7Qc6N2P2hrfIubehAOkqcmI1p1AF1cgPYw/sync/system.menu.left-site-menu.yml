@@ -1,8 +1,0 @@
-uuid: 0a847135-a60c-4f89-997f-22753c715181
-langcode: en
-status: true
-dependencies: {  }
-id: left-site-menu
-label: 'Left Site Menu'
-description: 'Add Left Site Menu'
-locked: false

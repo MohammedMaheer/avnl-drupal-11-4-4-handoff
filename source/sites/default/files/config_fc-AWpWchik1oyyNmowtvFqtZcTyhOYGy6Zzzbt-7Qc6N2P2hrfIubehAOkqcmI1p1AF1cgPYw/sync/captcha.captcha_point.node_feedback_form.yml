@@ -1,7 +1,0 @@
-uuid: 4d896c00-52b0-4f25-bab3-250e4bf3adc7
-langcode: en
-status: false
-dependencies: {  }
-formId: node_feedback_form
-captchaType: image_captcha/Image
-label: node_feedback_form

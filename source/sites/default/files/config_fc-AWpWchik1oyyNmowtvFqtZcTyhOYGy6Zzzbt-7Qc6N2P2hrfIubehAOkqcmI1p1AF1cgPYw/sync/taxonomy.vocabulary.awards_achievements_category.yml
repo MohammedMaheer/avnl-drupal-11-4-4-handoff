@@ -1,9 +1,0 @@
-uuid: 92ace2d0-bd76-4273-bb5a-94e94ff835ab
-langcode: en
-status: true
-dependencies: {  }
-name: 'Awards/ Achievements Category'
-vid: awards_achievements_category
-description: 'Add Awards/ Achievements Category'
-weight: 0
-new_revision: false

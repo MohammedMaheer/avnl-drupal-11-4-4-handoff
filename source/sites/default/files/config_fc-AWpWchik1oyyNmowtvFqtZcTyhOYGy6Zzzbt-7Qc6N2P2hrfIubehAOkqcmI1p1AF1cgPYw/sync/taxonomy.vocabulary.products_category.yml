@@ -1,9 +1,0 @@
-uuid: e1f3914b-86c6-4868-852d-de636159af2e
-langcode: en
-status: true
-dependencies: {  }
-name: 'Products Category'
-vid: products_category
-description: 'Add Products Category'
-weight: 0
-new_revision: false

@@ -1,9 +1,0 @@
-uuid: de9cfbb8-7826-4017-b659-5b2b7e271699
-langcode: en
-status: true
-dependencies: {  }
-name: 'E-Citizen/ Downloads Category'
-vid: ecitizen_downloads_category
-description: 'Add E-Citizen/ Downloads Category'
-weight: 0
-new_revision: false
