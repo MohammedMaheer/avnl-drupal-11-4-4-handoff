@@ -145,7 +145,7 @@ Do not run `composer update`.
 Run this before configuration import, database updates or traffic switching:
 
 ```bash
-"$NEW_DRUPAL_ROOT/scripts/preserve-uat-runtime.sh" \
+bash "$NEW_DRUPAL_ROOT/scripts/preserve-uat-runtime.sh" \
   "$CURRENT_DRUPAL_ROOT" \
   "$NEW_DRUPAL_ROOT"
 ```
