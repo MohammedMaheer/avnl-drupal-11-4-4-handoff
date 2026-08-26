@@ -21,30 +21,30 @@ You are the deployment operator for the AVNL Drupal 11.4.5 handoff. Deploy and v
 
 ## Preferred long-distance download
 
-Pull the versioned release directly from GitHub on the UAT computer. This is more reliable than uploading tens of thousands of individual files and supports a resumable transfer.
+Pull the pinned versioned source archive directly from GitHub on the UAT computer. This archive is generated from the tagged repository and contains the complete handoff tree, including `source/`, `database/`, documentation and checksums. It is more reliable than uploading tens of thousands of individual files and supports a resumable HTTP transfer.
 
 ```bash
 mkdir -p "DOWNLOAD_DIRECTORY"
 cd "DOWNLOAD_DIRECTORY"
 
 curl -fL --retry 20 --retry-delay 5 -C - \
-  -o AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip \
-  "https://github.com/MohammedMaheer/avnl-drupal-11-4-4-handoff/releases/download/avnl-drupal-11.4.5-handoff-2026-08-26/AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip"
+  -o avnl-drupal-11.4.5-uat-handoff.zip \
+  "https://github.com/MohammedMaheer/avnl-drupal-11-4-4-handoff/archive/refs/tags/avnl-drupal-11.4.5-handoff-2026-08-26.zip"
 
-curl -fL --retry 20 --retry-delay 5 \
-  -o AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip.sha256 \
-  "https://github.com/MohammedMaheer/avnl-drupal-11-4-4-handoff/releases/download/avnl-drupal-11.4.5-handoff-2026-08-26/AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip.sha256"
-
-sha256sum -c AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip.sha256
+unzip -t avnl-drupal-11.4.5-uat-handoff.zip
+mkdir -p "VERIFICATION_DIRECTORY"
+unzip -q avnl-drupal-11.4.5-uat-handoff.zip -d "VERIFICATION_DIRECTORY"
 ```
 
-Required ZIP SHA-256:
+After extraction, enter the one top-level folder containing `source/`, `database/`, `documentation/` and `CHECKSUMS.sha256`, then verify the tracked handoff files:
 
-```text
-0baea896dfdfeaedd84bd09a4ae17c0bab26ba19745f3dab81f2dab4f0d8ae40
+```bash
+sha256sum -c CHECKSUMS.sha256
 ```
 
-If GitHub is blocked, transfer the single ZIP and sidecar with resumable SSH instead of copying the source tree file by file:
+Every manifest entry must report `OK`. Stop if the ZIP test or any manifest entry fails.
+
+If GitHub is blocked, transfer the supplied handoff ZIP and its checksum sidecar with resumable SSH instead of copying the source tree file by file:
 
 ```bash
 rsync -avP --partial --append-verify \
@@ -59,16 +59,12 @@ Do not place the ZIP or database under a publicly served directory.
 
 ### 1. Read the handoff instructions
 
-After download verification, extract into a new inactive release parent:
-
-```bash
-unzip -q AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24.zip -d "RELEASE_BASE"
-```
+After archive and manifest verification, use or move the verified top-level handoff folder into a new inactive release parent. Do not extract or copy over the live UAT tree.
 
 Set these values from discovered UAT facts:
 
 ```bash
-export PACKAGE_ROOT="RELEASE_BASE/AVNL_Drupal_11.4.5_Final_Handoff_2026-08-24"
+export PACKAGE_ROOT="DISCOVERED_EXTRACTED_TOP_LEVEL_HANDOFF_DIRECTORY"
 export NEW_DRUPAL_ROOT="$PACKAGE_ROOT/source"
 export CURRENT_DRUPAL_ROOT="DISCOVERED_CURRENT_UAT_DRUPAL_ROOT"
 export PHP_BIN="DISCOVERED_APPROVED_PHP_CLI"
